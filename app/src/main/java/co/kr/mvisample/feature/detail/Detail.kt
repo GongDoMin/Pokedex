@@ -1,5 +1,6 @@
 package co.kr.mvisample.feature.detail
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,8 @@ import co.kr.mvisample.feature.components.pokemonCard
 import co.kr.mvisample.feature.detail.model.PokemonDetailModel
 import co.kr.mvisample.feature.detail.presentation.DetailViewModel
 import co.kr.mvisample.theme.PokemonTheme
+import co.kr.mvisample.ui.LocalNavAnimatedVisibilityScope
+import co.kr.mvisample.ui.LocalSharedTransitionScope
 import co.kr.mvisample.utils.LaunchedEventEffect
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -59,6 +62,7 @@ fun DetailScreen(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun DetailContent(
     pokemonDetail: PokemonDetailModel,
@@ -70,43 +74,63 @@ fun DetailContent(
             .data(pokemonDetail.imgUrl)
             .build()
     )
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+        ?: throw IllegalArgumentException("No Scope found")
+    val animatedVisibilityScope = LocalNavAnimatedVisibilityScope.current
+        ?: throw IllegalArgumentException("No Scope found")
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(PokemonTheme.colors.backgroundRed)
-            .padding(16.dp)
-            .pokemonCard()
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(8.dp)
+    with(sharedTransitionScope) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(PokemonTheme.colors.backgroundRed)
+                .padding(16.dp)
+                .pokemonCard()
         ) {
-            Image(
+            Column(
                 modifier = Modifier
-                    .aspectRatio(1f)
-                    .background(Color.White),
-                painter = painter,
-                contentDescription =  null,
-                colorFilter = if (pokemonDetail.isDiscovered) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
-            )
-            HeightSpacer(4.dp)
-            PokemonInfoRow(
-                label = "이름",
-                value = pokemonDetail.name
-            )
-            PokemonInfoRow(
-                label = "번호",
-                value = pokemonDetail.formatNumber()
-            )
-            PokemonInfoRow(
-                label = "키",
-                value = pokemonDetail.formatInfo(pokemonDetail.height.toString(), "M")
-            )
-            PokemonInfoRow(
-                label = "몸무게",
-                value = pokemonDetail.formatInfo(pokemonDetail.weight.toString(), "KG")
-            )
+                    .padding(8.dp)
+            ) {
+                Image(
+                    modifier = Modifier
+                        .aspectRatio(1f)
+                        .background(Color.White)
+                        .sharedElement(
+                            state = rememberSharedContentState(key = "image" + pokemonDetail.id),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        ),
+                    painter = painter,
+                    contentDescription =  null,
+                    colorFilter = if (pokemonDetail.isDiscovered) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
+                )
+                HeightSpacer(4.dp)
+                PokemonInfoRow(
+                    modifier = Modifier
+                        .sharedElement(
+                            state = rememberSharedContentState(key = "name" + pokemonDetail.id),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        ),
+                    label = "이름",
+                    value = pokemonDetail.name
+                )
+                PokemonInfoRow(
+                    modifier = Modifier
+                        .sharedElement(
+                            state = rememberSharedContentState(key = "number" + pokemonDetail.id),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        ),
+                    label = "번호",
+                    value = pokemonDetail.formatNumber()
+                )
+                PokemonInfoRow(
+                    label = "키",
+                    value = pokemonDetail.formatInfo(pokemonDetail.height.toString(), "M")
+                )
+                PokemonInfoRow(
+                    label = "몸무게",
+                    value = pokemonDetail.formatInfo(pokemonDetail.weight.toString(), "KG")
+                )
+            }
         }
     }
 }

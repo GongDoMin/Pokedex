@@ -1,12 +1,22 @@
+@file:OptIn(
+    ExperimentalSharedTransitionApi::class
+)
+
 package co.kr.mvisample.ui
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
@@ -25,19 +35,25 @@ fun PokemonApp() {
     val navController = rememberNavController()
 
     PokemonTheme {
-        NavHost(
-            navController = navController,
-            startDestination = PokemonRoutes.Home
-        ) {
-            composableWithBasicTransition<PokemonRoutes.Home> {
-                HomeContainer(
-                    onNavigateToPokemonDetail = { pokemonName, isDiscovered ->
-                        navController.navigate(PokemonRoutes.PokemonDetail(pokemonName, isDiscovered))
+        SharedTransitionLayout {
+            CompositionLocalProvider(
+                LocalSharedTransitionScope provides this
+            ) {
+                NavHost(
+                    navController = navController,
+                    startDestination = PokemonRoutes.Home
+                ) {
+                    composableWithBasicTransition<PokemonRoutes.Home> {
+                        HomeContainer(
+                            onNavigateToPokemonDetail = { pokemonName, isDiscovered ->
+                                navController.navigate(PokemonRoutes.PokemonDetail(pokemonName, isDiscovered))
+                            }
+                        )
                     }
-                )
-            }
-            composableWithBasicTransition<PokemonRoutes.PokemonDetail> {
-                DetailScreen()
+                    composableWithBasicTransition<PokemonRoutes.PokemonDetail> {
+                        DetailScreen()
+                    }
+                }
             }
         }
     }
@@ -60,6 +76,13 @@ inline fun <reified T : Any> NavGraphBuilder.composableWithBasicTransition(
         popEnterTransition = popEnterTransition,
         popExitTransition = popExitTransition
     ) {
-        content(it)
+        CompositionLocalProvider(
+            LocalNavAnimatedVisibilityScope provides this@composable
+        ) {
+            content(it)
+        }
     }
 }
+
+val LocalNavAnimatedVisibilityScope = compositionLocalOf<AnimatedVisibilityScope?> { null }
+val LocalSharedTransitionScope = compositionLocalOf<SharedTransitionScope?> { null }

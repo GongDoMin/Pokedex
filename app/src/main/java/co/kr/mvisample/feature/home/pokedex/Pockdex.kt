@@ -1,5 +1,6 @@
 package co.kr.mvisample.feature.home.pokedex
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +50,8 @@ import co.kr.mvisample.feature.home.pokedex.model.PokedexEvent
 import co.kr.mvisample.feature.home.pokedex.model.PokemonModel
 import co.kr.mvisample.feature.home.pokedex.presentation.PokedexViewModel
 import co.kr.mvisample.theme.PokemonTheme
+import co.kr.mvisample.ui.LocalNavAnimatedVisibilityScope
+import co.kr.mvisample.ui.LocalSharedTransitionScope
 import co.kr.mvisample.utils.LaunchedEventEffect
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -142,6 +146,7 @@ private fun PokedexContent(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun PokemonProfile(
     pokemon: PokemonModel?,
@@ -153,28 +158,43 @@ fun PokemonProfile(
             .data(pokemon?.imageUrl)
             .build()
     )
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+        ?: throw IllegalArgumentException("No Scope found")
+    val animatedVisibilityScope = LocalNavAnimatedVisibilityScope.current
+        ?: throw IllegalArgumentException("No Scope found")
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .pokemonCard(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            modifier = Modifier
-                .aspectRatio(1f)
-                .padding(8.dp)
-                .background(PokemonTheme.colors.backgroundGreen),
-            painter = selectedItemPainter,
-            contentDescription = null,
-            colorFilter = if (pokemon?.isDiscovered == true) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
-        )
-        HeightSpacer(4.dp)
-        Text(
-            text = pokemon?.formatNumber() ?: "",
-            style = PokemonTheme.typography.titleLarge,
-            color = PokemonTheme.colors.basicText
-        )
+    with(sharedTransitionScope) {
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .pokemonCard(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .padding(8.dp)
+                    .background(PokemonTheme.colors.backgroundGreen)
+                    .sharedElement(
+                        state = rememberSharedContentState(key = "image" + pokemon?.number),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    ),
+                painter = selectedItemPainter,
+                contentDescription = null,
+                colorFilter = if (pokemon?.isDiscovered == true) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
+            )
+            HeightSpacer(4.dp)
+            Text(
+                modifier = Modifier
+                    .sharedElement(
+                        state = rememberSharedContentState(key = "number" + pokemon?.number),
+                        animatedVisibilityScope = animatedVisibilityScope
+                    ),
+                text = pokemon?.formatNumber() ?: "",
+                style = PokemonTheme.typography.titleLarge,
+                color = PokemonTheme.colors.basicText
+            )
+        }
     }
 }
 
@@ -211,6 +231,7 @@ fun OptionButton(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun PokemonName(
     pokemon: PokemonModel,
@@ -218,54 +239,66 @@ fun PokemonName(
     isSelected: Boolean,
     modifier: Modifier = Modifier
 ) {
-    SubcomposeLayout(
-        modifier = modifier
-            .fillMaxWidth()
-            .border(
-                width = if (isSelected) 1.dp else 0.dp,
-                color = if (isSelected) Color.White else Color.Transparent
-            )
-            .clickable { onClickPokemon(pokemon) }
-    ) { constraints ->
-        val iconPlaceables = subcompose("icon") {
-            if (pokemon.isDiscovered) {
-                Image(
-                    imageVector = Icons.Default.Done,
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(PokemonTheme.colors.basicText)
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+        ?: throw IllegalArgumentException("No Scope found")
+    val animatedVisibilityScope = LocalNavAnimatedVisibilityScope.current
+        ?: throw IllegalArgumentException("No Scope found")
+
+    with(sharedTransitionScope) {
+        SubcomposeLayout(
+            modifier = modifier
+                .fillMaxWidth()
+                .border(
+                    width = if (isSelected) 1.dp else 0.dp,
+                    color = if (isSelected) Color.White else Color.Transparent
                 )
-            } else {
-                Spacer(modifier = Modifier)
-            }
-        }.map { it.measure(Constraints.fixed(16.dp.roundToPx(), 16.dp.roundToPx())) }
+                .clickable { onClickPokemon(pokemon) }
+        ) { constraints ->
+            val iconPlaceables = subcompose("icon") {
+                if (pokemon.isDiscovered) {
+                    Image(
+                        imageVector = Icons.Default.Done,
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(PokemonTheme.colors.basicText)
+                    )
+                } else {
+                    Spacer(modifier = Modifier)
+                }
+            }.map { it.measure(Constraints.fixed(16.dp.roundToPx(), 16.dp.roundToPx())) }
 
-        val spacerWidth = 4.dp.roundToPx()
+            val spacerWidth = 4.dp.roundToPx()
 
-        val textPlaceables = subcompose("text") {
-            Text(
-                text = pokemon.name,
-                style = PokemonTheme.typography.titleLarge,
-                color = PokemonTheme.colors.basicText
+            val textPlaceables = subcompose("text") {
+                Text(
+                    modifier = Modifier
+                        .sharedElement(
+                            state = rememberSharedContentState(key = "name" + pokemon.number),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        ),
+                    text = pokemon.name,
+                    style = PokemonTheme.typography.titleLarge,
+                    color = PokemonTheme.colors.basicText
+                )
+            }.map { it.measure(constraints.offset(horizontal = -(16.dp.roundToPx() + spacerWidth))) }
+
+            val height = maxOf(
+                iconPlaceables.firstOrNull()?.height ?: 0,
+                textPlaceables.firstOrNull()?.height ?: 0
             )
-        }.map { it.measure(constraints.offset(horizontal = -(16.dp.roundToPx() + spacerWidth))) }
 
-        val height = maxOf(
-            iconPlaceables.firstOrNull()?.height ?: 0,
-            textPlaceables.firstOrNull()?.height ?: 0
-        )
+            layout(width = constraints.maxWidth, height = height) {
+                var xPosition = 0
 
-        layout(width = constraints.maxWidth, height = height) {
-            var xPosition = 0
+                iconPlaceables.forEach { placeable ->
+                    placeable.placeRelative(x = xPosition, y = (height - placeable.height) / 2)
+                    xPosition += placeable.width
+                }
 
-            iconPlaceables.forEach { placeable ->
-                placeable.placeRelative(x = xPosition, y = (height - placeable.height) / 2)
-                xPosition += placeable.width
-            }
+                xPosition += spacerWidth
 
-            xPosition += spacerWidth
-
-            textPlaceables.forEach { placeable ->
-                placeable.placeRelative(x = xPosition, y = (height - placeable.height) / 2)
+                textPlaceables.forEach { placeable ->
+                    placeable.placeRelative(x = xPosition, y = (height - placeable.height) / 2)
+                }
             }
         }
     }
