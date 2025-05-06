@@ -70,4 +70,12 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     implementation(libs.jetbrains.kotlinx.serialization)
+
+    implementation(libs.okhttp)
+    implementation(libs.retrofit)
+    implementation(libs.logging.interceptor)
+    implementation(libs.retrofit.serialization.converter)
+
+    implementation("androidx.paging:paging-compose:3.3.6")
+    implementation("io.coil-kt:coil-compose:2.7.0")
 }
