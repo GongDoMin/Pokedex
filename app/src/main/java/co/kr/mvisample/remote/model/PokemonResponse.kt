@@ -16,10 +16,10 @@ data class PokemonResponse(
     @SerialName("name") val name: String = "",
     @SerialName("url") val url: String = ""
 ) {
-    fun getNumber() : Int = url.split("/".toRegex()).dropLast(1).last().toInt()
+    fun getId() : Int = url.split("/".toRegex()).dropLast(1).last().toInt()
 
     fun getImageUrl() : String {
-        val number = getNumber()
+        val number = getId()
         return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/" +
                 "pokemon/other/official-artwork/$number.png"
     }

@@ -23,7 +23,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -85,7 +84,7 @@ fun PokedexScreen(
         PokedexContent(
             modifier = modifier,
             pokemonCount = pokemons.itemCount,
-            pokemonKeys = pokemons.itemKey { it.number },
+            pokemonKeys = pokemons.itemKey { it.id },
             pokemon = { pokemons[it] },
             onSendAction = pokedexViewModel::handleAction,
             selectedPokemon = uiState.content.selectedPokemon
@@ -138,7 +137,7 @@ private fun PokedexContent(
                     PokemonName(
                         pokemon = pokemonModel,
                         onClickPokemon = { onSendAction(PokedexAction.OnClickPokemon(it)) },
-                        isSelected = selectedPokemon?.number == pokemonModel.number
+                        isSelected = selectedPokemon?.id == pokemonModel.id
                     )
                 }
             }
@@ -176,7 +175,7 @@ fun PokemonProfile(
                     .padding(8.dp)
                     .background(PokemonTheme.colors.backgroundGreen)
                     .sharedElement(
-                        state = rememberSharedContentState(key = "image" + pokemon?.number),
+                        state = rememberSharedContentState(key = "image" + pokemon?.id),
                         animatedVisibilityScope = animatedVisibilityScope
                     ),
                 painter = selectedItemPainter,
@@ -187,7 +186,7 @@ fun PokemonProfile(
             Text(
                 modifier = Modifier
                     .sharedElement(
-                        state = rememberSharedContentState(key = "number" + pokemon?.number),
+                        state = rememberSharedContentState(key = "number" + pokemon?.id),
                         animatedVisibilityScope = animatedVisibilityScope
                     ),
                 text = pokemon?.formatNumber() ?: "",
@@ -272,7 +271,7 @@ fun PokemonName(
                 Text(
                     modifier = Modifier
                         .sharedElement(
-                            state = rememberSharedContentState(key = "name" + pokemon.number),
+                            state = rememberSharedContentState(key = "name" + pokemon.id),
                             animatedVisibilityScope = animatedVisibilityScope
                         ),
                     text = pokemon.name,
@@ -313,73 +312,73 @@ fun PokedexPreview() {
                 PagingData.from(
                     listOf(
                         PokemonModel(
-                            number = 1,
+                            id = 1,
                             name = "Bulbasaur",
                             imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
                             isDiscovered = true
                         ),
                         PokemonModel(
-                            number = 2,
+                            id = 2,
                             name = "Bulbasaur",
                             imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
                             isDiscovered = true
                         ),
                         PokemonModel(
-                            number = 3,
+                            id = 3,
                             name = "Bulbasaur",
                             imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
                             isDiscovered = true
                         ),
                         PokemonModel(
-                            number = 4,
+                            id = 4,
                             name = "Bulbasaur",
                             imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
                             isDiscovered = true
                         ),
                         PokemonModel(
-                            number = 5,
+                            id = 5,
                             name = "Bulbasaur",
                             imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
                             isDiscovered = false
                         ),
                         PokemonModel(
-                            number = 6,
+                            id = 6,
                             name = "Bulbasaur",
                             imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
                             isDiscovered = false
                         ),
                         PokemonModel(
-                            number = 7,
+                            id = 7,
                             name = "Bulbasaur",
                             imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
                             isDiscovered = false
                         ),
                         PokemonModel(
-                            number = 8,
+                            id = 8,
                             name = "Bulbasaur",
                             imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
                             isDiscovered = false
                         ),
                         PokemonModel(
-                            number = 9,
+                            id = 9,
                             name = "Bulbasaur",
                             imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
                             isDiscovered = false
                         ),
                         PokemonModel(
-                            number = 10,
+                            id = 10,
                             name = "Bulbasaur",
                             imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
                             isDiscovered = true
                         ),
                         PokemonModel(
-                            number = 11,
+                            id = 11,
                             name = "Bulbasaur",
                             imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
                             isDiscovered = false
                         ),
                         PokemonModel(
-                            number = 12,
+                            id = 12,
                             name = "Bulbasaur",
                             imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
                             isDiscovered = true
@@ -390,7 +389,7 @@ fun PokedexPreview() {
         }.collectAsLazyPagingItems()
 
     val selectedItem = PokemonModel(
-        number = 1,
+        id = 1,
         name = "Bulbasaur",
         imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
         isDiscovered = true
@@ -399,7 +398,7 @@ fun PokedexPreview() {
     PokemonTheme {
         PokedexContent(
             pokemonCount = lazyPagingItems.itemCount,
-            pokemonKeys = lazyPagingItems.itemKey { it.number },
+            pokemonKeys = lazyPagingItems.itemKey { it.id },
             pokemon = { lazyPagingItems[it] },
             onSendAction = {},
             selectedPokemon = selectedItem
