@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -229,60 +231,34 @@ fun PokemonName(
     isSelected: Boolean,
     modifier: Modifier = Modifier
 ) {
-    SubcomposeLayout(
+    Row(
         modifier = modifier
             .fillMaxWidth()
             .border(
                 width = if (isSelected) 1.dp else 0.dp,
                 color = if (isSelected) Color.White else Color.Transparent
             )
-            .clickable { onClickPokemon(pokemon) }
-    ) { constraints ->
-        val iconPlaceables = subcompose("icon") {
-            if (pokemon.isDiscovered) {
-                Image(
-                    imageVector = Icons.Default.Done,
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(PokemonTheme.colors.basicText)
-                )
-            } else {
-                Spacer(modifier = Modifier)
-            }
-        }.map { it.measure(Constraints.fixed(16.dp.roundToPx(), 16.dp.roundToPx())) }
-
-        val spacerWidth = 4.dp.roundToPx()
-
-        val textPlaceables = subcompose("text") {
-            Text(
+            .clickable { onClickPokemon(pokemon) },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (pokemon.isDiscovered) {
+            Icon(
+                imageVector = Icons.Default.Done,
+                contentDescription = null,
+                tint = PokemonTheme.colors.basicText,
                 modifier = Modifier
-                    .sharedElement(
-                        key = "name" + pokemon.id
-                    ),
-                text = pokemon.name,
-                style = PokemonTheme.typography.titleLarge,
-                color = PokemonTheme.colors.basicText
+                    .size(16.dp)
             )
-        }.map { it.measure(constraints.offset(horizontal = -(16.dp.roundToPx() + spacerWidth))) }
-
-        val height = maxOf(
-            iconPlaceables.firstOrNull()?.height ?: 0,
-            textPlaceables.firstOrNull()?.height ?: 0
-        )
-
-        layout(width = constraints.maxWidth, height = height) {
-            var xPosition = 0
-
-            iconPlaceables.forEach { placeable ->
-                placeable.placeRelative(x = xPosition, y = (height - placeable.height) / 2)
-                xPosition += placeable.width
-            }
-
-            xPosition += spacerWidth
-
-            textPlaceables.forEach { placeable ->
-                placeable.placeRelative(x = xPosition, y = (height - placeable.height) / 2)
-            }
+            WidthSpacer(4.dp)
+        } else {
+            WidthSpacer(20.dp)
         }
+        Text(
+            modifier = Modifier.sharedElement(key = "name" + pokemon.id),
+            text = pokemon.name,
+            style = PokemonTheme.typography.titleLarge,
+            color = PokemonTheme.colors.basicText
+        )
     }
 }
 
