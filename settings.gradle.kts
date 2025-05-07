@@ -23,3 +23,5 @@ rootProject.name = "MVISample"
 include(":app")
 include(":remote")
 include(":data")
+include(":feature")
+include(":core")
