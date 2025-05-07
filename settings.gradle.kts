@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "MVISample"
 include(":app")
 include(":remote")
+include(":data")

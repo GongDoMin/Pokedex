@@ -76,6 +76,6 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.retrofit.serialization.converter)
 
-    implementation("androidx.paging:paging-compose:3.3.6")
+    implementation(libs.androidx.paging.compose)
     implementation("io.coil-kt:coil-compose:2.7.0")
 }
