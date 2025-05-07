@@ -6,17 +6,14 @@ package co.kr.mvisample.ui
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
@@ -24,10 +21,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import co.kr.mvisample.core.navigation.PokemonRoutes
+import co.kr.mvisample.core.theme.LocalNavAnimatedVisibilityScope
+import co.kr.mvisample.core.theme.LocalSharedTransitionScope
+import co.kr.mvisample.core.theme.PokemonTheme
 import co.kr.mvisample.feature.detail.DetailScreen
 import co.kr.mvisample.feature.home.HomeContainer
-import co.kr.mvisample.navigation.PokemonRoutes
-import co.kr.mvisample.theme.PokemonTheme
 import kotlin.reflect.KType
 
 @Composable
@@ -83,6 +82,3 @@ inline fun <reified T : Any> NavGraphBuilder.composableWithBasicTransition(
         }
     }
 }
-
-val LocalNavAnimatedVisibilityScope = compositionLocalOf<AnimatedVisibilityScope?> { null }
-val LocalSharedTransitionScope = compositionLocalOf<SharedTransitionScope?> { null }
