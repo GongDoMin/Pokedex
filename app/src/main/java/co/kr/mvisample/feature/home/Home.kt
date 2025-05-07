@@ -159,13 +159,14 @@ fun PokemonBottomNavItemLayout(
     onClickSection: (HomeSections) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val alpha by animateFloatAsState(
+    val iconAlpha by animateFloatAsState(
         targetValue = if (showIcon) 1f else 0f
     )
+
     Layout(
         modifier = modifier,
         content = {
-            if (showIcon) {
+            if (iconAlpha != 0f) {
                 Image(
                     modifier = Modifier
                         .layoutId("icon"),
@@ -198,7 +199,7 @@ fun PokemonBottomNavItemLayout(
 
         val iconMaxWith = BottomIconSize.roundToPx()
         val iconPlaceable = measureables.firstOrNull { it.layoutId == "icon" }?.measure(constraints.copy(minWidth = 0, maxWidth = iconMaxWith))
-        val iconWidth = ((iconPlaceable?.width ?: 0) * alpha).roundToInt()
+        val iconWidth = ((iconPlaceable?.width ?: 0) * iconAlpha).roundToInt()
 
         val textMaxWidth = (totalWidth - iconWidth).coerceAtLeast(0)
         val textPlaceable = measureables.first { it.layoutId == "text" }.measure(constraints.copy(minWidth = 0, maxWidth = textMaxWidth))
@@ -206,7 +207,7 @@ fun PokemonBottomNavItemLayout(
         layout(totalWidth, totalHeight) {
             var x = (totalWidth - (iconWidth + textPlaceable.width)) / 2
             iconPlaceable?.placeRelative(x, (totalHeight - (iconPlaceable.height)) / 2)
-            x += ((iconPlaceable?.width ?: 0) * alpha).roundToInt()
+            x += ((iconPlaceable?.width ?: 0) * iconAlpha).roundToInt()
             textPlaceable.placeRelative(x, (totalHeight - textPlaceable.height) / 2)
         }
     }
