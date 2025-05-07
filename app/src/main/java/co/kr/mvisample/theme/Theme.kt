@@ -1,11 +1,16 @@
 package co.kr.mvisample.theme
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import co.kr.mvisample.ui.LocalNavAnimatedVisibilityScope
+import co.kr.mvisample.ui.LocalSharedTransitionScope
 
 @Composable
 fun PokemonTheme(
@@ -18,6 +23,32 @@ fun PokemonTheme(
         LocalPokemonTypography provides typography,
         content = content
     )
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun PreviewPokemonTheme(
+    colors: PokemonColors = PokemonColors(),
+    typography: PokemonTypography = PokemonTypography(),
+    content: @Composable () -> Unit
+) {
+    SharedTransitionLayout {
+        CompositionLocalProvider(
+            LocalSharedTransitionScope provides this
+        ) {
+            AnimatedVisibility(true) {
+                CompositionLocalProvider(
+                    LocalNavAnimatedVisibilityScope provides this
+                ) {
+                    CompositionLocalProvider(
+                        LocalPokemonColors provides colors,
+                        LocalPokemonTypography provides typography,
+                        content = content
+                    )
+                }
+            }
+        }
+    }
 }
 
 object PokemonTheme {

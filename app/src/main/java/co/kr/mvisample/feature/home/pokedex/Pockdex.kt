@@ -52,6 +52,7 @@ import co.kr.mvisample.feature.home.pokedex.model.PokedexEvent
 import co.kr.mvisample.feature.home.pokedex.model.PokemonModel
 import co.kr.mvisample.feature.home.pokedex.presentation.PokedexViewModel
 import co.kr.mvisample.theme.PokemonTheme
+import co.kr.mvisample.theme.PreviewPokemonTheme
 import co.kr.mvisample.utils.LaunchedEventEffect
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -354,7 +355,7 @@ fun PokedexPreview() {
         isDiscovered = true
     )
 
-    PokemonTheme {
+    PreviewPokemonTheme {
         PokedexContent(
             pokemonCount = lazyPagingItems.itemCount,
             pokemonKeys = lazyPagingItems.itemKey { it.id },
