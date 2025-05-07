@@ -143,31 +143,38 @@ fun PokemonBottomNavLayout(
 ) {
     Layout(
         modifier = modifier
-            .height(BottomNavHeight)
-            .background(contentColor),
+            .background(contentColor), // 배경 먼저 설정
         content = content
-    ) { measureables, constraints ->
+    ) { measurables, constraints ->
+
         val spacing = BottomBarPadding.roundToPx()
+
         val totalSpacing = spacing * (itemCount + 1)
         val availableWidth = constraints.maxWidth - totalSpacing
         val itemWidth = availableWidth / itemCount
-        val itemPlaceables = measureables.fastMap {
-            it.measure(
-                constraints.copy(
-                    minWidth = itemWidth,
-                    maxWidth = itemWidth,
-                )
-            )
+
+        val itemConstraints = constraints.copy(
+            minWidth = itemWidth,
+            maxWidth = itemWidth,
+            minHeight = 0,
+            maxHeight = BottomNavHeight.roundToPx() - (spacing * 2)
+        )
+
+        val itemPlaceables = measurables.fastMap {
+            it.measure(itemConstraints)
         }
+
+        val layoutHeight = itemPlaceables.maxOfOrNull { it.height }?.plus(spacing * 2) ?: 0
+
         layout(
             width = constraints.maxWidth,
-            height = itemPlaceables.maxByOrNull { it.height }?.height ?: 0
+            height = layoutHeight
         ) {
             var x = spacing
+            val y = spacing
             itemPlaceables.forEach {
-                it.placeRelative(x, 0)
-                x += it.width
-                x += spacing
+                it.placeRelative(x = x, y = y)
+                x += it.width + spacing
             }
         }
     }
@@ -246,7 +253,7 @@ sealed interface HomeRoutes {
     @Serializable data object Etc: HomeRoutes
 }
 
-private val BottomNavHeight = 40.dp
+private val BottomNavHeight = 48.dp
 private val BottomBarPadding = 8.dp
 private val BottomIconSize = 24.dp
 
