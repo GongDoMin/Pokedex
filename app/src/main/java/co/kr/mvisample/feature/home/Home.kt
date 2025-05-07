@@ -50,7 +50,6 @@ fun HomeContainer(
     val navBackStackEntry by nestedNavController.currentBackStackEntryAsState()
     val currentSection = navBackStackEntry?.destination?.route.toSection()
     Scaffold(
-        containerColor = PokemonTheme.colors.backgroundRed,
         bottomBar = {
             PokemonBottomBar(
                 tabs = HomeSections.entries.toList(),
@@ -152,14 +151,11 @@ fun PokemonBottomNavLayout(
         val totalSpacing = spacing * (itemCount + 1)
         val availableWidth = constraints.maxWidth - totalSpacing
         val itemWidth = availableWidth / itemCount
-        val itemHeight = constraints.maxHeight - spacing
         val itemPlaceables = measureables.fastMap {
             it.measure(
                 constraints.copy(
                     minWidth = itemWidth,
                     maxWidth = itemWidth,
-                    minHeight = itemHeight,
-                    maxHeight = itemHeight
                 )
             )
         }

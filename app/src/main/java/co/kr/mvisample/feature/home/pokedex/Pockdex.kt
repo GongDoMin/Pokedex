@@ -106,6 +106,7 @@ private fun PokedexContent(
     Row(
         modifier = modifier
             .fillMaxSize()
+            .background(PokemonTheme.colors.backgroundRed)
             .padding(8.dp)
     ) {
         Column(
