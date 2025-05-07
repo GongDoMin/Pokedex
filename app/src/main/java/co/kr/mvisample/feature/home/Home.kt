@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastMap
 import androidx.navigation.compose.NavHost
@@ -101,9 +103,28 @@ fun PokemonBottomBar(
         tabs.forEach {
             PokemonBottomNavItemLayout(
                 showIcon = it == currentSection,
-                section = it,
-                onClickSection = {
-                    onClickSection(it.route)
+                icon = {
+                    Image(
+                        modifier = Modifier,
+                        imageVector = Icons.Default.PlayArrow,
+                        contentDescription = null
+                    )
+                },
+                text = {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .pokemonCard(
+                                shape = RoundedCornerShape(16.dp)
+                            )
+                            .clickable {
+                                onClickSection(it.route)
+                            },
+                        text = it.label,
+                        style = PokemonTheme.typography.titleMedium,
+                        color = PokemonTheme.colors.basicText,
+                        textAlign = TextAlign.Center
+                    )
                 }
             )
         }
@@ -155,9 +176,9 @@ fun PokemonBottomNavLayout(
 @Composable
 fun PokemonBottomNavItemLayout(
     showIcon: Boolean,
-    section: HomeSections,
-    onClickSection: (HomeSections) -> Unit,
     modifier: Modifier = Modifier,
+    icon: @Composable BoxScope.() -> Unit,
+    text: @Composable BoxScope.() -> Unit
 ) {
     val iconAlpha by animateFloatAsState(
         targetValue = if (showIcon) 1f else 0f
@@ -167,38 +188,26 @@ fun PokemonBottomNavItemLayout(
         modifier = modifier,
         content = {
             if (iconAlpha != 0f) {
-                Image(
+                Box(
                     modifier = Modifier
                         .layoutId("icon"),
-                    imageVector = Icons.Default.PlayArrow,
-                    contentDescription = null
+                    contentAlignment = Alignment.Center,
+                    content = icon
                 )
             }
             Box(
                 modifier = Modifier
-                    .layoutId("text")
-                    .fillMaxWidth()
-                    .pokemonCard(
-                        shape = RoundedCornerShape(16.dp)
-                    )
-                    .clickable {
-                        onClickSection(section)
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = section.label,
-                    style = PokemonTheme.typography.titleMedium,
-                    color = PokemonTheme.colors.basicText
-                )
-            }
+                    .layoutId("text"),
+                contentAlignment = Alignment.Center,
+                content = text
+            )
         }
     ) { measureables, constraints ->
         val totalWidth = constraints.maxWidth
         val totalHeight = constraints.maxHeight
 
-        val iconMaxWith = BottomIconSize.roundToPx()
-        val iconPlaceable = measureables.firstOrNull { it.layoutId == "icon" }?.measure(constraints.copy(minWidth = 0, maxWidth = iconMaxWith))
+        val iconMaxSize = BottomIconSize.roundToPx()
+        val iconPlaceable = measureables.firstOrNull { it.layoutId == "icon" }?.measure(constraints.copy(minWidth = 0, maxWidth = iconMaxSize, minHeight = 0, maxHeight = iconMaxSize))
         val iconWidth = ((iconPlaceable?.width ?: 0) * iconAlpha).roundToInt()
 
         val textMaxWidth = (totalWidth - iconWidth).coerceAtLeast(0)
