@@ -17,12 +17,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastMap
 import androidx.navigation.compose.NavHost
@@ -91,8 +95,8 @@ fun HomeContainer(
 fun PokemonBottomBar(
     tabs: List<HomeSections>,
     currentSection: HomeSections,
-    modifier: Modifier = Modifier,
     onClickSection: (HomeRoutes) -> Unit,
+    modifier: Modifier = Modifier,
     contentColor: Color = PokemonTheme.colors.backgroundRed
 ) {
     PokemonBottomNavLayout(
@@ -249,3 +253,30 @@ sealed interface HomeRoutes {
 private val BottomNavHeight = 40.dp
 private val BottomBarPadding = 8.dp
 private val BottomIconSize = 24.dp
+
+@Preview
+@Composable
+fun PokemonBottomBarPreview() {
+    var currentSection by remember { mutableStateOf(HomeSections.POKEDEX) }
+
+    PokemonTheme {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(PokemonTheme.colors.backgroundRed),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            PokemonBottomBar(
+                tabs = HomeSections.entries.toList(),
+                currentSection = currentSection,
+                onClickSection = {
+                    currentSection = when (it) {
+                        HomeRoutes.Pokedex -> HomeSections.POKEDEX
+                        HomeRoutes.Items -> HomeSections.ITEMS
+                        HomeRoutes.Etc -> HomeSections.ETC
+                    }
+                }
+            )
+        }
+    }
+}
