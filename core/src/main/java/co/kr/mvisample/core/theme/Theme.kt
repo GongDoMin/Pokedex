@@ -80,7 +80,9 @@ data class PokemonColors(
     val backgroundRed: Color = BackgroundRed,
     val backgroundGreen: Color = BackgroundGreen,
     val border: Color = Border,
-    val basicText: Color = BasicText
+    val basicText: Color = BasicText,
+    val pokeballTop: Color = PokeballTop,
+    val pokeballBottom: Color = PokeballBottom
 )
 
 @Immutable

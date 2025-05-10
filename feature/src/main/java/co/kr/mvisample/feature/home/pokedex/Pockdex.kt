@@ -1,6 +1,9 @@
 package co.kr.mvisample.feature.home.pokedex
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,15 +18,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
@@ -39,7 +42,6 @@ import androidx.paging.compose.itemKey
 import co.kr.mvisample.core.theme.PokemonTheme
 import co.kr.mvisample.core.theme.PreviewPokemonTheme
 import co.kr.mvisample.core.utils.LaunchedEventEffect
-import co.kr.mvisample.feature.components.HeightSpacer
 import co.kr.mvisample.feature.components.OverlayWithLoadingAndDialog
 import co.kr.mvisample.feature.components.WeightSpacer
 import co.kr.mvisample.feature.components.WidthSpacer
@@ -105,9 +107,7 @@ private fun PokedexContent(
                 .weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            PokemonProfile(
-                pokemon = selectedPokemon
-            )
+            PokemonImage(pokemon = selectedPokemon)
             WeightSpacer()
             PokedexActionButtons(
                 isDiscovered = selectedPokemon?.isDiscovered == true,
@@ -129,7 +129,7 @@ private fun PokedexContent(
                 key = pokemons.itemKey { it.id }
             ) {
                 pokemons[it]?.let { pokemonModel ->
-                    PokemonName(
+                    PokemonListItem(
                         pokemon = pokemonModel,
                         onClickPokemon = { onSendAction(PokedexAction.OnPokemonClick(it)) },
                         isSelected = selectedPokemon?.id == pokemonModel.id
@@ -142,7 +142,7 @@ private fun PokedexContent(
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun PokemonProfile(
+private fun PokemonImage(
     pokemon: PokemonModel?,
     modifier: Modifier = Modifier
 ) {
@@ -175,7 +175,7 @@ fun PokemonProfile(
 }
 
 @Composable
-fun PokedexActionButtons(
+private fun PokedexActionButtons(
     isDiscovered: Boolean,
     onCatchClick: () -> Unit,
     onDiscoverClick: () -> Unit,
@@ -228,7 +228,7 @@ private fun PokedexActionButton(
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun PokemonName(
+private fun PokemonListItem(
     pokemon: PokemonModel,
     onClickPokemon: (PokemonModel) -> Unit,
     isSelected: Boolean,
@@ -245,13 +245,7 @@ fun PokemonName(
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (pokemon.isDiscovered) {
-            Icon(
-                imageVector = Icons.Default.Done,
-                contentDescription = null,
-                tint = PokemonTheme.colors.basicText,
-                modifier = Modifier
-                    .size(16.dp)
-            )
+            Pokeball(isCaught = pokemon.isCaught)
             WidthSpacer(4.dp)
         } else {
             WidthSpacer(20.dp)
@@ -272,6 +266,81 @@ fun PokemonName(
             style = PokemonTheme.typography.titleLarge,
             color = PokemonTheme.colors.basicText
         )
+    }
+}
+
+@Composable
+private fun Pokeball(
+    isCaught: Boolean,
+    modifier: Modifier = Modifier,
+    caughtColorTop: Color = PokemonTheme.colors.pokeballTop,
+    caughtColorBottom: Color = PokemonTheme.colors.pokeballBottom,
+    uncaughtColorTop: Color = Color(0xFF888888),
+    uncaughtColorBottom: Color = Color(0xFFB0B0B0),
+    outlineColor: Color = PokemonTheme.colors.basicText,
+    centerCircleColor: Color = Color.White
+) {
+    val animatedTopColor by animateColorAsState(
+        targetValue = if (isCaught) caughtColorTop else uncaughtColorTop,
+        animationSpec = tween(durationMillis = 300),
+        label = "topColorAnimation"
+    )
+
+    val animatedBottomColor by animateColorAsState(
+        targetValue = if (isCaught) caughtColorBottom else uncaughtColorBottom,
+        animationSpec = tween(durationMillis = 300),
+        label = "bottomColorAnimation"
+    )
+
+    Canvas(
+        modifier = modifier
+            .size(16.dp)
+            .border(1.dp, color = outlineColor, shape = CircleShape)
+    ) {
+        val diameter = size.minDimension
+        val radius = diameter / 2
+        val center = Offset(size.width / 2, size.height / 2)
+
+        drawArc(
+            color = animatedTopColor,
+            startAngle = 190f,
+            sweepAngle = 160f,
+            useCenter = true,
+            topLeft = Offset(0f, 0f),
+            size = Size(size.width, size.height)
+        )
+
+        drawArc(
+            color = animatedBottomColor,
+            startAngle = -10f,
+            sweepAngle = 200f,
+            useCenter = true,
+            topLeft = Offset(0f, 0f),
+            size = Size(size.width, size.height)
+        )
+
+        drawCircle(
+            color = outlineColor,
+            radius = radius * 0.3f,
+            center = center
+        )
+
+        drawCircle(
+            color = centerCircleColor,
+            radius = radius * 0.15f,
+            center = center
+        )
+    }
+}
+
+@Preview
+@Composable
+fun PokeballPreview() {
+    PokemonTheme {
+        Row {
+            Pokeball(isCaught = true)
+            Pokeball(isCaught = false)
+        }
     }
 }
 

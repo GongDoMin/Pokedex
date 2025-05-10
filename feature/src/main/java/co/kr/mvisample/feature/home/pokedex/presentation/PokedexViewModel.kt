@@ -11,7 +11,6 @@ import co.kr.mvisample.feature.home.pokedex.model.PokedexEvent
 import co.kr.mvisample.feature.home.pokedex.model.PokedexUiState
 import co.kr.mvisample.feature.home.pokedex.model.toFeature
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -84,18 +83,20 @@ class PokedexViewModel @Inject constructor(
                     )
                 }
                 else -> {
-                    pokemonRepository.markAsDiscovered(selectedPokemon.id)
-                        .collect {
-                            updateUiState {
-                                it.copy(
-                                    content = it.content.copy(
-                                        selectedPokemon = it.content.selectedPokemon?.copy(
-                                            isDiscovered = true
+                    if (!selectedPokemon.isDiscovered) {
+                        pokemonRepository.markAsDiscovered(selectedPokemon.id)
+                            .collect {
+                                updateUiState {
+                                    it.copy(
+                                        content = it.content.copy(
+                                            selectedPokemon = it.content.selectedPokemon?.copy(
+                                                isDiscovered = true
+                                            )
                                         )
                                     )
-                                )
+                                }
                             }
-                        }
+                    }
                 }
             }
         }
