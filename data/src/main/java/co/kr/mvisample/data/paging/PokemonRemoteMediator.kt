@@ -5,6 +5,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import co.kr.mvisample.data.impl.LoadSize
+import co.kr.mvisample.data.impl.TotalLoadSize
 import co.kr.mvisample.data.model.toData
 import co.kr.mvisample.data.model.toEntity
 import co.kr.mvisample.local.model.PokemonEntity
@@ -42,7 +43,7 @@ class PokemonRemoteMediator(
 
         try {
             val response = pokemonDataSource.fetchPokemons(
-                limit = LoadSize,
+                limit = if (page == 2) TotalLoadSize - (LoadSize * page) else LoadSize,
                 offset = page * LoadSize
             )
 
@@ -51,7 +52,7 @@ class PokemonRemoteMediator(
                 pokemonDao.clearPokemons()
             }
 
-            val endOfPaginationReached = response.next.isEmpty()
+            val endOfPaginationReached = response.results.size < LoadSize
             val prevKey = if (page == 0) null else page - 1
             val nextKey = if (endOfPaginationReached) null else page + 1
 

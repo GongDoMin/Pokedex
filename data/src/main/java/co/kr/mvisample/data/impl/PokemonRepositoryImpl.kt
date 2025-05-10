@@ -68,4 +68,5 @@ class PokemonRepositoryImpl @Inject constructor(
 }
 
 const val LoadSize = 100
+const val TotalLoadSize = 251
 const val InitialLoadSize = 100
