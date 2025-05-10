@@ -7,8 +7,9 @@ import co.kr.mvisample.remote.utils.getImageUrl
 data class Pokemon(
     val id: Int = 0,
     val name: String = "",
-    val imageUrl: String = "",
-    val isDiscovered: Boolean = false
+    val imgUrl: String = "",
+    val isDiscovered: Boolean = false,
+    val isCaught: Boolean = false
 )
 
 fun PokemonResponse.toData(): Pokemon {
@@ -16,8 +17,9 @@ fun PokemonResponse.toData(): Pokemon {
     return Pokemon(
         id = id,
         name = name,
-        imageUrl = getImageUrl(id),
-        isDiscovered = listOf(true, false).random()
+        imgUrl = getImageUrl(id),
+        isDiscovered = false,
+        isCaught = false
     )
 }
 
@@ -25,15 +27,16 @@ fun Pokemon.toEntity(): PokemonEntity =
     PokemonEntity(
         id = id,
         name = name,
-        imgUrl = imageUrl,
-        isDiscovered = false,
-        isCaught = false
+        imgUrl = imgUrl,
+        isDiscovered = isDiscovered,
+        isCaught = isCaught
     )
 
 fun PokemonEntity.toData(): Pokemon =
     Pokemon(
         id = id,
         name = name,
-        imageUrl = imgUrl,
-        isDiscovered = false
+        imgUrl = imgUrl,
+        isDiscovered = isDiscovered,
+        isCaught = isCaught
     )

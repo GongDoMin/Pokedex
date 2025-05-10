@@ -15,6 +15,6 @@ fun Pokemon.toFeature() : PokemonModel =
     PokemonModel(
         id = id,
         name = name,
-        imageUrl = imageUrl,
+        imageUrl = imgUrl,
         isDiscovered = isDiscovered
     )
