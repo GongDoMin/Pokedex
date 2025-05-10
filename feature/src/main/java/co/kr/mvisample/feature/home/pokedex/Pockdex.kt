@@ -252,7 +252,7 @@ fun PokemonName(
         }
         Text(
             modifier = Modifier.sharedElement(key = "name" + pokemon.id),
-            text = pokemon.name,
+            text = if (pokemon.isDiscovered) pokemon.name else "???",
             style = PokemonTheme.typography.titleLarge,
             color = PokemonTheme.colors.basicText
         )

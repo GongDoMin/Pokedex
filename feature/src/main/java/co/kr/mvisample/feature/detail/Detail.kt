@@ -100,18 +100,18 @@ fun DetailContent(
             PokemonInfoRow(
                 modifier = Modifier
                     .sharedElement(
-                        key = "name" + pokemonDetail.id
-                    ),
-                label = "이름",
-                value = pokemonDetail.name
-            )
-            PokemonInfoRow(
-                modifier = Modifier
-                    .sharedElement(
                         key = "number" + pokemonDetail.id
                     ),
                 label = "번호",
                 value = pokemonDetail.formatNumber()
+            )
+            PokemonInfoRow(
+                modifier = Modifier
+                    .sharedElement(
+                        key = "name" + pokemonDetail.id
+                    ),
+                label = "이름",
+                value = if (pokemonDetail.isDiscovered) pokemonDetail.name else "???"
             )
             PokemonInfoRow(
                 label = "키",
