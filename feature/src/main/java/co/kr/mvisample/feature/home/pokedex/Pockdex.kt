@@ -119,7 +119,7 @@ private fun PokedexContent(
         WidthSpacer(16.dp)
         LazyColumn(
             modifier = Modifier
-                .weight(1f)
+                .weight(2f)
                 .fillMaxHeight()
                 .pokemonCard()
                 .padding(8.dp)
@@ -170,16 +170,6 @@ fun PokemonProfile(
             painter = selectedItemPainter,
             contentDescription = null,
             colorFilter = if (pokemon?.isDiscovered == true) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
-        )
-        HeightSpacer(4.dp)
-        Text(
-            modifier = Modifier
-                .sharedElement(
-                    key = "number" + pokemon?.id
-                ),
-            text = pokemon?.formatNumber() ?: "",
-            style = PokemonTheme.typography.titleLarge,
-            color = PokemonTheme.colors.basicText
         )
     }
 }
@@ -266,6 +256,16 @@ fun PokemonName(
         } else {
             WidthSpacer(20.dp)
         }
+        Text(
+            modifier = Modifier
+                .sharedElement(
+                    key = "number" + pokemon.id
+                ),
+            text = pokemon.formatNumber(),
+            style = PokemonTheme.typography.titleLarge,
+            color = PokemonTheme.colors.basicText
+        )
+        WidthSpacer(4.dp)
         Text(
             modifier = Modifier.sharedElement(key = "name" + pokemon.id),
             text = if (pokemon.isDiscovered) pokemon.name else "???",

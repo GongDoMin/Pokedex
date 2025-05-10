@@ -9,7 +9,7 @@ data class PokemonModel(
     val isDiscovered: Boolean = false,
     val isCaught: Boolean = false
 ) {
-    fun formatNumber(): String = "No.%04d".format(id)
+    fun formatNumber(): String = "%03d".format(id)
 }
 
 fun Pokemon.toFeature() : PokemonModel =
