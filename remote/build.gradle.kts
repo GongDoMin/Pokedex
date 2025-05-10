@@ -27,12 +27,12 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "POKEMON_API", "\"https://pokeapi.co/api/v2/\"")
-            buildConfigField("String", "POKEMON_IMAGE_URL", "\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\"")
+            buildConfigField("String", "POKEMON_IMAGE_URL", "\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/\"")
         }
 
         release {
             buildConfigField("String", "POKEMON_API", "\"https://pokeapi.co/api/v2/\"")
-            buildConfigField("String", "POKEMON_IMAGE_URL", "\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\"")
+            buildConfigField("String", "POKEMON_IMAGE_URL", "\"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/\"")
 
             isMinifyEnabled = false
             proguardFiles(
