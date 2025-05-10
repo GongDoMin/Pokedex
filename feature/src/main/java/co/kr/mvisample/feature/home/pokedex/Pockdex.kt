@@ -15,10 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,13 +27,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import co.kr.mvisample.core.theme.PokemonTheme
+import co.kr.mvisample.core.theme.PreviewPokemonTheme
+import co.kr.mvisample.core.utils.LaunchedEventEffect
 import co.kr.mvisample.feature.components.HeightSpacer
 import co.kr.mvisample.feature.components.OverlayWithLoadingAndDialog
 import co.kr.mvisample.feature.components.WeightSpacer
@@ -46,9 +49,6 @@ import co.kr.mvisample.feature.home.pokedex.model.PokedexAction
 import co.kr.mvisample.feature.home.pokedex.model.PokedexEvent
 import co.kr.mvisample.feature.home.pokedex.model.PokemonModel
 import co.kr.mvisample.feature.home.pokedex.presentation.PokedexViewModel
-import co.kr.mvisample.core.theme.PokemonTheme
-import co.kr.mvisample.core.theme.PreviewPokemonTheme
-import co.kr.mvisample.core.utils.LaunchedEventEffect
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import kotlinx.coroutines.flow.flowOf
@@ -80,9 +80,7 @@ fun PokedexScreen(
     ) {
         PokedexContent(
             modifier = modifier,
-            pokemonCount = pokemons.itemCount,
-            pokemonKeys = pokemons.itemKey { it.id },
-            pokemon = { pokemons[it] },
+            pokemons = pokemons,
             onSendAction = pokedexViewModel::handleAction,
             selectedPokemon = uiState.content.selectedPokemon
         )
@@ -91,9 +89,7 @@ fun PokedexScreen(
 
 @Composable
 private fun PokedexContent(
-    pokemonCount: Int,
-    pokemonKeys: (index: Int) -> Any,
-    pokemon: (index: Int) -> PokemonModel?,
+    pokemons: LazyPagingItems<PokemonModel>,
     onSendAction: (PokedexAction) -> Unit,
     modifier: Modifier = Modifier,
     selectedPokemon: PokemonModel? = null
@@ -113,10 +109,11 @@ private fun PokedexContent(
                 pokemon = selectedPokemon
             )
             WeightSpacer()
-            OptionButton(
-                onClickButton = {
-                    onSendAction(PokedexAction.OnClickOptionButton)
-                }
+            PokedexActionButtons(
+                isDiscovered = selectedPokemon?.isDiscovered == true,
+                onCatchClick = {},
+                onDiscoverClick = {},
+                onDetailClick = { onSendAction(PokedexAction.OnClickOptionButton) }
             )
         }
         WidthSpacer(16.dp)
@@ -128,10 +125,10 @@ private fun PokedexContent(
                 .padding(8.dp)
         ) {
             items(
-                count = pokemonCount,
-                key = pokemonKeys
+                count = pokemons.itemCount,
+                key = pokemons.itemKey { it.id }
             ) {
-                pokemon(it)?.let { pokemonModel ->
+                pokemons[it]?.let { pokemonModel ->
                     PokemonName(
                         pokemon = pokemonModel,
                         onClickPokemon = { onSendAction(PokedexAction.OnClickPokemon(it)) },
@@ -188,36 +185,55 @@ fun PokemonProfile(
 }
 
 @Composable
-fun OptionButton(
-    onClickButton: () -> Unit,
+fun PokedexActionButtons(
+    isDiscovered: Boolean,
+    onCatchClick: () -> Unit,
+    onDiscoverClick: () -> Unit,
+    onDetailClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    Column (
         modifier = modifier
             .fillMaxWidth()
-            .pokemonCard(shape = RoundedCornerShape(16.dp))
-            .clickable {
-                onClickButton()
-            },
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+            .pokemonCard()
+            .padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(
-            text = "SELECT",
-            style = PokemonTheme.typography.titleMedium,
-            color = PokemonTheme.colors.basicText
-        )
-        Icon(
-            imageVector = Icons.Default.PlayArrow,
-            contentDescription = null,
-            tint = PokemonTheme.colors.basicText
-        )
-        Text(
-            text = "상 세",
-            style = PokemonTheme.typography.titleMedium,
-            color = PokemonTheme.colors.basicText
+        if (isDiscovered) {
+            PokedexActionButton(
+                text = "포획하기",
+                onClick = onCatchClick
+            )
+        }
+        if (!isDiscovered) {
+            PokedexActionButton(
+                text = "발견하기",
+                onClick = onDiscoverClick
+            )
+        }
+        PokedexActionButton(
+            text = "상세보기",
+            onClick = onDetailClick
         )
     }
+}
+
+@Composable
+private fun PokedexActionButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    style: TextStyle = PokemonTheme.typography.titleMedium,
+    color: Color = PokemonTheme.colors.basicText
+) {
+    Text(
+        text = text,
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        style = style,
+        color = color
+    )
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -262,7 +278,7 @@ fun PokemonName(
 @Preview(showBackground = true)
 @Composable
 fun PokedexPreview() {
-    val lazyPagingItems =
+    val pokemons =
         remember {
             flowOf(
                 PagingData.from(
@@ -344,7 +360,7 @@ fun PokedexPreview() {
             )
         }.collectAsLazyPagingItems()
 
-    val selectedItem = PokemonModel(
+    val selectedPokemon = PokemonModel(
         id = 1,
         name = "Bulbasaur",
         imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
@@ -353,11 +369,9 @@ fun PokedexPreview() {
 
     PreviewPokemonTheme {
         PokedexContent(
-            pokemonCount = lazyPagingItems.itemCount,
-            pokemonKeys = lazyPagingItems.itemKey { it.id },
-            pokemon = { lazyPagingItems[it] },
+            pokemons = pokemons,
             onSendAction = {},
-            selectedPokemon = selectedItem
+            selectedPokemon = selectedPokemon
         )
     }
 }

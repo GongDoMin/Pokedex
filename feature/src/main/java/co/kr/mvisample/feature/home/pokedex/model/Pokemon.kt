@@ -6,7 +6,8 @@ data class PokemonModel(
     val id: Int = 0,
     val name: String = "",
     val imageUrl: String = "",
-    val isDiscovered: Boolean = false
+    val isDiscovered: Boolean = false,
+    val isCaught: Boolean = false
 ) {
     fun formatNumber(): String = "No.%04d".format(id)
 }
@@ -16,5 +17,6 @@ fun Pokemon.toFeature() : PokemonModel =
         id = id,
         name = name,
         imageUrl = imgUrl,
-        isDiscovered = isDiscovered
+        isDiscovered = isDiscovered,
+        isCaught = isCaught
     )
