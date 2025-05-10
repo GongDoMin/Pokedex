@@ -8,7 +8,7 @@ import co.kr.mvisample.remote.utils.getImageUrl
 
 data class PokemonDetail(
     val id: Int = 0,
-    val imgUrl: String = "",
+    val imageUrl: String = "",
     val name: String = "",
     val weight: Float = 0f,
     val height: Float = 0f,
@@ -48,7 +48,7 @@ fun TypeWithSlotResponse.toData(): Type =
 fun PokemonDetailResponse.toData(): PokemonDetail =
     PokemonDetail(
         id = id,
-        imgUrl = getImageUrl(id),
+        imageUrl = getImageUrl(id),
         name = name,
         weight = weight * 0.1f,
         height = height * 0.1f,

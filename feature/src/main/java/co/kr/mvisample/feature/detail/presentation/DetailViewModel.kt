@@ -30,18 +30,18 @@ class DetailViewModel @Inject constructor(
     private val routes = savedStateHandle.toRoute<PokemonRoutes.PokemonDetail>()
 
     init {
-        handleAction(DetailAction.SystemAction.FetchPokemonDetail(routes.pokemonName))
+        handleAction(DetailAction.SystemAction.FetchPokemonDetail(routes.name))
     }
 
     override fun handleAction(action: DetailAction) {
         when (action) {
-            is DetailAction.SystemAction.FetchPokemonDetail -> handleFetchPokemonDetail(action.pokemonName)
+            is DetailAction.SystemAction.FetchPokemonDetail -> handleFetchPokemonDetail(action.name)
         }
     }
 
-    private fun handleFetchPokemonDetail(pokemonName: String) {
+    private fun handleFetchPokemonDetail(name: String) {
         launch {
-            pokemonRepository.fetchPokemonDetail(pokemonName)
+            pokemonRepository.fetchPokemonDetail(name)
                 .resultCollect(
                     onSuccess = { pokemonDetail ->
                         val feature = pokemonDetail.toFeature()
@@ -49,7 +49,7 @@ class DetailViewModel @Inject constructor(
                             val currentDetail = it.content.pokemonDetail
                             val updatedDetail = currentDetail.copy(
                                 id = feature.id,
-                                imgUrl = feature.imgUrl,
+                                imageUrl = feature.imageUrl,
                                 name = feature.name,
                                 weight = feature.weight,
                                 height = feature.height,

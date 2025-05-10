@@ -70,7 +70,7 @@ fun DetailContent(
     val context = LocalContext.current
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(context)
-            .data(pokemonDetail.imgUrl)
+            .data(pokemonDetail.imageUrl)
             .build()
     )
     Box(

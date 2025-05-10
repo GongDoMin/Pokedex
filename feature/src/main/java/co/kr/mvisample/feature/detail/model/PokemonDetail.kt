@@ -7,7 +7,7 @@ import co.kr.mvisample.data.model.Type
 
 data class PokemonDetailModel(
     val id: Int = 0,
-    val imgUrl: String = "",
+    val imageUrl: String = "",
     val name: String = "",
     val weight: Float = 0f,
     val height: Float = 0f,
@@ -55,7 +55,7 @@ fun Type.toFeature(): TypeModel =
 fun PokemonDetail.toFeature(): PokemonDetailModel =
     PokemonDetailModel(
         id = id,
-        imgUrl = imgUrl,
+        imageUrl = imageUrl,
         name = name,
         weight = weight,
         height = height,

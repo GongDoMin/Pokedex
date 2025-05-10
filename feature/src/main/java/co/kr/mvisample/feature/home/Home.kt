@@ -44,7 +44,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun HomeContainer(
-    onNavigateToPokemonDetail: (pokemonName: String, isDiscovered: Boolean) -> Unit
+    onNavigateToPokemonDetail: (name: String, isDiscovered: Boolean) -> Unit
 ) {
     val nestedNavController = rememberNavController()
     val navBackStackEntry by nestedNavController.currentBackStackEntryAsState()

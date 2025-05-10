@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 sealed interface PokemonRoutes {
     @Serializable data object Home : PokemonRoutes
-    @Serializable data class PokemonDetail(val pokemonName: String, val isDiscovered: Boolean) : PokemonRoutes
+    @Serializable data class PokemonDetail(val name: String, val isDiscovered: Boolean) : PokemonRoutes
 }

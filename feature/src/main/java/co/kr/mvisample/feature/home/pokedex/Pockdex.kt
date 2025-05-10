@@ -55,7 +55,7 @@ import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun PokedexScreen(
-    onNavigateToPokemonDetail: (pokemonName: String, isDiscovered: Boolean) -> Unit,
+    onNavigateToPokemonDetail: (name: String, isDiscovered: Boolean) -> Unit,
     modifier: Modifier = Modifier,
     pokedexViewModel: PokedexViewModel = hiltViewModel(),
 ) {
@@ -66,7 +66,7 @@ fun PokedexScreen(
         event = pokedexViewModel.event,
         collector = {
             when (it) {
-                is PokedexEvent.OnNavigateToDetail -> { onNavigateToPokemonDetail(it.pokemonName, it.isDiscovered) }
+                is PokedexEvent.OnNavigateToDetail -> { onNavigateToPokemonDetail(it.name, it.isDiscovered) }
             }
         }
     )
