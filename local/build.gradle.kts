@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "co.kr.mvisample.data"
+    namespace = "co.kr.mvisample.local"
     compileSdk = 35
 
     defaultConfig {
@@ -36,9 +36,6 @@ android {
 
 dependencies {
 
-    implementation(project(":remote"))
-    implementation(project(":local"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -49,5 +46,9 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
-    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
+    kapt(libs.androidx.room.compiler)
+    androidTestImplementation(libs.androidx.room.testing)
 }
