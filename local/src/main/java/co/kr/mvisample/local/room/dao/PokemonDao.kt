@@ -15,6 +15,9 @@ interface PokemonDao {
     @Query("SELECT * FROM pokemon WHERE id = :id")
     fun getPokemon(id: Int): PokemonEntity
 
+    @Query("UPDATE pokemon SET isDiscovered = 1 WHERE id = :id")
+    fun markAsDiscovered(id: Int)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPokemons(pokemons: List<PokemonEntity>)
 

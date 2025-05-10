@@ -111,9 +111,9 @@ private fun PokedexContent(
             WeightSpacer()
             PokedexActionButtons(
                 isDiscovered = selectedPokemon?.isDiscovered == true,
-                onCatchClick = {},
-                onDiscoverClick = {},
-                onDetailClick = { onSendAction(PokedexAction.OnClickOptionButton) }
+                onCatchClick = { onSendAction(PokedexAction.AttemptCatchPokemon) },
+                onDiscoverClick = { onSendAction(PokedexAction.MarkPokemonAsDiscovered) },
+                onDetailClick = { onSendAction(PokedexAction.ShowPokemonDetail) }
             )
         }
         WidthSpacer(16.dp)
@@ -131,7 +131,7 @@ private fun PokedexContent(
                 pokemons[it]?.let { pokemonModel ->
                     PokemonName(
                         pokemon = pokemonModel,
-                        onClickPokemon = { onSendAction(PokedexAction.OnClickPokemon(it)) },
+                        onClickPokemon = { onSendAction(PokedexAction.OnPokemonClick(it)) },
                         isSelected = selectedPokemon?.id == pokemonModel.id
                     )
                 }

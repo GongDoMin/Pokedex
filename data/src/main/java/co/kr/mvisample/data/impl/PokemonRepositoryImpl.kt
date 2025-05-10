@@ -11,6 +11,7 @@ import co.kr.mvisample.data.model.toData
 import co.kr.mvisample.data.paging.PokemonRemoteMediator
 import co.kr.mvisample.data.repository.PokemonRepository
 import co.kr.mvisample.data.result.Result
+import co.kr.mvisample.data.resultMapper
 import co.kr.mvisample.data.resultMapperWithLocal
 import co.kr.mvisample.local.room.dao.PokemonDao
 import co.kr.mvisample.local.room.dao.RemoteKeyDao
@@ -59,6 +60,11 @@ class PokemonRepositoryImpl @Inject constructor(
                 )
             }
         )
+
+    override fun markAsDiscovered(id: Int): Flow<Result<Unit>> =
+        resultMapper {
+            pokemonDao.markAsDiscovered(id)
+        }
 }
 
 const val LoadSize = 100

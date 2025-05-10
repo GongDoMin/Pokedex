@@ -14,4 +14,7 @@ class PokemonDataSourceImpl @Inject constructor(
 
     override fun getPokemon(id: Int): PokemonEntity =
         pokemonDao.getPokemon(id)
+
+    override suspend fun markAsDiscovered(id: Int) =
+        pokemonDao.markAsDiscovered(id)
 }

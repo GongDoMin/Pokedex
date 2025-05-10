@@ -7,4 +7,6 @@ interface PokemonDataSource {
     fun getPokemons(): PagingSource<Int, PokemonEntity>
 
     fun getPokemon(id: Int): PokemonEntity
+
+    suspend fun markAsDiscovered(id: Int)
 }

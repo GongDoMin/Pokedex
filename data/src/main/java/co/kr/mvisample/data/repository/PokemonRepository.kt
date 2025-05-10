@@ -10,4 +10,6 @@ interface PokemonRepository {
     fun fetchPokemons(): Flow<PagingData<Pokemon>>
 
     fun fetchPokemonDetail(id: Int, name: String): Flow<Result<PokemonDetail>>
+
+    fun markAsDiscovered(id: Int): Flow<Result<Unit>>
 }
