@@ -55,7 +55,12 @@ class PokedexViewModel @Inject constructor(
                 )
             }
             else -> {
-                sendEvent(PokedexEvent.OnNavigateToDetail(selectedPokemon.name, selectedPokemon.isDiscovered))
+                sendEvent(
+                    PokedexEvent.OnNavigateToDetail(
+                        id = selectedPokemon.id,
+                        name = selectedPokemon.name,
+                        isDiscovered = selectedPokemon.isDiscovered
+                    ))
             }
         }
     }

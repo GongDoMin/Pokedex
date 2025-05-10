@@ -12,6 +12,9 @@ interface PokemonDao {
     @Query("SELECT * FROM pokemon")
     fun getPokemons(): PagingSource<Int, PokemonEntity>
 
+    @Query("SELECT * FROM pokemon WHERE id = :id")
+    fun getPokemon(id: Int): PokemonEntity
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPokemons(pokemons: List<PokemonEntity>)
 

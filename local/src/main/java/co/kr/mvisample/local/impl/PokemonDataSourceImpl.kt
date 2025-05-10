@@ -9,6 +9,9 @@ import javax.inject.Inject
 class PokemonDataSourceImpl @Inject constructor(
     private val pokemonDao: PokemonDao
 ) : PokemonDataSource {
-    override fun getRepositories(): PagingSource<Int, PokemonEntity> =
+    override fun getPokemons(): PagingSource<Int, PokemonEntity> =
         pokemonDao.getPokemons()
+
+    override fun getPokemon(id: Int): PokemonEntity =
+        pokemonDao.getPokemon(id)
 }

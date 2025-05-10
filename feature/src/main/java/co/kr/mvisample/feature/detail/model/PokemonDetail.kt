@@ -55,7 +55,7 @@ fun Type.toFeature(): TypeModel =
 fun PokemonDetail.toFeature(): PokemonDetailModel =
     PokemonDetailModel(
         id = id,
-        imageUrl = imageUrl,
+        imageUrl = imgUrl,
         name = name,
         weight = weight,
         height = height,

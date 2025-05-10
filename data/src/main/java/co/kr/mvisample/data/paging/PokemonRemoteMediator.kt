@@ -5,7 +5,6 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import co.kr.mvisample.data.impl.LoadSize
-import co.kr.mvisample.data.model.Pokemon
 import co.kr.mvisample.data.model.toData
 import co.kr.mvisample.data.model.toEntity
 import co.kr.mvisample.local.model.PokemonEntity

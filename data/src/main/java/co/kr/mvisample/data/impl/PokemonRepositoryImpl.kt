@@ -11,7 +11,7 @@ import co.kr.mvisample.data.model.toData
 import co.kr.mvisample.data.paging.PokemonRemoteMediator
 import co.kr.mvisample.data.repository.PokemonRepository
 import co.kr.mvisample.data.result.Result
-import co.kr.mvisample.data.resultMapper
+import co.kr.mvisample.data.resultMapperWithLocal
 import co.kr.mvisample.local.room.dao.PokemonDao
 import co.kr.mvisample.local.room.dao.RemoteKeyDao
 import co.kr.mvisample.remote.datasource.PokemonDataSource
@@ -39,10 +39,26 @@ class PokemonRepositoryImpl @Inject constructor(
             }
         }
 
-    override fun fetchPokemonDetail(name: String): Flow<Result<PokemonDetail>> =
-        resultMapper {
-            pokemonDataSource.fetchPokemonDetail(name).toData()
-        }
+    override fun fetchPokemonDetail(id: Int, name: String): Flow<Result<PokemonDetail>> =
+        resultMapperWithLocal(
+            localAction = {
+                val entity = pokemonDao.getPokemon(id)
+                PokemonDetail(
+                    id = entity.id,
+                    name = entity.name,
+                    imgUrl = entity.imgUrl
+                )
+            },
+            remoteAction = {
+                val response = pokemonDataSource.fetchPokemonDetail(name)
+                PokemonDetail(
+                    weight = response.weight * 0.1f,
+                    height = response.height * 0.1f,
+                    types = response.types.map { it.toData() },
+                    abilities = response.abilities.map { it.toData() }
+                )
+            }
+        )
 }
 
 const val LoadSize = 100

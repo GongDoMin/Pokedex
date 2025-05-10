@@ -44,8 +44,8 @@ fun PokemonApp() {
                 ) {
                     composableWithBasicTransition<PokemonRoutes.Home> {
                         HomeContainer(
-                            onNavigateToPokemonDetail = { name, isDiscovered ->
-                                navController.navigate(PokemonRoutes.PokemonDetail(name, isDiscovered))
+                            onNavigateToPokemonDetail = { id, name, isDiscovered ->
+                                navController.navigate(PokemonRoutes.PokemonDetail(id, name, isDiscovered))
                             }
                         )
                     }

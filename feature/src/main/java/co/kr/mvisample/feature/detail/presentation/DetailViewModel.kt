@@ -21,36 +21,58 @@ class DetailViewModel @Inject constructor(
 ) : BaseViewModel<DetailAction, UiState<DetailUiState>, DetailEvent>(
     initialState = UiState(
         content = DetailUiState(
-            pokemonDetail = PokemonDetailModel(
-                isDiscovered = savedStateHandle.toRoute<PokemonRoutes.PokemonDetail>().isDiscovered
-            )
+            pokemonDetail = savedStateHandle.toRoute<PokemonRoutes.PokemonDetail>().let {
+                PokemonDetailModel(
+                    id = it.id,
+                    isDiscovered = it.isDiscovered
+                )
+            }
         )
     )
 ) {
-    private val routes = savedStateHandle.toRoute<PokemonRoutes.PokemonDetail>()
 
     init {
-        handleAction(DetailAction.SystemAction.FetchPokemonDetail(routes.name))
+        handleAction(
+            uiState.value.content.pokemonDetail.let {
+                DetailAction.SystemAction.FetchPokemonDetail(
+                    id = it.id,
+                    name = it.name
+                )
+            }
+        )
     }
 
     override fun handleAction(action: DetailAction) {
         when (action) {
-            is DetailAction.SystemAction.FetchPokemonDetail -> handleFetchPokemonDetail(action.name)
+            is DetailAction.SystemAction.FetchPokemonDetail -> handleFetchPokemonDetail(action.id, action.name)
         }
     }
 
-    private fun handleFetchPokemonDetail(name: String) {
+    private fun handleFetchPokemonDetail(id: Int, name: String) {
         launch {
-            pokemonRepository.fetchPokemonDetail(name)
+            pokemonRepository.fetchPokemonDetail(id, name)
                 .resultCollect(
+                    onLoading = { pokemonDetail ->
+                        pokemonDetail?.let {
+                            updateUiState {
+                                val currentDetail = it.content.pokemonDetail
+                                val updatedDetail = currentDetail.copy(
+                                    id = pokemonDetail.id,
+                                    name = pokemonDetail.name,
+                                    imageUrl = pokemonDetail.imgUrl
+                                )
+                                val updatedContent = it.content.copy(
+                                    pokemonDetail = updatedDetail
+                                )
+                                it.copy(content = updatedContent)
+                            }
+                        }
+                    },
                     onSuccess = { pokemonDetail ->
                         val feature = pokemonDetail.toFeature()
                         updateUiState {
                             val currentDetail = it.content.pokemonDetail
                             val updatedDetail = currentDetail.copy(
-                                id = feature.id,
-                                imageUrl = feature.imageUrl,
-                                name = feature.name,
                                 weight = feature.weight,
                                 height = feature.height,
                             )
