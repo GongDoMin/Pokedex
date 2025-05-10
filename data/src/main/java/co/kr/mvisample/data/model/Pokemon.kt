@@ -1,5 +1,6 @@
 package co.kr.mvisample.data.model
 
+import co.kr.mvisample.local.model.PokemonEntity
 import co.kr.mvisample.remote.model.PokemonResponse
 import co.kr.mvisample.remote.utils.getImageUrl
 
@@ -19,3 +20,20 @@ fun PokemonResponse.toData(): Pokemon {
         isDiscovered = listOf(true, false).random()
     )
 }
+
+fun Pokemon.toEntity(): PokemonEntity =
+    PokemonEntity(
+        id = id,
+        name = name,
+        imgUrl = imageUrl,
+        isDiscovered = false,
+        isCaught = false
+    )
+
+fun PokemonEntity.toData(): Pokemon =
+    Pokemon(
+        id = id,
+        name = name,
+        imageUrl = imgUrl,
+        isDiscovered = false
+    )

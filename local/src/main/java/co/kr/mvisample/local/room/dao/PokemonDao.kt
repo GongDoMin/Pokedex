@@ -2,6 +2,8 @@ package co.kr.mvisample.local.room.dao
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import co.kr.mvisample.local.model.PokemonEntity
 
@@ -9,4 +11,10 @@ import co.kr.mvisample.local.model.PokemonEntity
 interface PokemonDao {
     @Query("SELECT * FROM pokemon")
     fun getPokemons(): PagingSource<Int, PokemonEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPokemons(pokemons: List<PokemonEntity>)
+
+    @Query("DELETE FROM pokemon")
+    suspend fun clearPokemons()
 }
