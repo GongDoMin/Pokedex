@@ -1,6 +1,5 @@
 package co.kr.mvisample.feature.detail.model
 
-import co.kr.mvisample.data.model.PokemonDetail
 import co.kr.mvisample.data.model.Type
 
 data class PokemonDetailModel(
@@ -26,14 +25,4 @@ data class TypeModel(
 fun Type.toFeature(): TypeModel =
     TypeModel(
         name = name
-    )
-
-fun PokemonDetail.toFeature(): PokemonDetailModel =
-    PokemonDetailModel(
-        id = id,
-        imageUrl = imgUrl,
-        name = name,
-        weight = weight,
-        height = height,
-        types = types.map { it.toFeature() }
     )

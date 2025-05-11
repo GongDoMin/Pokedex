@@ -54,39 +54,32 @@ class DetailViewModel @Inject constructor(
         launch {
             pokemonRepository.fetchPokemonDetail(id, name)
                 .resultCollect(
-                    onLoading = { pokemonDetail ->
-                        pokemonDetail?.let {
-                            updateUiState {
-                                val currentDetail = it.content.pokemonDetail
-                                val updatedDetail = currentDetail.copy(
-                                    id = pokemonDetail.id,
-                                    name = pokemonDetail.name,
-                                    imageUrl = pokemonDetail.imgUrl
+                    onSuccess = { state, pokemonDetail ->
+                        state.copy(
+                            content = state.content.copy(
+                                pokemonDetail = state.content.pokemonDetail.copy(
+                                    weight = pokemonDetail.weight,
+                                    height = pokemonDetail.height,
+                                    types = pokemonDetail.types.map { it.toFeature() }
                                 )
-                                val updatedContent = it.content.copy(
-                                    pokemonDetail = updatedDetail
-                                )
-                                it.copy(content = updatedContent)
-                            }
-                        }
-                    },
-                    onSuccess = { pokemonDetail ->
-                        val feature = pokemonDetail.toFeature()
-                        updateUiState {
-                            val currentDetail = it.content.pokemonDetail
-                            val updatedDetail = currentDetail.copy(
-                                weight = feature.weight,
-                                height = feature.height,
-                                types = feature.types
                             )
-                            val updatedContent = it.content.copy(
-                                pokemonDetail = updatedDetail
-                            )
-                            it.copy(content = updatedContent)
-                        }
+                        )
                     },
                     onError = {
                         it.printStackTrace()
+                    },
+                    onLoading = { state, pokemonDetail ->
+                        pokemonDetail?.let {
+                            state.copy(
+                                content = state.content.copy(
+                                    pokemonDetail = state.content.pokemonDetail.copy(
+                                        id = pokemonDetail.id,
+                                        name = pokemonDetail.name,
+                                        imageUrl = pokemonDetail.imgUrl
+                                    )
+                                )
+                            )
+                        } ?: state
                     }
                 )
         }

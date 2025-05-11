@@ -53,23 +53,29 @@ abstract class BaseViewModel<Action, UiState: UiStateMarker, Event>(
     }
 
     protected suspend fun <T> Flow<Result<T>>.resultCollect(
-        onLoading: (T?) -> Unit = {},
-        onError: (Throwable) -> Unit = {},
-        onSuccess: (T) -> Unit
+        onSuccess: (UiState, T) -> UiState,
+        onLoading: ((UiState, T?) -> UiState)? = null,
+        onError: ((Throwable) -> Unit)? = null
     ) {
         collect { result ->
             when (result) {
                 is Result.Loading -> {
                     updateLoadingState(true)
-                    onLoading(result.data)
+                    onLoading?.let { onLoading ->
+                        updateUiState {
+                            onLoading(it, result.data)
+                        }
+                    }
                 }
                 is Result.Error -> {
                     updateLoadingState(false)
-                    onError(result.throwable)
+                    onError?.let { it(result.throwable) }
                 }
                 is Result.Success -> {
                     updateLoadingState(false)
-                    onSuccess(result.data)
+                    updateUiState {
+                        onSuccess(it, result.data)
+                    }
                 }
             }
         }

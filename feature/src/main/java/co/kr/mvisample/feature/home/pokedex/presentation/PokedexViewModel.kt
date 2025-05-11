@@ -72,16 +72,14 @@ class PokedexViewModel @Inject constructor(
                     if (!pokemon.isDiscovered) {
                         pokemonRepository.markAsDiscovered(pokemon.id)
                             .resultCollect(
-                                onSuccess = {
-                                    updateUiState {
-                                        it.copy(
-                                            content = it.content.copy(
-                                                selectedPokemon = it.content.selectedPokemon?.copy(
-                                                    isDiscovered = true
-                                                )
+                                onSuccess = { state, _ ->
+                                    state.copy(
+                                        content = state.content.copy(
+                                            selectedPokemon = state.content.selectedPokemon?.copy(
+                                                isDiscovered = true
                                             )
                                         )
-                                    }
+                                    )
                                 }
                             )
                     }
@@ -96,17 +94,17 @@ class PokedexViewModel @Inject constructor(
                 selectedPokemon = uiState.value.content.selectedPokemon,
                 onPresent = { pokemon ->
                     pokemonRepository.markAsCaught(pokemon.id, true)
-                        .resultCollect {
-                            updateUiState {
-                                it.copy(
-                                    content = it.content.copy(
-                                        selectedPokemon = it.content.selectedPokemon?.copy(
-                                            isCaught = false
+                        .resultCollect(
+                            onSuccess = { state, _ ->
+                                state.copy(
+                                    content = state.content.copy(
+                                        selectedPokemon = state.content.selectedPokemon?.copy(
+                                            isCaught = true
                                         )
                                     )
                                 )
                             }
-                        }
+                        )
                 }
             )
         }
@@ -118,17 +116,17 @@ class PokedexViewModel @Inject constructor(
                 selectedPokemon = uiState.value.content.selectedPokemon,
                 onPresent = { pokemon ->
                     pokemonRepository.markAsCaught(pokemon.id, false)
-                        .resultCollect {
-                            updateUiState {
-                                it.copy(
-                                    content = it.content.copy(
-                                        selectedPokemon = it.content.selectedPokemon?.copy(
+                        .resultCollect(
+                            onSuccess = { state, _ ->
+                                state.copy(
+                                    content = state.content.copy(
+                                        selectedPokemon = state.content.selectedPokemon?.copy(
                                             isCaught = false
                                         )
                                     )
                                 )
                             }
-                        }
+                        )
                 }
             )
         }
