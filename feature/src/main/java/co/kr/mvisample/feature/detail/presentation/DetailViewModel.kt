@@ -71,8 +71,6 @@ class DetailViewModel @Inject constructor(
                         pokemonDetail?.let {
                             copy(
                                 pokemonDetail = this.pokemonDetail.copy(
-                                    id = pokemonDetail.id,
-                                    name = pokemonDetail.name,
                                     imageUrl = pokemonDetail.imgUrl
                                 )
                             )
