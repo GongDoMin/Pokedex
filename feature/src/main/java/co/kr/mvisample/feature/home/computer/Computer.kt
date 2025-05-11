@@ -1,4 +1,4 @@
-package co.kr.mvisample.feature.home.etc
+package co.kr.mvisample.feature.home.computer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import co.kr.mvisample.core.theme.PokemonTheme
 
 @Composable
-fun EtcScreen() {
+fun ComputerScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -18,7 +18,7 @@ fun EtcScreen() {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "설정"
+            text = "컴퓨터"
         )
     }
 }

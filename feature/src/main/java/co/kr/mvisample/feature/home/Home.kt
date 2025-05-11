@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -35,7 +34,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import co.kr.mvisample.feature.components.pokemonCard
 import co.kr.mvisample.feature.home.HomeSections.Companion.toSection
-import co.kr.mvisample.feature.home.etc.EtcScreen
+import co.kr.mvisample.feature.home.computer.ComputerScreen
 import co.kr.mvisample.feature.home.items.ItemsScreen
 import co.kr.mvisample.feature.home.pokedex.PokedexScreen
 import co.kr.mvisample.core.theme.PokemonTheme
@@ -83,8 +82,8 @@ fun HomeContainer(
             composable<HomeRoutes.Items> {
                 ItemsScreen()
             }
-            composable<HomeRoutes.Etc> {
-                EtcScreen()
+            composable<HomeRoutes.Computer> {
+                ComputerScreen()
             }
         }
     }
@@ -120,6 +119,7 @@ fun PokemonBottomBar(
                             .pokemonCard(
                                 shape = RoundedCornerShape(16.dp)
                             )
+                            .padding(vertical = 4.dp)
                             .clickable {
                                 onClickSection(it.route)
                             },
@@ -235,7 +235,7 @@ enum class HomeSections(
 ) {
     POKEDEX("도감", HomeRoutes.Pokedex),
     ITEMS("가방", HomeRoutes.Items),
-    ETC("설정", HomeRoutes.Etc);
+    COMPUTER("컴퓨터", HomeRoutes.Computer);
 
     companion object {
         fun String?.toSection(): HomeSections? {
@@ -250,10 +250,10 @@ enum class HomeSections(
 sealed interface HomeRoutes {
     @Serializable data object Pokedex: HomeRoutes
     @Serializable data object Items: HomeRoutes
-    @Serializable data object Etc: HomeRoutes
+    @Serializable data object Computer: HomeRoutes
 }
 
-private val BottomNavHeight = 48.dp
+private val BottomNavHeight = 56.dp
 private val BottomBarPadding = 8.dp
 private val BottomIconSize = 24.dp
 
@@ -276,7 +276,7 @@ fun PokemonBottomBarPreview() {
                     currentSection = when (it) {
                         HomeRoutes.Pokedex -> HomeSections.POKEDEX
                         HomeRoutes.Items -> HomeSections.ITEMS
-                        HomeRoutes.Etc -> HomeSections.ETC
+                        HomeRoutes.Computer -> HomeSections.COMPUTER
                     }
                 }
             )
