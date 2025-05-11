@@ -83,13 +83,10 @@ abstract class BaseViewModel<Action, UiState: UiStateMarker, Event>(
 
     protected fun <Content> updateContent(content: Content) {
         updateUiState { state ->
-            when (state) {
-                is co.kr.mvisample.feature.base.UiState<*> -> {
-                    (state as co.kr.mvisample.feature.base.UiState<Content>).copy(
-                        content = content
-                    ) as UiState
-                }
-                else -> state
+            state.withTypedUiState {
+                (this as co.kr.mvisample.feature.base.UiState<Content>).copy(
+                    content = content
+                ) as UiState
             }
         }
     }
@@ -100,31 +97,36 @@ abstract class BaseViewModel<Action, UiState: UiStateMarker, Event>(
         errorContent: String = ""
     ) {
         updateUiState { state ->
-            when (state) {
-                is co.kr.mvisample.feature.base.UiState<*> ->
-                    state.copy(
-                        error = state.error.copy(
-                            isError = isError,
-                            errorTitle = errorTitle,
-                            errorContent = errorContent
-                        )
-                    ) as UiState
-                else -> state
+            state.withTypedUiState {
+                this.copy(
+                    error = this.error.copy(
+                        isError = isError,
+                        errorTitle = errorTitle,
+                        errorContent = errorContent
+                    )
+                ) as UiState
             }
         }
     }
 
     protected open fun updateLoadingState(isLoading: Boolean) {
         updateUiState { state ->
-            when (state) {
-                is co.kr.mvisample.feature.base.UiState<*> ->
-                    state.copy(
-                        loading = state.loading.copy(
-                            isLoading = isLoading
-                        )
-                    ) as UiState
-                else -> state
+            state.withTypedUiState {
+                this.copy(
+                    loading = this.loading.copy(
+                        isLoading = isLoading
+                    )
+                ) as UiState
             }
+        }
+    }
+
+    private fun UiState.withTypedUiState(
+        block: co.kr.mvisample.feature.base.UiState<*>.() -> UiState
+    ) : UiState {
+        return when (this) {
+            is co.kr.mvisample.feature.base.UiState<*> -> block()
+            else -> this
         }
     }
 }
