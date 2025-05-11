@@ -50,7 +50,9 @@ fun PokemonApp() {
                         )
                     }
                     composableWithBasicTransition<PokemonRoutes.PokemonDetail> {
-                        DetailScreen()
+                        DetailScreen(
+                            onNavigateToBack = { navController.popBackStack() }
+                        )
                     }
                 }
             }

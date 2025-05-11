@@ -27,7 +27,9 @@ abstract class BaseViewModel<Action, UiState: UiStateMarker, Event>(
 
     protected fun updateUiState(function: (UiState) -> UiState) = _uiState.update(function)
 
-    protected fun sendEvent(event: Event) = _event.trySend(event)
+    protected open fun sendEvent(event: Event) = launch {
+        _event.send(event)
+    }
 
     abstract fun handleAction(action: Action)
 

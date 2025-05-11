@@ -2,6 +2,7 @@ package co.kr.mvisample.feature.detail.presentation
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
+import co.kr.mvisample.core.navigation.PokemonRoutes
 import co.kr.mvisample.data.repository.PokemonRepository
 import co.kr.mvisample.feature.base.BaseViewModel
 import co.kr.mvisample.feature.base.UiState
@@ -10,7 +11,6 @@ import co.kr.mvisample.feature.detail.model.DetailEvent
 import co.kr.mvisample.feature.detail.model.DetailUiState
 import co.kr.mvisample.feature.detail.model.PokemonDetailModel
 import co.kr.mvisample.feature.detail.model.toFeature
-import co.kr.mvisample.core.navigation.PokemonRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -24,6 +24,7 @@ class DetailViewModel @Inject constructor(
             pokemonDetail = savedStateHandle.toRoute<PokemonRoutes.PokemonDetail>().let {
                 PokemonDetailModel(
                     id = it.id,
+                    name = it.name,
                     isDiscovered = it.isDiscovered
                 )
             }
@@ -34,7 +35,7 @@ class DetailViewModel @Inject constructor(
     init {
         handleAction(
             uiState.value.content.pokemonDetail.let {
-                DetailAction.SystemAction.FetchPokemonDetail(
+                DetailAction.FetchPokemonDetail(
                     id = it.id,
                     name = it.name
                 )
@@ -44,7 +45,8 @@ class DetailViewModel @Inject constructor(
 
     override fun handleAction(action: DetailAction) {
         when (action) {
-            is DetailAction.SystemAction.FetchPokemonDetail -> handleFetchPokemonDetail(action.id, action.name)
+            is DetailAction.FetchPokemonDetail -> handleFetchPokemonDetail(action.id, action.name)
+            DetailAction.OnBackClick -> handleOnBackClick()
         }
     }
 
@@ -75,6 +77,7 @@ class DetailViewModel @Inject constructor(
                             val updatedDetail = currentDetail.copy(
                                 weight = feature.weight,
                                 height = feature.height,
+                                types = feature.types
                             )
                             val updatedContent = it.content.copy(
                                 pokemonDetail = updatedDetail
@@ -87,5 +90,9 @@ class DetailViewModel @Inject constructor(
                     }
                 )
         }
+    }
+
+    private fun handleOnBackClick() {
+        sendEvent(DetailEvent.OnNavigateToBack)
     }
 }

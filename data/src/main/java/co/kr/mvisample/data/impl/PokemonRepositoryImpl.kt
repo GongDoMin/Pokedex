@@ -55,8 +55,7 @@ class PokemonRepositoryImpl @Inject constructor(
                 PokemonDetail(
                     weight = response.weight * 0.1f,
                     height = response.height * 0.1f,
-                    types = response.types.map { it.toData() },
-                    abilities = response.abilities.map { it.toData() }
+                    types = response.types.map { it.toData() }
                 )
             }
         )

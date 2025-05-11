@@ -9,31 +9,17 @@ data class PokemonDetailResponse(
     @SerialName("name") val name: String = "",
     @SerialName("weight") val weight: Int = 0,
     @SerialName("height") val height: Int = 0,
-    @SerialName("types") val types: List<TypeWithSlotResponse> = emptyList(),
-    @SerialName("abilities") val abilities: List<PokemonAbilityResponse> = emptyList(),
+    @SerialName("types") val types: List<TypeWithSlotResponse> = emptyList()
 )
 
 @Serializable
 data class TypeWithSlotResponse(
-    @SerialName(value = "slot") val slot: Int = 0,
-    @SerialName(value = "type") val type: TypeResponse = TypeResponse(),
+    @SerialName("slot") val slot: Int = 0,
+    @SerialName("type") val type: TypeResponse = TypeResponse(),
 )
 
 @Serializable
 data class TypeResponse(
-    @SerialName(value = "name") val name: String = "",
-    @SerialName(value = "url") val url: String = ""
-)
-
-@Serializable
-data class PokemonAbilityResponse(
-    @SerialName("ability") val ability: AbilityResponse = AbilityResponse(),
-    @SerialName("is_hidden") val isHidden: Boolean = false,
-    @SerialName("slot") val slot: Int = 0
-)
-
-@Serializable
-data class AbilityResponse(
     @SerialName("name") val name: String = "",
     @SerialName("url") val url: String = ""
 )
