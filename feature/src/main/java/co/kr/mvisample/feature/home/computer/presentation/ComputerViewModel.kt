@@ -29,13 +29,11 @@ class ComputerViewModel @Inject constructor(
     private fun handleFetchPokemonIcons() {
         launch {
             pokemonRepository.fetchPokemonIcons().collect { pokemonIcons ->
-                updateUiState {
-                    it.copy(
-                        content = it.content.copy(
-                            pokemonIcons = pokemonIcons.map { it.toFeature() }
-                        )
+                updateContent(
+                    uiState.value.content.copy(
+                        pokemonIcons = pokemonIcons.map { it.toFeature() }
                     )
-                }
+                )
             }
         }
     }

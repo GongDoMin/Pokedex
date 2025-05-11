@@ -3,6 +3,7 @@ package co.kr.mvisample.feature.detail.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import co.kr.mvisample.core.navigation.PokemonRoutes
+import co.kr.mvisample.data.model.PokemonDetail
 import co.kr.mvisample.data.repository.PokemonRepository
 import co.kr.mvisample.feature.base.BaseViewModel
 import co.kr.mvisample.feature.base.UiState
@@ -53,33 +54,29 @@ class DetailViewModel @Inject constructor(
     private fun handleFetchPokemonDetail(id: Int, name: String) {
         launch {
             pokemonRepository.fetchPokemonDetail(id, name)
-                .resultCollect(
-                    onSuccess = { state, pokemonDetail ->
-                        state.copy(
-                            content = state.content.copy(
-                                pokemonDetail = state.content.pokemonDetail.copy(
-                                    weight = pokemonDetail.weight,
-                                    height = pokemonDetail.height,
-                                    types = pokemonDetail.types.map { it.toFeature() }
-                                )
+                .resultCollect<PokemonDetail, DetailUiState>(
+                    onSuccess = { pokemonDetail ->
+                        copy(
+                            pokemonDetail = this.pokemonDetail.copy(
+                                weight = pokemonDetail.weight,
+                                height = pokemonDetail.height,
+                                types = pokemonDetail.types.map { it.toFeature() }
                             )
                         )
                     },
                     onError = {
                         it.printStackTrace()
                     },
-                    onLoading = { state, pokemonDetail ->
+                    onLoading = { pokemonDetail ->
                         pokemonDetail?.let {
-                            state.copy(
-                                content = state.content.copy(
-                                    pokemonDetail = state.content.pokemonDetail.copy(
-                                        id = pokemonDetail.id,
-                                        name = pokemonDetail.name,
-                                        imageUrl = pokemonDetail.imgUrl
-                                    )
+                            copy(
+                                pokemonDetail = this.pokemonDetail.copy(
+                                    id = pokemonDetail.id,
+                                    name = pokemonDetail.name,
+                                    imageUrl = pokemonDetail.imgUrl
                                 )
                             )
-                        } ?: state
+                        } ?: this
                     }
                 )
         }

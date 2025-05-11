@@ -8,13 +8,6 @@ data class UiState<Content>(
     val content: Content
 ): UiStateMarker
 
-data class CombinedUiState<Content1, Content2>(
-    val loading: Loading = Loading(),
-    val error: Error = Error(),
-    val content1: Content1,
-    val content2: Content2
-): UiStateMarker
-
 data class Loading(
     val isLoading: Boolean = false
 )

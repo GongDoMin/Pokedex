@@ -52,31 +52,44 @@ abstract class BaseViewModel<Action, UiState: UiStateMarker, Event>(
         )
     }
 
-    protected suspend fun <T> Flow<Result<T>>.resultCollect(
-        onSuccess: (UiState, T) -> UiState,
-        onLoading: ((UiState, T?) -> UiState)? = null,
+    protected suspend fun <DataModel, Content> Flow<Result<DataModel>>.resultCollect(
+        onSuccess: Content.(DataModel) -> Content,
+        onLoading: (Content.(DataModel?) -> Content)? = null,
         onError: ((Throwable) -> Unit)? = null
     ) {
         collect { result ->
+            val currentState = uiState.value as co.kr.mvisample.feature.base.UiState<Content>
+
             when (result) {
                 is Result.Loading -> {
                     updateLoadingState(true)
                     onLoading?.let { onLoading ->
-                        updateUiState {
-                            onLoading(it, result.data)
-                        }
+                        updateContent(currentState.content.onLoading(result.data))
                     }
                 }
                 is Result.Error -> {
                     updateLoadingState(false)
-                    onError?.let { it(result.throwable) }
+                    onError?.let { onError ->
+                        onError(result.throwable)
+                    }
                 }
                 is Result.Success -> {
                     updateLoadingState(false)
-                    updateUiState {
-                        onSuccess(it, result.data)
-                    }
+                    updateContent(currentState.content.onSuccess(result.data))
                 }
+            }
+        }
+    }
+
+    protected fun <Content> updateContent(content: Content) {
+        updateUiState { state ->
+            when (state) {
+                is co.kr.mvisample.feature.base.UiState<*> -> {
+                    (state as co.kr.mvisample.feature.base.UiState<Content>).copy(
+                        content = content
+                    ) as UiState
+                }
+                else -> state
             }
         }
     }
@@ -96,14 +109,6 @@ abstract class BaseViewModel<Action, UiState: UiStateMarker, Event>(
                             errorContent = errorContent
                         )
                     ) as UiState
-                is CombinedUiState<*, *> ->
-                    state.copy(
-                        error = state.error.copy(
-                            isError = isError,
-                            errorTitle = errorTitle,
-                            errorContent = errorContent
-                        )
-                    ) as UiState
                 else -> state
             }
         }
@@ -113,12 +118,6 @@ abstract class BaseViewModel<Action, UiState: UiStateMarker, Event>(
         updateUiState { state ->
             when (state) {
                 is co.kr.mvisample.feature.base.UiState<*> ->
-                    state.copy(
-                        loading = state.loading.copy(
-                            isLoading = isLoading
-                        )
-                    ) as UiState
-                is CombinedUiState<*, *> ->
                     state.copy(
                         loading = state.loading.copy(
                             isLoading = isLoading
