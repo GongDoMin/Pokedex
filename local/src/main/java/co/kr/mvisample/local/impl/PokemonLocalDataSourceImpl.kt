@@ -17,6 +17,9 @@ class PokemonLocalDataSourceImpl @Inject constructor(
     override fun getPokemonLocals(): Flow<List<PokemonLocalEntity>> =
         pokemonDao.getPokemonLocals()
 
+    override fun getCaughtPokemons(): Flow<List<PokemonLocalEntity>> =
+        pokemonDao.getCaughtPokemons()
+
     override suspend fun insertPokemons(pokemons: List<PokemonEntity>) {
         pokemonDao.insertPokemons(pokemons)
     }

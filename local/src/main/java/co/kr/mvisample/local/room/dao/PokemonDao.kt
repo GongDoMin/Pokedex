@@ -17,6 +17,9 @@ interface PokemonDao {
     @Query("SELECT * FROM `pokemon-local`")
     fun getPokemonLocals(): Flow<List<PokemonLocalEntity>>
 
+    @Query("SELECT * FROM `pokemon-local` WHERE isCaught = 1 ORDER BY `order` ASC")
+    fun getCaughtPokemons(): Flow<List<PokemonLocalEntity>>
+
     @Query("SELECT * FROM pokemon WHERE id = :id")
     suspend fun getPokemon(id: Int): PokemonEntity
 

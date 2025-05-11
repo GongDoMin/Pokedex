@@ -8,6 +8,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import co.kr.mvisample.data.model.Pokemon
 import co.kr.mvisample.data.model.PokemonDetail
+import co.kr.mvisample.data.model.PokemonIcon
 import co.kr.mvisample.data.model.toData
 import co.kr.mvisample.data.paging.PokemonRemoteMediator
 import co.kr.mvisample.data.repository.PokemonRepository
@@ -77,6 +78,11 @@ class PokemonRepositoryImpl @Inject constructor(
                 )
             }
         )
+
+    override fun fetchPokemonIcons(): Flow<List<PokemonIcon>> =
+        pokemonLocalDataSource.getCaughtPokemons().map { pokemonLocals ->
+            pokemonLocals.map { it.toData() }
+        }
 
     override fun markAsDiscovered(id: Int): Flow<Result<Unit>> =
         resultMapper {
