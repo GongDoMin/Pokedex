@@ -27,9 +27,7 @@ fun Pokemon.toEntity(): PokemonEntity =
     PokemonEntity(
         id = id,
         name = name,
-        imgUrl = imgUrl,
-        isDiscovered = isDiscovered,
-        isCaught = isCaught
+        imgUrl = imgUrl
     )
 
 fun PokemonEntity.toData(): Pokemon =
@@ -37,6 +35,4 @@ fun PokemonEntity.toData(): Pokemon =
         id = id,
         name = name,
         imgUrl = imgUrl,
-        isDiscovered = isDiscovered,
-        isCaught = isCaught
     )

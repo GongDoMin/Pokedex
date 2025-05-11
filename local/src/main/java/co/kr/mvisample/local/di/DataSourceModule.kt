@@ -1,19 +1,12 @@
 package co.kr.mvisample.local.di
 
-import android.content.Context
-import androidx.room.Room
-import co.kr.mvisample.local.datasource.PokemonDataSource
-import co.kr.mvisample.local.datasource.RemoteKeyDataSource
-import co.kr.mvisample.local.impl.PokemonDataSourceImpl
-import co.kr.mvisample.local.impl.RemoteKeyDataSourceImpl
-import co.kr.mvisample.local.room.dao.PokemonDao
-import co.kr.mvisample.local.room.dao.RemoteKeyDao
-import co.kr.mvisample.local.room.database.PokemonDatabase
+import co.kr.mvisample.local.datasource.PokemonLocalDataSource
+import co.kr.mvisample.local.datasource.RemoteKeyLocalDataSource
+import co.kr.mvisample.local.impl.PokemonLocalDataSourceImpl
+import co.kr.mvisample.local.impl.RemoteKeyLocalDataSourceImpl
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -22,11 +15,11 @@ import javax.inject.Singleton
 abstract class DataSourceModule {
     @Binds
     @Singleton
-    abstract fun bindPokemonDataSource(pokemonDataSourceImpl: PokemonDataSourceImpl): PokemonDataSource
+    abstract fun bindPokemonLocalDataSource(pokemonLocalDataSourceImpl: PokemonLocalDataSourceImpl): PokemonLocalDataSource
 
     @Binds
     @Singleton
-    abstract fun bindRemoteKeyDataSource(remoteKeyDataSourceImpl: RemoteKeyDataSourceImpl): RemoteKeyDataSource
+    abstract fun bindRemoteKeyLocalDataSource(remoteKeyLocalDataSourceImpl: RemoteKeyLocalDataSourceImpl): RemoteKeyLocalDataSource
 
 
 }

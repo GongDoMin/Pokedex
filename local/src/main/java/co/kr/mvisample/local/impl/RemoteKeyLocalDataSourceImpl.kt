@@ -1,13 +1,13 @@
 package co.kr.mvisample.local.impl
 
-import co.kr.mvisample.local.datasource.RemoteKeyDataSource
+import co.kr.mvisample.local.datasource.RemoteKeyLocalDataSource
 import co.kr.mvisample.local.model.RemoteKeyEntity
 import co.kr.mvisample.local.room.dao.RemoteKeyDao
 import javax.inject.Inject
 
-class RemoteKeyDataSourceImpl @Inject constructor(
+class RemoteKeyLocalDataSourceImpl @Inject constructor(
     private val remoteKeyDao: RemoteKeyDao
-) : RemoteKeyDataSource {
+) : RemoteKeyLocalDataSource {
     override suspend fun remoteKey(pokemonId: Int): RemoteKeyEntity? =
         remoteKeyDao.remoteKey(pokemonId)
 

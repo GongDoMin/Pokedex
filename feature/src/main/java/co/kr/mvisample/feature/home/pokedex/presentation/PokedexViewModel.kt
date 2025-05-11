@@ -20,12 +20,12 @@ class PokedexViewModel @Inject constructor(
 ) : BaseViewModel<PokedexAction, UiState<PokedexUiState>, PokedexEvent>(
     initialState = UiState(content = PokedexUiState())
 ) {
-    val pokemons = pokemonRepository.fetchPokemons()
+    val pokemons = pokemonRepository.fetchPokemons(viewModelScope)
         .map {
             it.map {
                 it.toFeature()
             }
-        }.cachedIn(viewModelScope)
+        }
 
     override fun handleAction(action: PokedexAction) {
         when (action) {

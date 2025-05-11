@@ -6,17 +6,22 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import co.kr.mvisample.local.model.PokemonEntity
+import co.kr.mvisample.local.model.PokemonLocalEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PokemonDao {
     @Query("SELECT * FROM pokemon")
     fun getPokemons(): PagingSource<Int, PokemonEntity>
 
-    @Query("SELECT * FROM pokemon WHERE id = :id")
-    fun getPokemon(id: Int): PokemonEntity
+    @Query("SELECT * FROM `pokemon-local`")
+    fun getPokemonLocals(): Flow<List<PokemonLocalEntity>>
 
-    @Query("UPDATE pokemon SET isDiscovered = 1 WHERE id = :id")
-    fun markAsDiscovered(id: Int)
+    @Query("SELECT * FROM pokemon WHERE id = :id")
+    suspend fun getPokemon(id: Int): PokemonEntity
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE, entity = PokemonLocalEntity::class)
+    suspend fun markAsDiscovered(pokemon: PokemonLocalEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPokemons(pokemons: List<PokemonEntity>)
