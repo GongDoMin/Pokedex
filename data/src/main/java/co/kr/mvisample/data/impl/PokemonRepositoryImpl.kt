@@ -22,6 +22,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import java.math.BigDecimal
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -70,8 +71,8 @@ class PokemonRepositoryImpl @Inject constructor(
             remoteAction = {
                 val response = pokemonDataSource.fetchPokemonDetail(name)
                 PokemonDetail(
-                    weight = response.weight * 0.1f,
-                    height = response.height * 0.1f,
+                    weight = BigDecimal(response.weight).multiply(BigDecimal(0.1)).toFloat(),
+                    height = BigDecimal(response.height).multiply(BigDecimal(0.1)).toFloat(),
                     types = response.types.map { it.toData() }
                 )
             }
