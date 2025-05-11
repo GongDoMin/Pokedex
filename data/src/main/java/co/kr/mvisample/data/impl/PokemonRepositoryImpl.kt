@@ -18,6 +18,7 @@ import co.kr.mvisample.local.datasource.PokemonLocalDataSource
 import co.kr.mvisample.local.datasource.RemoteKeyLocalDataSource
 import co.kr.mvisample.remote.datasource.PokemonDataSource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -78,11 +79,13 @@ class PokemonRepositoryImpl @Inject constructor(
 
     override fun markAsDiscovered(id: Int): Flow<Result<Unit>> =
         resultMapper {
+            delay(500L)
             pokemonLocalDataSource.markAsDiscovered(id)
         }
 
     override fun markAsCaught(id: Int, isCaught: Boolean): Flow<Result<Unit>> =
         resultMapper {
+            delay(500L)
             pokemonLocalDataSource.markAsCaught(id, isCaught)
         }
 }
