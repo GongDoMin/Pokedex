@@ -23,8 +23,11 @@ interface PokemonDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE, entity = PokemonLocalEntity::class)
     suspend fun markAsDiscovered(pokemon: PokemonLocalEntity)
 
-    @Query("UPDATE `pokemon-local` SET isCaught = :isCaught WHERE id = :id")
-    suspend fun markAsCaught(id: Int, isCaught: Boolean)
+    @Query("UPDATE `pokemon-local` SET isCaught = :isCaught, `order` = :order WHERE id = :id")
+    suspend fun markAsCaught(id: Int, isCaught: Boolean, order: Int?)
+
+    @Query("SELECT MAX(`order`) FROM `pokemon-local`")
+    suspend fun getMaxOrder(): Int?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPokemons(pokemons: List<PokemonEntity>)

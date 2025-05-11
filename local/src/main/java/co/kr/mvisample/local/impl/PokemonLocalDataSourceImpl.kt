@@ -28,16 +28,19 @@ class PokemonLocalDataSourceImpl @Inject constructor(
         pokemonDao.markAsDiscovered(
             PokemonLocalEntity(
                 id = id,
-                isDiscovered = true,
-                isCaught = false
+                iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$id.png",
+                isCaught = false,
+                order = null
             )
         )
     }
 
     override suspend fun markAsCaught(id: Int, isCaught: Boolean) {
+        val order = if (isCaught) pokemonDao.getMaxOrder()?.plus(1) ?: 0 else null
         pokemonDao.markAsCaught(
             id = id,
-            isCaught = isCaught
+            isCaught = isCaught,
+            order = order
         )
     }
 

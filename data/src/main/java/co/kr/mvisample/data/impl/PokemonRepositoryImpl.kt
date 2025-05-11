@@ -51,7 +51,7 @@ class PokemonRepositoryImpl @Inject constructor(
             pagingData.map { pokemon ->
                 localMap[pokemon.id]?.let {
                     pokemon.copy(
-                        isDiscovered = it.isDiscovered,
+                        isDiscovered = true,
                         isCaught = it.isCaught
                     )
                 } ?: pokemon

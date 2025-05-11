@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "pokemon-local")
 data class PokemonLocalEntity(
     @PrimaryKey val id: Int,
-    val isDiscovered: Boolean,
-    val isCaught: Boolean
+    val iconUrl: String,
+    val isCaught: Boolean,
+    val order: Int?
 )
