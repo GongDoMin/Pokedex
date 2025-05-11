@@ -23,6 +23,9 @@ interface PokemonDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE, entity = PokemonLocalEntity::class)
     suspend fun markAsDiscovered(pokemon: PokemonLocalEntity)
 
+    @Query("UPDATE `pokemon-local` SET isCaught = :isCaught WHERE id = :id")
+    suspend fun markAsCaught(id: Int, isCaught: Boolean)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPokemons(pokemons: List<PokemonEntity>)
 

@@ -16,5 +16,7 @@ interface PokemonLocalDataSource {
 
     suspend fun markAsDiscovered(id: Int)
 
+    suspend fun markAsCaught(id: Int, isCaught: Boolean)
+
     suspend fun clearPokemons()
 }

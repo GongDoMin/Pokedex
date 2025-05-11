@@ -27,9 +27,7 @@ abstract class BaseViewModel<Action, UiState: UiStateMarker, Event>(
 
     protected fun updateUiState(function: (UiState) -> UiState) = _uiState.update(function)
 
-    protected open fun sendEvent(event: Event) = launch {
-        _event.send(event)
-    }
+    protected suspend fun sendEvent(event: Event) = _event.send(event)
 
     abstract fun handleAction(action: Action)
 
@@ -56,8 +54,8 @@ abstract class BaseViewModel<Action, UiState: UiStateMarker, Event>(
 
     protected suspend fun <T> Flow<Result<T>>.resultCollect(
         onLoading: (T?) -> Unit = {},
-        onSuccess: (T) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Throwable) -> Unit = {},
+        onSuccess: (T) -> Unit
     ) {
         collect { result ->
             when (result) {

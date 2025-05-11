@@ -49,8 +49,8 @@ class PokemonRepositoryImpl @Inject constructor(
             pagingData.map { pokemon ->
                 localMap[pokemon.id]?.let {
                     pokemon.copy(
-                        isDiscovered = pokemon.isDiscovered,
-                        isCaught = pokemon.isCaught
+                        isDiscovered = it.isDiscovered,
+                        isCaught = it.isCaught
                     )
                 } ?: pokemon
             }
@@ -79,6 +79,11 @@ class PokemonRepositoryImpl @Inject constructor(
     override fun markAsDiscovered(id: Int): Flow<Result<Unit>> =
         resultMapper {
             pokemonLocalDataSource.markAsDiscovered(id)
+        }
+
+    override fun markAsCaught(id: Int, isCaught: Boolean): Flow<Result<Unit>> =
+        resultMapper {
+            pokemonLocalDataSource.markAsCaught(id, isCaught)
         }
 }
 

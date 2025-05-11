@@ -13,4 +13,6 @@ interface PokemonRepository {
     fun fetchPokemonDetail(id: Int, name: String): Flow<Result<PokemonDetail>>
 
     fun markAsDiscovered(id: Int): Flow<Result<Unit>>
+
+    fun markAsCaught(id: Int, isCaught: Boolean): Flow<Result<Unit>>
 }

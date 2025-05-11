@@ -4,5 +4,6 @@ sealed interface PokedexAction {
     data class OnPokemonClick(val pokemon: PokemonModel) : PokedexAction
     data object ShowPokemonDetail : PokedexAction
     data object AttemptCatchPokemon : PokedexAction
+    data object ReleasePokemon : PokedexAction
     data object MarkPokemonAsDiscovered : PokedexAction
 }

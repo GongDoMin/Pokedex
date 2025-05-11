@@ -34,6 +34,13 @@ class PokemonLocalDataSourceImpl @Inject constructor(
         )
     }
 
+    override suspend fun markAsCaught(id: Int, isCaught: Boolean) {
+        pokemonDao.markAsCaught(
+            id = id,
+            isCaught = isCaught
+        )
+    }
+
     override suspend fun clearPokemons() {
         pokemonDao.clearPokemons()
     }

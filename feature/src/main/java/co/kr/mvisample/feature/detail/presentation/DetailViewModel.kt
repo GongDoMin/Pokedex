@@ -93,6 +93,8 @@ class DetailViewModel @Inject constructor(
     }
 
     private fun handleOnBackClick() {
-        sendEvent(DetailEvent.OnNavigateToBack)
+        launch {
+            sendEvent(DetailEvent.OnNavigateToBack)
+        }
     }
 }

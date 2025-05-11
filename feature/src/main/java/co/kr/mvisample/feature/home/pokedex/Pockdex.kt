@@ -111,6 +111,8 @@ private fun PokedexContent(
             WeightSpacer()
             PokedexActionButtons(
                 isDiscovered = selectedPokemon?.isDiscovered == true,
+                isCaught = selectedPokemon?.isCaught == true,
+                onReleaseClick = { onSendAction(PokedexAction.ReleasePokemon) },
                 onCatchClick = { onSendAction(PokedexAction.AttemptCatchPokemon) },
                 onDiscoverClick = { onSendAction(PokedexAction.MarkPokemonAsDiscovered) },
                 onDetailClick = { onSendAction(PokedexAction.ShowPokemonDetail) }
@@ -177,7 +179,9 @@ private fun PokemonImage(
 @Composable
 private fun PokedexActionButtons(
     isDiscovered: Boolean,
+    isCaught: Boolean,
     onCatchClick: () -> Unit,
+    onReleaseClick: () -> Unit,
     onDiscoverClick: () -> Unit,
     onDetailClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -190,12 +194,18 @@ private fun PokedexActionButtons(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         if (isDiscovered) {
-            PokedexActionButton(
-                text = "포획하기",
-                onClick = onCatchClick
-            )
-        }
-        if (!isDiscovered) {
+            if (isCaught) {
+                PokedexActionButton(
+                    text = "놓아주기",
+                    onClick = onReleaseClick
+                )
+            } else {
+                PokedexActionButton(
+                    text = "포획하기",
+                    onClick = onCatchClick
+                )
+            }
+        } else {
             PokedexActionButton(
                 text = "발견하기",
                 onClick = onDiscoverClick

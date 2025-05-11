@@ -1,7 +1,6 @@
 package co.kr.mvisample.feature.home.pokedex.presentation
 
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import androidx.paging.map
 import co.kr.mvisample.data.repository.PokemonRepository
 import co.kr.mvisample.feature.base.BaseViewModel
@@ -9,6 +8,7 @@ import co.kr.mvisample.feature.base.UiState
 import co.kr.mvisample.feature.home.pokedex.model.PokedexAction
 import co.kr.mvisample.feature.home.pokedex.model.PokedexEvent
 import co.kr.mvisample.feature.home.pokedex.model.PokedexUiState
+import co.kr.mvisample.feature.home.pokedex.model.PokemonModel
 import co.kr.mvisample.feature.home.pokedex.model.toFeature
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
@@ -32,6 +32,7 @@ class PokedexViewModel @Inject constructor(
             is PokedexAction.OnPokemonClick -> handleOnClickPokemon(action)
             PokedexAction.ShowPokemonDetail -> handleShowPokemonDetail()
             PokedexAction.AttemptCatchPokemon -> handleAttemptCatchPokemon()
+            PokedexAction.ReleasePokemon -> handleReleasePokemon()
             PokedexAction.MarkPokemonAsDiscovered -> handleMarkPokemonAsDiscovered()
         }
     }
@@ -47,58 +48,106 @@ class PokedexViewModel @Inject constructor(
     }
 
     private fun handleShowPokemonDetail() {
-        val selectedPokemon = uiState.value.content.selectedPokemon
-        when {
-            selectedPokemon == null -> {
-                updateErrorState(
-                    isError = true,
-                    errorTitle = "선택된 포켓몬이 없습니다.",
-                    errorContent = "포켓몬을 선택한 후 다시 시도해주세요."
-                )
-            }
-            else -> {
-                sendEvent(
-                    PokedexEvent.OnNavigateToDetail(
-                        id = selectedPokemon.id,
-                        name = selectedPokemon.name,
-                        isDiscovered = selectedPokemon.isDiscovered
-                    ))
-            }
+        launch {
+            withSelectedPokemon(
+                selectedPokemon = uiState.value.content.selectedPokemon,
+                onPresent = { pokemon ->
+                    sendEvent(
+                        PokedexEvent.OnNavigateToDetail(
+                            id = pokemon.id,
+                            name = pokemon.name,
+                            isDiscovered = pokemon.isDiscovered
+                        )
+                    )
+                }
+            )
+        }
+    }
+
+    private fun handleMarkPokemonAsDiscovered() {
+        launch {
+            withSelectedPokemon(
+                selectedPokemon = uiState.value.content.selectedPokemon,
+                onPresent = { pokemon ->
+                    if (!pokemon.isDiscovered) {
+                        pokemonRepository.markAsDiscovered(pokemon.id)
+                            .resultCollect(
+                                onSuccess = {
+                                    updateUiState {
+                                        it.copy(
+                                            content = it.content.copy(
+                                                selectedPokemon = it.content.selectedPokemon?.copy(
+                                                    isDiscovered = true
+                                                )
+                                            )
+                                        )
+                                    }
+                                }
+                            )
+                    }
+                }
+            )
         }
     }
 
     private fun handleAttemptCatchPokemon() {
-
-    }
-
-    private fun handleMarkPokemonAsDiscovered() {
-        val selectedPokemon = uiState.value.content.selectedPokemon
         launch {
-            when {
-                selectedPokemon == null -> {
-                    updateErrorState(
-                        isError = true,
-                        errorTitle = "선택된 포켓몬이 없습니다.",
-                        errorContent = "포켓몬을 선택한 후 다시 시도해주세요."
-                    )
-                }
-                else -> {
-                    if (!selectedPokemon.isDiscovered) {
-                        pokemonRepository.markAsDiscovered(selectedPokemon.id)
-                            .collect {
-                                updateUiState {
-                                    it.copy(
-                                        content = it.content.copy(
-                                            selectedPokemon = it.content.selectedPokemon?.copy(
-                                                isDiscovered = true
-                                            )
+            withSelectedPokemon(
+                selectedPokemon = uiState.value.content.selectedPokemon,
+                onPresent = { pokemon ->
+                    pokemonRepository.markAsCaught(pokemon.id, true)
+                        .resultCollect {
+                            updateUiState {
+                                it.copy(
+                                    content = it.content.copy(
+                                        selectedPokemon = it.content.selectedPokemon?.copy(
+                                            isCaught = false
                                         )
                                     )
-                                }
+                                )
                             }
-                    }
+                        }
                 }
-            }
+            )
+        }
+    }
+
+    private fun handleReleasePokemon() {
+        launch {
+            withSelectedPokemon(
+                selectedPokemon = uiState.value.content.selectedPokemon,
+                onPresent = { pokemon ->
+                    pokemonRepository.markAsCaught(pokemon.id, false)
+                        .resultCollect {
+                            updateUiState {
+                                it.copy(
+                                    content = it.content.copy(
+                                        selectedPokemon = it.content.selectedPokemon?.copy(
+                                            isCaught = false
+                                        )
+                                    )
+                                )
+                            }
+                        }
+                }
+            )
+        }
+    }
+
+    private suspend fun withSelectedPokemon(
+        selectedPokemon: PokemonModel?,
+        onPresent: suspend (selectedPokemon: PokemonModel) -> Unit,
+        onMissing: () -> Unit = {
+            updateErrorState(
+                isError = true,
+                errorTitle = "선택된 포켓몬이 없습니다.",
+                errorContent = "포켓몬을 선택한 후 다시 시도해주세요."
+            )
+        }
+    ) {
+        when {
+            selectedPokemon == null -> onMissing()
+            else -> onPresent(selectedPokemon)
         }
     }
 }
