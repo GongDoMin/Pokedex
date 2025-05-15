@@ -32,12 +32,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import co.kr.mvisample.core.theme.PokemonTheme
 import co.kr.mvisample.feature.components.pokemonCard
 import co.kr.mvisample.feature.home.HomeSections.Companion.toSection
 import co.kr.mvisample.feature.home.computer.ComputerScreen
-import co.kr.mvisample.feature.home.items.ItemsScreen
 import co.kr.mvisample.feature.home.pokedex.PokedexScreen
-import co.kr.mvisample.core.theme.PokemonTheme
 import kotlinx.serialization.Serializable
 import kotlin.math.roundToInt
 
@@ -78,9 +77,6 @@ fun HomeContainer(
                 PokedexScreen(
                     onNavigateToPokemonDetail = onNavigateToPokemonDetail
                 )
-            }
-            composable<HomeRoutes.Items> {
-                ItemsScreen()
             }
             composable<HomeRoutes.Computer> {
                 ComputerScreen()
@@ -234,7 +230,6 @@ enum class HomeSections(
     val route: HomeRoutes
 ) {
     POKEDEX("도감", HomeRoutes.Pokedex),
-    ITEMS("가방", HomeRoutes.Items),
     COMPUTER("컴퓨터", HomeRoutes.Computer);
 
     companion object {
@@ -249,7 +244,6 @@ enum class HomeSections(
 
 sealed interface HomeRoutes {
     @Serializable data object Pokedex: HomeRoutes
-    @Serializable data object Items: HomeRoutes
     @Serializable data object Computer: HomeRoutes
 }
 
@@ -275,7 +269,6 @@ fun PokemonBottomBarPreview() {
                 onClickSection = {
                     currentSection = when (it) {
                         HomeRoutes.Pokedex -> HomeSections.POKEDEX
-                        HomeRoutes.Items -> HomeSections.ITEMS
                         HomeRoutes.Computer -> HomeSections.COMPUTER
                     }
                 }
