@@ -12,13 +12,15 @@ interface PokemonLocalDataSource {
 
     fun getCaughtPokemons(): Flow<List<PokemonLocalEntity>>
 
-    suspend fun insertPokemons(pokemons: List<PokemonEntity>)
-
     suspend fun getPokemon(id: Int): PokemonEntity
+
+    suspend fun insertPokemons(pokemons: List<PokemonEntity>)
 
     suspend fun markAsDiscovered(id: Int)
 
     suspend fun markAsCaught(id: Int, isCaught: Boolean)
+
+    suspend fun swapPokemonOrder(firstId: Int, secondInt: Int)
 
     suspend fun clearPokemons()
 }

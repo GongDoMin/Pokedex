@@ -6,6 +6,7 @@ import co.kr.mvisample.feature.base.UiState
 import co.kr.mvisample.feature.home.computer.model.ComputerAction
 import co.kr.mvisample.feature.home.computer.model.ComputerEvent
 import co.kr.mvisample.feature.home.computer.model.ComputerUiState
+import co.kr.mvisample.feature.home.computer.model.PokemonIconModel
 import co.kr.mvisample.feature.home.computer.model.toFeature
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -23,6 +24,7 @@ class ComputerViewModel @Inject constructor(
     override fun handleAction(action: ComputerAction) {
         when (action) {
             ComputerAction.FetchPokemonIcons -> handleFetchPokemonIcons()
+            is ComputerAction.OnPokemonIconClick -> handleOnPokemonIconClick(action.pokemonIcon)
         }
     }
 
@@ -34,6 +36,41 @@ class ComputerViewModel @Inject constructor(
                         pokemonIcons = pokemonIcons.map { it.toFeature() }
                     )
                 )
+            }
+        }
+    }
+
+    private fun handleOnPokemonIconClick(pokemonIcon: PokemonIconModel) {
+        with (uiState.value.content) {
+            when {
+                selectedPokemonIcon == null -> {
+                    updateContent(
+                        copy(
+                            selectedPokemonIcon = pokemonIcon
+                        )
+                    )
+                }
+                selectedPokemonIcon.id == pokemonIcon.id -> {
+                    updateContent(
+                        copy(
+                            selectedPokemonIcon = null
+                        )
+                    )
+                }
+                else -> {
+                    launch {
+                        pokemonRepository.swapPokemonOrder(
+                            firstId = selectedPokemonIcon.id,
+                            secondId = pokemonIcon.id
+                        ).resultCollect<Unit, ComputerUiState>(
+                            onSuccess = {
+                                copy(
+                                    selectedPokemonIcon = null
+                                )
+                            }
+                        )
+                    }
+                }
             }
         }
     }

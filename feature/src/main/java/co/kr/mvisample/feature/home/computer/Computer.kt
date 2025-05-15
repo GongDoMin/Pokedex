@@ -1,22 +1,33 @@
 package co.kr.mvisample.feature.home.computer
 
+import androidx.compose.animation.core.InfiniteRepeatableSpec
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateIntOffsetAsState
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.mvisample.core.theme.PokemonTheme
 import co.kr.mvisample.feature.components.OverlayWithLoadingAndDialog
 import co.kr.mvisample.feature.components.pokemonCard
+import co.kr.mvisample.feature.home.computer.model.ComputerAction
 import co.kr.mvisample.feature.home.computer.model.PokemonIconModel
 import co.kr.mvisample.feature.home.computer.presentation.ComputerViewModel
 import coil.compose.rememberAsyncImagePainter
@@ -36,7 +47,9 @@ fun ComputerScreen(
         onSendAction = computerViewModel::handleBasicDialogAction
     ) {
         PokemonIconGrid(
-            pokemons = uiState.content.pokemonIcons
+            pokemons = uiState.content.pokemonIcons,
+            selectedPokemon = uiState.content.selectedPokemonIcon,
+            onClickPokemon = { computerViewModel.handleAction(ComputerAction.OnPokemonIconClick(it)) }
         )
     }
 }
@@ -44,9 +57,32 @@ fun ComputerScreen(
 @Composable
 fun PokemonIconGrid(
     pokemons: List<PokemonIconModel>,
+    selectedPokemon: PokemonIconModel?,
+    onClickPokemon: (PokemonIconModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val density = LocalDensity.current
+
+    val infinityTransition = rememberInfiniteTransition()
+
+    val scaleX by infinityTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 0.95f,
+        animationSpec = InfiniteRepeatableSpec(
+            animation = tween(durationMillis = 300),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+    val scaleY by infinityTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.1f,
+        animationSpec = InfiniteRepeatableSpec(
+            animation = tween(durationMillis = 300),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
 
     Layout(
         modifier = modifier
@@ -63,11 +99,22 @@ fun PokemonIconGrid(
                         .crossfade(true)
                         .build()
                 )
+
+                val offset by animateIntOffsetAsState(
+                    targetValue = if (it.id == selectedPokemon?.id) IntOffset(0, with (density) { 8.dp.roundToPx().times(-1) }) else IntOffset(0, 0),
+                    animationSpec = tween(durationMillis = 300)
+                )
+
                 Image(
                     painter = painter,
                     contentDescription = null,
                     modifier = Modifier
-                        .aspectRatio(1f)
+                        .clickable { onClickPokemon(it) }
+                        .offset { offset }
+                        .graphicsLayer {
+                            this.scaleX = scaleX
+                            this.scaleY = scaleY
+                        }
                 )
             }
         }

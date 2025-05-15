@@ -95,6 +95,12 @@ class PokemonRepositoryImpl @Inject constructor(
             delay(500L)
             pokemonLocalDataSource.markAsCaught(id, isCaught)
         }
+
+    override fun swapPokemonOrder(firstId: Int, secondId: Int): Flow<Result<Unit>> =
+        resultMapper {
+            delay(500L)
+            pokemonLocalDataSource.swapPokemonOrder(firstId, secondId)
+        }
 }
 
 const val LoadSize = 100

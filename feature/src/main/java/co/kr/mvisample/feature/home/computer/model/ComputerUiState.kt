@@ -4,5 +4,6 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class ComputerUiState(
-    val pokemonIcons: List<PokemonIconModel> = emptyList()
+    val pokemonIcons: List<PokemonIconModel> = emptyList(),
+    val selectedPokemonIcon: PokemonIconModel? = null
 )

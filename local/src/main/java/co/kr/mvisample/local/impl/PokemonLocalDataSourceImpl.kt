@@ -20,14 +20,13 @@ class PokemonLocalDataSourceImpl @Inject constructor(
     override fun getCaughtPokemons(): Flow<List<PokemonLocalEntity>> =
         pokemonDao.getCaughtPokemons()
 
-    override suspend fun insertPokemons(pokemons: List<PokemonEntity>) {
-        pokemonDao.insertPokemons(pokemons)
-    }
-
     override suspend fun getPokemon(id: Int): PokemonEntity =
         pokemonDao.getPokemon(id)
 
-    override suspend fun markAsDiscovered(id: Int) {
+    override suspend fun insertPokemons(pokemons: List<PokemonEntity>) =
+        pokemonDao.insertPokemons(pokemons)
+
+    override suspend fun markAsDiscovered(id: Int) =
         pokemonDao.markAsDiscovered(
             PokemonLocalEntity(
                 id = id,
@@ -36,18 +35,19 @@ class PokemonLocalDataSourceImpl @Inject constructor(
                 order = null
             )
         )
-    }
 
     override suspend fun markAsCaught(id: Int, isCaught: Boolean) {
         val order = if (isCaught) pokemonDao.getMaxOrder()?.plus(1) ?: 0 else null
-        pokemonDao.markAsCaught(
+        pokemonDao.updatePokemon(
             id = id,
             isCaught = isCaught,
             order = order
         )
     }
 
-    override suspend fun clearPokemons() {
+    override suspend fun swapPokemonOrder(firstId: Int, secondInt: Int) =
+        pokemonDao.swapPokemonOrder(firstId, secondInt)
+
+    override suspend fun clearPokemons() =
         pokemonDao.clearPokemons()
-    }
 }
