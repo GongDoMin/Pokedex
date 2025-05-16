@@ -33,6 +33,13 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+
+        freeCompilerArgs += listOf(
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${rootProject.file(".").absolutePath}/compose-metrics",
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${rootProject.file(".").absolutePath}/compose-reports"
+        )
     }
     buildFeatures {
         compose = true
