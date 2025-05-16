@@ -98,7 +98,6 @@ class PokemonRepositoryImpl @Inject constructor(
 
     override fun swapPokemonOrder(firstId: Int, secondId: Int): Flow<Result<Unit>> =
         resultMapper {
-            delay(500L)
             pokemonLocalDataSource.swapPokemonOrder(firstId, secondId)
         }
 }

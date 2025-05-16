@@ -9,17 +9,18 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -84,59 +85,43 @@ fun PokemonIconGrid(
         )
     )
 
-    Layout(
+    LazyVerticalGrid(
         modifier = modifier
             .fillMaxSize()
             .background(PokemonTheme.colors.backgroundRed)
             .padding(8.dp)
             .pokemonCard()
             .padding(8.dp),
-        content = {
-            pokemons.forEach {
-                val painter = rememberAsyncImagePainter(
+        columns = GridCells.Fixed(6)
+    ) {
+        items(
+            count = pokemons.size,
+            key = { pokemons[it].id }
+        ) {
+            val pokemon = pokemons[it]
+
+            val offset by animateIntOffsetAsState(
+                targetValue = if (pokemon.id == selectedPokemon?.id) IntOffset(0, with (density) { 8.dp.roundToPx().times(-1) }) else IntOffset(0, 0),
+                animationSpec = tween(durationMillis = 300)
+            )
+
+            Image(
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .clickable { onClickPokemon(pokemon) }
+                    .offset { offset }
+                    .graphicsLayer {
+                        this.scaleX = scaleX
+                        this.scaleY = scaleY
+                    }.animateItem(),
+                painter = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(context)
-                        .data(it.iconUrl)
+                        .data(pokemon.iconUrl)
                         .crossfade(true)
                         .build()
-                )
-
-                val offset by animateIntOffsetAsState(
-                    targetValue = if (it.id == selectedPokemon?.id) IntOffset(0, with (density) { 8.dp.roundToPx().times(-1) }) else IntOffset(0, 0),
-                    animationSpec = tween(durationMillis = 300)
-                )
-
-                Image(
-                    painter = painter,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clickable { onClickPokemon(it) }
-                        .offset { offset }
-                        .graphicsLayer {
-                            this.scaleX = scaleX
-                            this.scaleY = scaleY
-                        }
-                )
-            }
-        }
-    ) { measurables, constraints ->
-        val maxWidth = constraints.maxWidth
-        val itemSize = maxWidth / 6
-        val placeables = measurables.map {
-            it.measure(Constraints.fixed(itemSize, itemSize))
-        }
-
-        layout(maxWidth, constraints.maxHeight) {
-            var xPosition = 0
-            var yPosition = 0
-
-            placeables.forEach { placeable ->
-                if (xPosition + itemSize > maxWidth) {
-                    xPosition = 0
-                    yPosition += itemSize
-                }
-                placeable.placeRelative(x = xPosition, y = yPosition)
-                xPosition += itemSize
-            }
+                ),
+                contentDescription = null
+            )
         }
     }
 }
