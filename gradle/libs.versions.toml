@@ -25,6 +25,7 @@ retrofit = "2.11.0"
 serialization-converter = "1.0.0"
 jetbrainsKotlinJvm = "2.0.0"
 room = "2.6.1"
+kotestVersion = "5.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,6 +65,10 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
+
+kotest-runner = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotestVersion" }
+kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotestVersion" }
+kotest-property = { group = "io.kotest", name = "kotest-property", version.ref = "kotestVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
