@@ -22,7 +22,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -30,6 +32,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,6 +45,7 @@ import androidx.paging.compose.itemKey
 import co.kr.mvisample.core.theme.PokemonTheme
 import co.kr.mvisample.core.theme.PreviewPokemonTheme
 import co.kr.mvisample.core.utils.LaunchedEventEffect
+import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.components.OverlayWithLoadingAndDialog
 import co.kr.mvisample.feature.components.WeightSpacer
 import co.kr.mvisample.feature.components.WidthSpacer
@@ -99,7 +103,6 @@ private fun PokedexContent(
     Row(
         modifier = modifier
             .fillMaxSize()
-            .background(PokemonTheme.colors.backgroundRed)
             .padding(8.dp)
     ) {
         Column(
@@ -148,13 +151,6 @@ private fun PokemonImage(
     pokemon: PokemonModel?,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
-    val selectedItemPainter = rememberAsyncImagePainter(
-        model = ImageRequest.Builder(context)
-            .data(pokemon?.imageUrl)
-            .build()
-    )
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -169,7 +165,16 @@ private fun PokemonImage(
                 .sharedElement(
                     key = "image" + pokemon?.id
                 ),
-            painter = selectedItemPainter,
+            painter = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(pokemon?.imageUrl)
+                    .apply {
+                        if (LocalInspectionMode.current) {
+                            placeholder(R.drawable.img_charizard)
+                        }
+                    }
+                    .build()
+            ),
             contentDescription = null,
             colorFilter = if (pokemon?.isDiscovered == true) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
         )
@@ -345,111 +350,187 @@ private fun Pokeball(
 
 @Preview
 @Composable
-fun PokeballPreview() {
+private fun PokeballPreview() {
     PokemonTheme {
-        Row {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             Pokeball(isCaught = true)
             Pokeball(isCaught = false)
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun PokedexPreview() {
-    val pokemons =
-        remember {
-            flowOf(
-                PagingData.from(
-                    listOf(
-                        PokemonModel(
-                            id = 1,
-                            name = "Bulbasaur",
-                            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-                            isDiscovered = true
-                        ),
-                        PokemonModel(
-                            id = 2,
-                            name = "Bulbasaur",
-                            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-                            isDiscovered = true
-                        ),
-                        PokemonModel(
-                            id = 3,
-                            name = "Bulbasaur",
-                            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-                            isDiscovered = true
-                        ),
-                        PokemonModel(
-                            id = 4,
-                            name = "Bulbasaur",
-                            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-                            isDiscovered = true
-                        ),
-                        PokemonModel(
-                            id = 5,
-                            name = "Bulbasaur",
-                            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-                            isDiscovered = false
-                        ),
-                        PokemonModel(
-                            id = 6,
-                            name = "Bulbasaur",
-                            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-                            isDiscovered = false
-                        ),
-                        PokemonModel(
-                            id = 7,
-                            name = "Bulbasaur",
-                            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-                            isDiscovered = false
-                        ),
-                        PokemonModel(
-                            id = 8,
-                            name = "Bulbasaur",
-                            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-                            isDiscovered = false
-                        ),
-                        PokemonModel(
-                            id = 9,
-                            name = "Bulbasaur",
-                            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-                            isDiscovered = false
-                        ),
-                        PokemonModel(
-                            id = 10,
-                            name = "Bulbasaur",
-                            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-                            isDiscovered = true
-                        ),
-                        PokemonModel(
-                            id = 11,
-                            name = "Bulbasaur",
-                            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-                            isDiscovered = false
-                        ),
-                        PokemonModel(
-                            id = 12,
-                            name = "Bulbasaur",
-                            imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-                            isDiscovered = true
-                        )
-                    )
+private fun PokemonListItemPreview() {
+    PreviewPokemonTheme {
+        Column {
+            PokemonListItem(
+                pokemon = PokemonModel(
+                    id = 1,
+                    name = "Charizard",
+                    isDiscovered = false,
+                ),
+                onClickPokemon = {},
+                isSelected = true
+            )
+            PokemonListItem(
+                pokemon = PokemonModel(
+                    id = 2,
+                    name = "Charizard",
+                    isDiscovered = true,
+                    isCaught = false
+                ),
+                onClickPokemon = {},
+                isSelected = false
+            )
+            PokemonListItem(
+                pokemon = PokemonModel(
+                    id = 3,
+                    name = "Charizard",
+                    isDiscovered = true,
+                    isCaught = true
+                ),
+                onClickPokemon = {},
+                isSelected = false
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PokemonImagePreview() {
+    PreviewPokemonTheme {
+        PokemonImage(
+            pokemon = PokemonModel(
+                id = 1,
+                name = "Charizard",
+                imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/6.png",
+                isDiscovered = true,
+                isCaught = true
+            )
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PokedexActionButtonsPreview() {
+    PokemonTheme {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            PokedexActionButtons(
+                isDiscovered = false,
+                isCaught = false,
+                onCatchClick = {},
+                onReleaseClick = {},
+                onDiscoverClick = {},
+                onDetailClick = {}
+            )
+            PokedexActionButtons(
+                isDiscovered = true,
+                isCaught = true,
+                onCatchClick = {},
+                onReleaseClick = {},
+                onDiscoverClick = {},
+                onDetailClick = {}
+            )
+            PokedexActionButtons(
+                isDiscovered = true,
+                isCaught = false,
+                onCatchClick = {},
+                onReleaseClick = {},
+                onDiscoverClick = {},
+                onDetailClick = {}
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PokedexPreview() {
+    val pokemons = remember {
+        flowOf(
+            PagingData.from(
+                listOf(
+                    PokemonModel(
+                        id = 1,
+                        name = "Charizard",
+                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/6.png",
+                        isDiscovered = true,
+                        isCaught = true
+                    ),
+                    PokemonModel(
+                        id = 2,
+                        name = "Charizard",
+                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/6.png",
+                        isDiscovered = true
+                    ),
+                    PokemonModel(
+                        id = 3,
+                        name = "Charizard",
+                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/6.png",
+                        isDiscovered = true
+                    ),
+                    PokemonModel(
+                        id = 4,
+                        name = "Charizard",
+                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/6.png",
+                        isDiscovered = true
+                    ),
+                    PokemonModel(
+                        id = 5,
+                        name = "Charizard",
+                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/6.png",
+                    ),
+                    PokemonModel(
+                        id = 6,
+                        name = "Charizard",
+                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/6.png",
+                    ),
+                    PokemonModel(
+                        id = 7,
+                        name = "Charizard",
+                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/6.png",
+                    ),
+                    PokemonModel(
+                        id = 8,
+                        name = "Charizard",
+                        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/6.png",
+                    ),
                 )
             )
-        }.collectAsLazyPagingItems()
+        )
+    }.collectAsLazyPagingItems()
 
-    val selectedPokemon = PokemonModel(
-        id = 1,
-        name = "Bulbasaur",
-        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-        isDiscovered = true
-    )
+    var selectedPokemon: PokemonModel? by remember {
+        mutableStateOf(
+            PokemonModel(
+                id = 1,
+                name = "Charizard",
+                imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/6.png",
+                isDiscovered = true,
+                isCaught = true
+            )
+        )
+    }
 
     PreviewPokemonTheme {
         PokedexContent(
             pokemons = pokemons,
-            onSendAction = {},
+            onSendAction = {
+                when (it) {
+                    PokedexAction.AttemptCatchPokemon -> {}
+                    PokedexAction.MarkPokemonAsDiscovered -> {}
+                    is PokedexAction.OnPokemonClick -> selectedPokemon = it.pokemon
+                    PokedexAction.ReleasePokemon -> {}
+                    PokedexAction.ShowPokemonDetail -> {}
+                }
+            },
             selectedPokemon = selectedPokemon
         )
     }

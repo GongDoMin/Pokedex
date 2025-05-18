@@ -50,6 +50,7 @@ fun HomeContainer(
     val navBackStackEntry by nestedNavController.currentBackStackEntryAsState()
     val currentSection = navBackStackEntry?.destination?.route.toSection()
     Scaffold(
+        containerColor = PokemonTheme.colors.backgroundRed,
         bottomBar = {
             PokemonBottomBar(
                 tabs = HomeSections.entries.toPersistentList(),
