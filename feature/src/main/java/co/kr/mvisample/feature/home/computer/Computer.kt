@@ -17,15 +17,21 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.mvisample.core.theme.PokemonTheme
+import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.components.OverlayWithLoadingAndDialog
 import co.kr.mvisample.feature.components.pokemonCard
 import co.kr.mvisample.feature.home.computer.model.ComputerAction
@@ -56,7 +62,7 @@ fun ComputerScreen(
 }
 
 @Composable
-fun PokemonIconGrid(
+private fun PokemonIconGrid(
     pokemons: List<PokemonIconModel>,
     selectedPokemon: PokemonIconModel?,
     onClickPokemon: (PokemonIconModel) -> Unit,
@@ -88,7 +94,6 @@ fun PokemonIconGrid(
     LazyVerticalGrid(
         modifier = modifier
             .fillMaxSize()
-            .background(PokemonTheme.colors.backgroundRed)
             .padding(8.dp)
             .pokemonCard()
             .padding(8.dp),
@@ -117,11 +122,56 @@ fun PokemonIconGrid(
                 painter = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(context)
                         .data(pokemon.iconUrl)
-                        .crossfade(true)
+                        .apply {
+                            if (LocalInspectionMode.current) {
+                                placeholder(R.drawable.img_charizard_icon)
+                            }
+                        }
                         .build()
                 ),
                 contentDescription = null
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PokemonIconGridPreview() {
+    val pokemons = remember {
+        listOf(
+            PokemonIconModel(
+                id = 1,
+                iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
+                order = 0
+            ),
+            PokemonIconModel(
+                id = 2,
+                iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
+                order = 1
+            ),
+            PokemonIconModel(
+                id = 3,
+                iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
+                order = 2
+            ),
+            PokemonIconModel(
+                id = 4,
+                iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
+                order = 3
+            ),
+        )
+    }
+
+    var selectedPokemon: PokemonIconModel? by remember {
+        mutableStateOf(null)
+    }
+
+    PokemonTheme {
+        PokemonIconGrid(
+            pokemons = pokemons,
+            selectedPokemon = selectedPokemon,
+            onClickPokemon = { selectedPokemon = it }
+        )
     }
 }
