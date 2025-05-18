@@ -86,7 +86,7 @@ fun HomeContainer(
 }
 
 @Composable
-fun PokemonBottomBar(
+private fun PokemonBottomBar(
     tabs: List<HomeSections>,
     currentSection: HomeSections,
     onClickSection: (HomeRoutes) -> Unit,
@@ -131,7 +131,7 @@ fun PokemonBottomBar(
 }
 
 @Composable
-fun PokemonBottomNavLayout(
+private fun PokemonBottomNavLayout(
     itemCount: Int,
     modifier: Modifier = Modifier,
     contentColor: Color = PokemonTheme.colors.backgroundRed,
@@ -177,7 +177,7 @@ fun PokemonBottomNavLayout(
 }
 
 @Composable
-fun PokemonBottomNavItemLayout(
+private fun PokemonBottomNavItemLayout(
     showIcon: Boolean,
     modifier: Modifier = Modifier,
     icon: @Composable BoxScope.() -> Unit,
@@ -253,26 +253,19 @@ private val BottomIconSize = 24.dp
 
 @Preview
 @Composable
-fun PokemonBottomBarPreview() {
+private fun PokemonBottomBarPreview() {
     var currentSection by remember { mutableStateOf(HomeSections.POKEDEX) }
 
     PokemonTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(PokemonTheme.colors.backgroundRed),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            PokemonBottomBar(
-                tabs = HomeSections.entries.toList(),
-                currentSection = currentSection,
-                onClickSection = {
-                    currentSection = when (it) {
-                        HomeRoutes.Pokedex -> HomeSections.POKEDEX
-                        HomeRoutes.Computer -> HomeSections.COMPUTER
-                    }
+        PokemonBottomBar(
+            tabs = HomeSections.entries.toList(),
+            currentSection = currentSection,
+            onClickSection = {
+                currentSection = when (it) {
+                    HomeRoutes.Pokedex -> HomeSections.POKEDEX
+                    HomeRoutes.Computer -> HomeSections.COMPUTER
                 }
-            )
-        }
+            }
+        )
     }
 }
