@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.HorizontalDivider
@@ -24,19 +26,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.mvisample.core.theme.PokemonTheme
+import co.kr.mvisample.core.theme.PreviewPokemonTheme
 import co.kr.mvisample.core.utils.LaunchedEventEffect
+import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.components.OverlayWithLoadingAndDialog
 import co.kr.mvisample.feature.components.pokemonCard
 import co.kr.mvisample.feature.components.sharedElement
 import co.kr.mvisample.feature.detail.model.DetailAction
 import co.kr.mvisample.feature.detail.model.DetailEvent
 import co.kr.mvisample.feature.detail.model.PokemonDetailModel
+import co.kr.mvisample.feature.detail.model.TypeModel
 import co.kr.mvisample.feature.detail.presentation.DetailViewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -175,38 +182,35 @@ fun DetailContent(
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun PokemonImage(
+private fun PokemonImage(
     pokemonDetail: PokemonDetailModel,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
-    val painter = rememberAsyncImagePainter(
-        model = ImageRequest.Builder(context)
-            .data(pokemonDetail.imageUrl)
-            .build()
-    )
-
-    Box(
+    Image(
         modifier = modifier
-            .fillMaxWidth(),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        Image(
-            modifier = Modifier
-                .aspectRatio(1f)
-                .background(Color.White)
-                .sharedElement(
-                    key = "image" + pokemonDetail.id
-                ),
-            painter = painter,
-            contentDescription =  null,
-            colorFilter = if (pokemonDetail.isDiscovered) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
-        )
-    }
+            .fillMaxWidth()
+            .aspectRatio(1f)
+            .background(Color.White)
+            .sharedElement(
+                key = "image" + pokemonDetail.id
+            ),
+        painter = rememberAsyncImagePainter(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(pokemonDetail.imageUrl)
+                .apply {
+                    if (LocalInspectionMode.current) {
+                        placeholder(R.drawable.img_charizard)
+                    }
+                }
+                .build()
+        ),
+        contentDescription =  null,
+        colorFilter = if (pokemonDetail.isDiscovered) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
+    )
 }
 
 @Composable
-fun PokemonInfoRow(
+private fun PokemonInfoRow(
     label: String,
     value: String,
     modifier: Modifier = Modifier,
@@ -230,6 +234,94 @@ fun PokemonInfoRow(
             text = value,
             style = PokemonTheme.typography.titleLarge,
             color = PokemonTheme.colors.basicText
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun DetailHeaderPreview() {
+    PokemonTheme {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            DetailHeader(
+                pokemonDetail = PokemonDetailModel(
+                    id = 6,
+                    name = "Charizard",
+                ),
+                onBackClick = {}
+            )
+            DetailHeader(
+                pokemonDetail = PokemonDetailModel(
+                    id = 6,
+                    name = "Charizard",
+                    isDiscovered = true
+                ),
+                onBackClick = {}
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PokemonInfoRowPreview() {
+    PokemonTheme {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            PokemonInfoRow(
+                label = "Number",
+                value = "006"
+            )
+            PokemonInfoRow(
+                label = "Name",
+                value = "Charizard"
+            )
+            PokemonInfoRow(
+                label = "Height",
+                value = "999 M"
+            )
+            PokemonInfoRow(
+                label = "Weight",
+                value = "999 KG"
+            )
+            PokemonInfoRow(
+                label = "Type",
+                value = "fire"
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PokemonImagePreview() {
+    PreviewPokemonTheme {
+        PokemonImage(
+            pokemonDetail = PokemonDetailModel(
+                imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/6.png",
+                isDiscovered = true
+            )
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PokemonContentPreview() {
+    PreviewPokemonTheme {
+        DetailContent(
+            pokemonDetail = PokemonDetailModel(
+                id = 6,
+                imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/6.png",
+                name = "Charizard",
+                weight = 99f,
+                height = 99f,
+                isDiscovered = true,
+                types = listOf(TypeModel(name = "fire"))
+            )
         )
     }
 }
