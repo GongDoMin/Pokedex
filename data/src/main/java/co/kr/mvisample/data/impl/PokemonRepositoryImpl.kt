@@ -17,6 +17,7 @@ import co.kr.mvisample.data.resultMapper
 import co.kr.mvisample.data.resultMapperWithLocal
 import co.kr.mvisample.local.model.PokemonLocalEntity
 import co.kr.mvisample.local.room.dao.PokemonDao
+import co.kr.mvisample.local.room.dao.PokemonLocalDao
 import co.kr.mvisample.local.room.dao.RemoteKeyDao
 import co.kr.mvisample.remote.datasource.PokemonDataSource
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +32,7 @@ import javax.inject.Inject
 class PokemonRepositoryImpl @Inject constructor(
     private val pokemonDataSource : PokemonDataSource,
     private val pokemonDao: PokemonDao,
+    private val pokemonLocalDao: PokemonLocalDao,
     private val remoteKeyDao: RemoteKeyDao
 ): PokemonRepository {
     override fun fetchPokemons(scope: CoroutineScope): Flow<PagingData<Pokemon>> =
@@ -46,7 +48,7 @@ class PokemonRepositoryImpl @Inject constructor(
                 pokemonEntity.toData()
             }
         }.cachedIn(scope).combine(
-            pokemonDao.getPokemonLocals()
+            pokemonLocalDao.getPokemonLocals()
         ) { pagingData, pokemonLocals ->
             val localMap = pokemonLocals.associateBy { it.id }
 
@@ -81,14 +83,14 @@ class PokemonRepositoryImpl @Inject constructor(
         )
 
     override fun fetchPokemonIcons(): Flow<List<PokemonIcon>> =
-        pokemonDao.getCaughtPokemons().map { pokemonLocals ->
+        pokemonLocalDao.getPokemonLocals(true).map { pokemonLocals ->
             pokemonLocals.map { it.toData() }
         }
 
     override fun markAsDiscovered(id: Int): Flow<Result<Unit>> =
         resultMapper {
             delay(500L)
-            pokemonDao.markAsDiscovered(
+            pokemonLocalDao.markAsDiscovered(
                 PokemonLocalEntity(
                     id = id,
                     iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$id.png",
@@ -101,8 +103,8 @@ class PokemonRepositoryImpl @Inject constructor(
     override fun markAsCaught(id: Int, isCaught: Boolean): Flow<Result<Unit>> =
         resultMapper {
             delay(500L)
-            val order = if (isCaught) pokemonDao.getMaxOrder()?.plus(1) ?: 0 else null
-            pokemonDao.updatePokemon(
+            val order = if (isCaught) pokemonLocalDao.getMaxOrder()?.plus(1) ?: 0 else null
+            pokemonLocalDao.updatePokemonLocal(
                 id = id,
                 isCaught = isCaught,
                 order = order
@@ -111,7 +113,7 @@ class PokemonRepositoryImpl @Inject constructor(
 
     override fun swapPokemonOrder(firstId: Int, secondId: Int): Flow<Result<Unit>> =
         resultMapper {
-            pokemonDao.swapPokemonOrder(firstId, secondId)
+            pokemonLocalDao.swapPokemonOrder(firstId, secondId)
         }
 }
 
