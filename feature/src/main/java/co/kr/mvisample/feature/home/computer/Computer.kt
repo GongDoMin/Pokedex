@@ -7,7 +7,6 @@ import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,18 +53,18 @@ fun ComputerScreen(
         onSendAction = computerViewModel::handleBasicDialogAction
     ) {
         PokemonIconGrid(
-            pokemons = uiState.content.pokemonIcons,
-            selectedPokemon = uiState.content.selectedPokemonIcon,
-            onClickPokemon = { computerViewModel.handleAction(ComputerAction.OnPokemonIconClick(it)) }
+            pokemonIcons = uiState.content.pokemonIcons,
+            selectedPokemonIcon = uiState.content.selectedPokemonIcon,
+            onClickPokemonIcon = { computerViewModel.handleAction(ComputerAction.OnPokemonIconClick(it)) }
         )
     }
 }
 
 @Composable
 private fun PokemonIconGrid(
-    pokemons: List<PokemonIconModel>,
-    selectedPokemon: PokemonIconModel?,
-    onClickPokemon: (PokemonIconModel) -> Unit,
+    pokemonIcons: List<PokemonIconModel>,
+    selectedPokemonIcon: PokemonIconModel?,
+    onClickPokemonIcon: (PokemonIconModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -100,20 +99,20 @@ private fun PokemonIconGrid(
         columns = GridCells.Fixed(6)
     ) {
         items(
-            count = pokemons.size,
-            key = { pokemons[it].id }
+            count = pokemonIcons.size,
+            key = { pokemonIcons[it].id }
         ) {
-            val pokemon = pokemons[it]
+            val pokemon = pokemonIcons[it]
 
             val offset by animateIntOffsetAsState(
-                targetValue = if (pokemon.id == selectedPokemon?.id) IntOffset(0, with (density) { 8.dp.roundToPx().times(-1) }) else IntOffset(0, 0),
+                targetValue = if (pokemon.id == selectedPokemonIcon?.id) IntOffset(0, with (density) { 8.dp.roundToPx().times(-1) }) else IntOffset(0, 0),
                 animationSpec = tween(durationMillis = 300)
             )
 
             Image(
                 modifier = Modifier
                     .aspectRatio(1f)
-                    .clickable { onClickPokemon(pokemon) }
+                    .clickable { onClickPokemonIcon(pokemon) }
                     .offset { offset }
                     .graphicsLayer {
                         this.scaleX = scaleX
@@ -169,9 +168,9 @@ private fun PokemonIconGridPreview() {
 
     PokemonTheme {
         PokemonIconGrid(
-            pokemons = pokemons,
-            selectedPokemon = selectedPokemon,
-            onClickPokemon = { selectedPokemon = it }
+            pokemonIcons = pokemons,
+            selectedPokemonIcon = selectedPokemon,
+            onClickPokemonIcon = { selectedPokemon = it }
         )
     }
 }
