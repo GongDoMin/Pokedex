@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -18,15 +17,12 @@ fun Modifier.pokemonCard(
     backgroundColor: Color = PokemonTheme.colors.backgroundBlack,
     border: BorderStroke? = BorderStroke(2.dp, PokemonTheme.colors.border),
     shape: Shape = RectangleShape
-): Modifier {
-    return remember(backgroundColor, border, shape) {
-        this
-            .then(
-                border?.let {
-                    Modifier.border(it, shape)
-                } ?: Modifier
-            )
-            .clip(shape)
-            .background(color = backgroundColor)
-    }
-}
+): Modifier =
+    this
+        .then(
+            border?.let {
+                Modifier.border(it, shape)
+            } ?: Modifier
+        )
+        .clip(shape)
+        .background(color = backgroundColor)
