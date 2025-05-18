@@ -15,8 +15,9 @@ import co.kr.mvisample.data.repository.PokemonRepository
 import co.kr.mvisample.data.result.Result
 import co.kr.mvisample.data.resultMapper
 import co.kr.mvisample.data.resultMapperWithLocal
-import co.kr.mvisample.local.datasource.PokemonLocalDataSource
-import co.kr.mvisample.local.datasource.RemoteKeyLocalDataSource
+import co.kr.mvisample.local.model.PokemonLocalEntity
+import co.kr.mvisample.local.room.dao.PokemonDao
+import co.kr.mvisample.local.room.dao.RemoteKeyDao
 import co.kr.mvisample.remote.datasource.PokemonDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -29,8 +30,8 @@ import javax.inject.Inject
 @OptIn(ExperimentalPagingApi::class)
 class PokemonRepositoryImpl @Inject constructor(
     private val pokemonDataSource : PokemonDataSource,
-    private val pokemonLocalDataSource: PokemonLocalDataSource,
-    private val remoteKeyLocalDataSource: RemoteKeyLocalDataSource
+    private val pokemonDao: PokemonDao,
+    private val remoteKeyDao: RemoteKeyDao
 ): PokemonRepository {
     override fun fetchPokemons(scope: CoroutineScope): Flow<PagingData<Pokemon>> =
         Pager(
@@ -38,14 +39,14 @@ class PokemonRepositoryImpl @Inject constructor(
                 pageSize = LoadSize,
                 initialLoadSize = InitialLoadSize
             ),
-            remoteMediator = PokemonRemoteMediator(pokemonDataSource, pokemonLocalDataSource, remoteKeyLocalDataSource),
-            pagingSourceFactory = { pokemonLocalDataSource.getPokemons() }
+            remoteMediator = PokemonRemoteMediator(pokemonDataSource, pokemonDao, remoteKeyDao),
+            pagingSourceFactory = { pokemonDao.getPokemons() }
         ).flow.map { pagingData ->
             pagingData.map { pokemonEntity ->
                 pokemonEntity.toData()
             }
         }.cachedIn(scope).combine(
-            pokemonLocalDataSource.getPokemonLocals()
+            pokemonDao.getPokemonLocals()
         ) { pagingData, pokemonLocals ->
             val localMap = pokemonLocals.associateBy { it.id }
 
@@ -62,7 +63,7 @@ class PokemonRepositoryImpl @Inject constructor(
     override fun fetchPokemonDetail(id: Int, name: String): Flow<Result<PokemonDetail>> =
         resultMapperWithLocal(
             localAction = {
-                val entity = pokemonLocalDataSource.getPokemon(id)
+                val entity = pokemonDao.getPokemon(id)
                 PokemonDetail(
                     id = entity.id,
                     name = entity.name,
@@ -80,25 +81,37 @@ class PokemonRepositoryImpl @Inject constructor(
         )
 
     override fun fetchPokemonIcons(): Flow<List<PokemonIcon>> =
-        pokemonLocalDataSource.getCaughtPokemons().map { pokemonLocals ->
+        pokemonDao.getCaughtPokemons().map { pokemonLocals ->
             pokemonLocals.map { it.toData() }
         }
 
     override fun markAsDiscovered(id: Int): Flow<Result<Unit>> =
         resultMapper {
             delay(500L)
-            pokemonLocalDataSource.markAsDiscovered(id)
+            pokemonDao.markAsDiscovered(
+                PokemonLocalEntity(
+                    id = id,
+                    iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$id.png",
+                    isCaught = false,
+                    order = null
+                )
+            )
         }
 
     override fun markAsCaught(id: Int, isCaught: Boolean): Flow<Result<Unit>> =
         resultMapper {
             delay(500L)
-            pokemonLocalDataSource.markAsCaught(id, isCaught)
+            val order = if (isCaught) pokemonDao.getMaxOrder()?.plus(1) ?: 0 else null
+            pokemonDao.updatePokemon(
+                id = id,
+                isCaught = isCaught,
+                order = order
+            )
         }
 
     override fun swapPokemonOrder(firstId: Int, secondId: Int): Flow<Result<Unit>> =
         resultMapper {
-            pokemonLocalDataSource.swapPokemonOrder(firstId, secondId)
+            pokemonDao.swapPokemonOrder(firstId, secondId)
         }
 }
 

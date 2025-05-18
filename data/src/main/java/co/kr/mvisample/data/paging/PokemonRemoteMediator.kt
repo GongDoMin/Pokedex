@@ -8,17 +8,17 @@ import co.kr.mvisample.data.impl.LoadSize
 import co.kr.mvisample.data.impl.TotalLoadSize
 import co.kr.mvisample.data.model.toData
 import co.kr.mvisample.data.model.toEntity
-import co.kr.mvisample.local.datasource.PokemonLocalDataSource
-import co.kr.mvisample.local.datasource.RemoteKeyLocalDataSource
 import co.kr.mvisample.local.model.PokemonEntity
 import co.kr.mvisample.local.model.RemoteKeyEntity
+import co.kr.mvisample.local.room.dao.PokemonDao
+import co.kr.mvisample.local.room.dao.RemoteKeyDao
 import co.kr.mvisample.remote.datasource.PokemonDataSource
 
 @OptIn(ExperimentalPagingApi::class)
 class PokemonRemoteMediator(
     private val pokemonDataSource: PokemonDataSource,
-    private val pokemonLocalDataSource: PokemonLocalDataSource,
-    private val remoteKeyLocalDataSource: RemoteKeyLocalDataSource
+    private val pokemonDao: PokemonDao,
+    private val remoteKeyDao: RemoteKeyDao
 ) : RemoteMediator<Int, PokemonEntity>() {
 
     override suspend fun load(
@@ -48,8 +48,8 @@ class PokemonRemoteMediator(
             )
 
             if (loadType == LoadType.REFRESH) {
-                remoteKeyLocalDataSource.clearRemoteKeys()
-                pokemonLocalDataSource.clearPokemons()
+                remoteKeyDao.clearRemoteKeys()
+                pokemonDao.clearPokemons()
             }
 
             val endOfPaginationReached = response.results.size < LoadSize
@@ -61,8 +61,8 @@ class PokemonRemoteMediator(
                 RemoteKeyEntity(pokemonId = it.id, prevKey = prevKey, nextKey = nextKey)
             }
 
-            remoteKeyLocalDataSource.insertRemoteKeys(keys)
-            pokemonLocalDataSource.insertPokemons(pokemonEntities)
+            remoteKeyDao.insertRemoteKeys(keys)
+            pokemonDao.insertPokemons(pokemonEntities)
 
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (e: Exception) {
@@ -75,7 +75,7 @@ class PokemonRemoteMediator(
     ): RemoteKeyEntity? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { id ->
-                remoteKeyLocalDataSource.remoteKey(id)
+                remoteKeyDao.remoteKey(id)
             }
         }
     }
@@ -85,7 +85,7 @@ class PokemonRemoteMediator(
     ): RemoteKeyEntity? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { pokemon ->
-                remoteKeyLocalDataSource.remoteKey(pokemon.id)
+                remoteKeyDao.remoteKey(pokemon.id)
             }
     }
 
@@ -94,7 +94,7 @@ class PokemonRemoteMediator(
     ): RemoteKeyEntity? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { pokemon ->
-                remoteKeyLocalDataSource.remoteKey(pokemon.id)
+                remoteKeyDao.remoteKey(pokemon.id)
             }
     }
 }
