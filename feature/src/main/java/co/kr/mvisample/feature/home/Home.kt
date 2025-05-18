@@ -37,6 +37,8 @@ import co.kr.mvisample.feature.components.pokemonCard
 import co.kr.mvisample.feature.home.HomeSections.Companion.toSection
 import co.kr.mvisample.feature.home.computer.ComputerScreen
 import co.kr.mvisample.feature.home.pokedex.PokedexScreen
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
 import kotlin.math.roundToInt
 
@@ -50,7 +52,7 @@ fun HomeContainer(
     Scaffold(
         bottomBar = {
             PokemonBottomBar(
-                tabs = HomeSections.entries.toList(),
+                tabs = HomeSections.entries.toPersistentList(),
                 currentSection = currentSection ?: HomeSections.POKEDEX,
                 onClickSection = {
                     if (it != (currentSection?.route ?: HomeSections.POKEDEX)) {
@@ -87,7 +89,7 @@ fun HomeContainer(
 
 @Composable
 private fun PokemonBottomBar(
-    tabs: List<HomeSections>,
+    tabs: ImmutableList<HomeSections>,
     currentSection: HomeSections,
     onClickSection: (HomeRoutes) -> Unit,
     modifier: Modifier = Modifier,
@@ -258,7 +260,7 @@ private fun PokemonBottomBarPreview() {
 
     PokemonTheme {
         PokemonBottomBar(
-            tabs = HomeSections.entries.toList(),
+            tabs = HomeSections.entries.toPersistentList(),
             currentSection = currentSection,
             onClickSection = {
                 currentSection = when (it) {
