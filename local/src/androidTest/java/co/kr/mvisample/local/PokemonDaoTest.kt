@@ -33,7 +33,7 @@ class PokemonDaoTest : PokemonDatabaseTest() {
         val expected = Pokemon.first()
 
         // when
-        pokemonDao.insertPokemons(Pokemon)
+        pokemonDao.insertPokemons(*Pokemon.toTypedArray())
         val result = pokemonDao.getPokemon(expected.id)
 
         // then
@@ -43,7 +43,7 @@ class PokemonDaoTest : PokemonDatabaseTest() {
     @Test
     fun 모든포켓몬을삭제하면_조회결과가_null이다() = runTest {
         // given
-        pokemonDao.insertPokemons(Pokemon)
+        pokemonDao.insertPokemons(*Pokemon.toTypedArray())
 
         // when
         pokemonDao.clearPokemons()

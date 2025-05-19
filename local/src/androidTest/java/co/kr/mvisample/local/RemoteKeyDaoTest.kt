@@ -31,7 +31,7 @@ class RemoteKeyDaoTest : PokemonDatabaseTest() {
     fun 특정포켓몬의_remoteKey를_조회한다() = runTest {
         // given
         val expected = RemoteKeyEntity(pokemonId = 1, prevKey = null, nextKey = 2)
-        remoteKeyDao.insertRemoteKeys(listOf(expected))
+        remoteKeyDao.insertRemoteKeys(expected)
 
         // when
         val result = remoteKeyDao.remoteKey(expected.pokemonId)
@@ -59,7 +59,7 @@ class RemoteKeyDaoTest : PokemonDatabaseTest() {
         )
 
         // when
-        remoteKeyDao.insertRemoteKeys(expectedRemoteKeys)
+        remoteKeyDao.insertRemoteKeys(*expectedRemoteKeys.toTypedArray())
 
         // then
         for (expected in expectedRemoteKeys) {
@@ -75,7 +75,7 @@ class RemoteKeyDaoTest : PokemonDatabaseTest() {
             RemoteKeyEntity(pokemonId = 1, prevKey = null, nextKey = 2),
             RemoteKeyEntity(pokemonId = 2, prevKey = 1, nextKey = 3)
         )
-        remoteKeyDao.insertRemoteKeys(expectedRemoteKeys)
+        remoteKeyDao.insertRemoteKeys(*expectedRemoteKeys.toTypedArray())
 
         // when
         remoteKeyDao.clearRemoteKeys()

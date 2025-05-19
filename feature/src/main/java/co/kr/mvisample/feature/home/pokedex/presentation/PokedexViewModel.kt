@@ -87,7 +87,7 @@ class PokedexViewModel @Inject constructor(
             withSelectedPokemon(
                 selectedPokemon = uiState.value.content.selectedPokemon,
                 onPresent = { pokemon ->
-                    pokemonRepository.markAsCaught(pokemon.id, true)
+                    pokemonRepository.markAsCaught(pokemon.id)
                         .resultCollect<Unit, PokedexUiState>(
                             onSuccess = { _ ->
                                 copy(
@@ -107,7 +107,7 @@ class PokedexViewModel @Inject constructor(
             withSelectedPokemon(
                 selectedPokemon = uiState.value.content.selectedPokemon,
                 onPresent = { pokemon ->
-                    pokemonRepository.markAsCaught(pokemon.id, false)
+                    pokemonRepository.markAsRelease(pokemon.id)
                         .resultCollect<Unit, PokedexUiState>(
                             onSuccess = { _ ->
                                 copy(

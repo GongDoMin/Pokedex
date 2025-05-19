@@ -16,7 +16,7 @@ interface PokemonDao {
     suspend fun getPokemon(id: Int): PokemonEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPokemons(pokemons: List<PokemonEntity>)
+    suspend fun insertPokemons(vararg pokemons: PokemonEntity)
 
     @Query("DELETE FROM pokemon")
     suspend fun clearPokemons()

@@ -17,7 +17,9 @@ interface PokemonRepository {
 
     fun markAsDiscovered(id: Int): Flow<Result<Unit>>
 
-    fun markAsCaught(id: Int, isCaught: Boolean): Flow<Result<Unit>>
+    fun markAsCaught(id: Int): Flow<Result<Unit>>
+
+    fun markAsRelease(id: Int): Flow<Result<Unit>>
 
     fun swapPokemonOrder(firstId: Int, secondId: Int): Flow<Result<Unit>>
 }

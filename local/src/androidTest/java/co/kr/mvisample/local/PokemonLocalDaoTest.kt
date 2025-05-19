@@ -89,12 +89,12 @@ class PokemonLocalDaoTest : PokemonDatabaseTest() {
         Pokemons.forEach { pokemonLocalDao.markAsDiscovered(it) }
 
         // when
-        pokemonLocalDao.updatePokemonLocal(id = target.id, isCaught = true, order = expectedOrder)
+        pokemonLocalDao.catchPokemon(id = target.id, order = expectedOrder)
         val result = pokemonLocalDao.getPokemonLocal(target.id)
 
         // then
-        assertTrue(result.isCaught)
-        assertEquals(expectedOrder, result.order)
+        assertTrue(result?.isCaught == true)
+        assertEquals(expectedOrder, result?.order)
     }
 
     @Test
@@ -104,12 +104,12 @@ class PokemonLocalDaoTest : PokemonDatabaseTest() {
         Pokemons.forEach { pokemonLocalDao.markAsDiscovered(it) }
 
         // when
-        pokemonLocalDao.updatePokemonLocal(id = target.id, isCaught = false, order = null)
+        pokemonLocalDao.releasePokemon(id = target.id)
         val result = pokemonLocalDao.getPokemonLocal(target.id)
 
         // then
-        assertFalse(result.isCaught)
-        assertNull(result.order)
+        assertFalse(result?.isCaught == true)
+        assertNull(result?.order)
     }
 
     @Test
@@ -132,13 +132,15 @@ class PokemonLocalDaoTest : PokemonDatabaseTest() {
         val secondExpected = Pokemons.filter { it.isCaught }.random()
         Pokemons.forEach { pokemonLocalDao.markAsDiscovered(it) }
 
-        pokemonLocalDao.swapPokemonOrder(firstExpected.id, secondExpected.id)
+        // when
+        pokemonLocalDao.swapPokemonOrder(firstExpected.id, secondExpected.order)
+        pokemonLocalDao.swapPokemonOrder(secondExpected.id, firstExpected.order)
         val firstResult = pokemonLocalDao.getPokemonLocal(firstExpected.id)
         val secondResult = pokemonLocalDao.getPokemonLocal(secondExpected.id)
 
         // then
-        assertEquals(firstExpected.order, secondResult.order)
-        assertEquals(secondExpected.order, firstResult.order)
+        assertEquals(firstExpected.order, secondResult?.order)
+        assertEquals(secondExpected.order, firstResult?.order)
     }
 
     companion object {

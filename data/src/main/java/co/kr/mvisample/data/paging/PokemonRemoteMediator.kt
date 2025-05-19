@@ -61,8 +61,8 @@ class PokemonRemoteMediator(
                 RemoteKeyEntity(pokemonId = it.id, prevKey = prevKey, nextKey = nextKey)
             }
 
-            remoteKeyDao.insertRemoteKeys(keys)
-            pokemonDao.insertPokemons(pokemonEntities)
+            remoteKeyDao.insertRemoteKeys(*keys.toTypedArray())
+            pokemonDao.insertPokemons(*pokemonEntities.toTypedArray())
 
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (e: Exception) {

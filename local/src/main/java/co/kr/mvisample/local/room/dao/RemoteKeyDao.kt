@@ -12,7 +12,7 @@ interface RemoteKeyDao {
     suspend fun remoteKey(pokemonId: Int): RemoteKeyEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRemoteKeys(remoteKeys: List<RemoteKeyEntity>)
+    suspend fun insertRemoteKeys(vararg remoteKeys: RemoteKeyEntity)
 
     @Query("DELETE FROM remote_key")
     suspend fun clearRemoteKeys()

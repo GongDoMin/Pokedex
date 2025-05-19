@@ -100,20 +100,32 @@ class PokemonRepositoryImpl @Inject constructor(
             )
         }
 
-    override fun markAsCaught(id: Int, isCaught: Boolean): Flow<Result<Unit>> =
+    override fun markAsCaught(id: Int): Flow<Result<Unit>> =
         resultMapper {
             delay(500L)
-            val order = if (isCaught) pokemonLocalDao.getMaxOrder()?.plus(1) ?: 0 else null
-            pokemonLocalDao.updatePokemonLocal(
+            val order = pokemonLocalDao.getMaxOrder()?.plus(1) ?: 0
+            pokemonLocalDao.catchPokemon(
                 id = id,
-                isCaught = isCaught,
                 order = order
             )
         }
 
+    override fun markAsRelease(id: Int): Flow<Result<Unit>> =
+        resultMapper {
+            delay(500L)
+            pokemonLocalDao.releasePokemon(
+                id = id
+            )
+        }
+
+
     override fun swapPokemonOrder(firstId: Int, secondId: Int): Flow<Result<Unit>> =
         resultMapper {
-            pokemonLocalDao.swapPokemonOrder(firstId, secondId)
+            val firstPokemon = pokemonLocalDao.getPokemonLocal(firstId) ?: error("Pokemon with id $firstId not found.")
+            val secondPokemon = pokemonLocalDao.getPokemonLocal(secondId) ?: error("Pokemon with id $secondId not found.")
+
+            pokemonLocalDao.swapPokemonOrder(firstPokemon.id, secondPokemon.order)
+            pokemonLocalDao.swapPokemonOrder(secondPokemon.id, firstPokemon.order)
         }
 }
 

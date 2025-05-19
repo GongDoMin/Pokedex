@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import co.kr.mvisample.local.model.PokemonLocalEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -21,31 +20,20 @@ interface PokemonLocalDao {
     fun getPokemonLocals(isCaught: Boolean? = null): Flow<List<PokemonLocalEntity>>
 
     @Query("SELECT * FROM `pokemon-local` WHERE id = :id")
-    fun getPokemonLocal(id: Int): PokemonLocalEntity
+    fun getPokemonLocal(id: Int): PokemonLocalEntity?
 
     @Query("SELECT MAX(`order`) FROM `pokemon-local`")
     suspend fun getMaxOrder(): Int?
 
-    @Query("UPDATE `pokemon-local` SET isCaught = :isCaught, `order` = :order WHERE id = :id")
-    suspend fun updatePokemonLocal(id: Int, isCaught: Boolean, order: Int?)
+    @Query("UPDATE `pokemon-local` SET `order` = :order WHERE id = :id")
+    suspend fun swapPokemonOrder(id: Int, order: Int?)
+
+    @Query("UPDATE `pokemon-local` SET isCaught = 1, `order` = :order WHERE id = :id")
+    suspend fun catchPokemon(id: Int, order: Int)
+
+    @Query("UPDATE `pokemon-local` SET isCaught = 0, `order` = NULL WHERE id = :id")
+    suspend fun releasePokemon(id: Int)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE, entity = PokemonLocalEntity::class)
     suspend fun markAsDiscovered(pokemon: PokemonLocalEntity)
-
-    @Transaction
-    suspend fun swapPokemonOrder(firstId: Int, secondId: Int) {
-        val firstPokemon = getPokemonLocal(firstId)
-        val secondPokemon = getPokemonLocal(secondId)
-
-        updatePokemonLocal(
-            id = firstPokemon.id,
-            isCaught = true,
-            order = secondPokemon.order
-        )
-        updatePokemonLocal(
-            id = secondPokemon.id,
-            isCaught = true,
-            order = firstPokemon.order
-        )
-    }
 }
