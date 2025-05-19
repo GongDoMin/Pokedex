@@ -51,4 +51,6 @@ dependencies {
     implementation(libs.androidx.room.paging)
     kapt(libs.androidx.room.compiler)
     androidTestImplementation(libs.androidx.room.testing)
+
+    androidTestImplementation(libs.kotlinx.coroutines.test)
 }
