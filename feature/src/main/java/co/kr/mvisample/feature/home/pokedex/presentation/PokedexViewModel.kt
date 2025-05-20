@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.map
 import co.kr.mvisample.data.repository.PokemonRepository
 import co.kr.mvisample.feature.base.BaseViewModel
-import co.kr.mvisample.feature.base.UiState
 import co.kr.mvisample.feature.home.pokedex.model.PokedexAction
 import co.kr.mvisample.feature.home.pokedex.model.PokedexEvent
 import co.kr.mvisample.feature.home.pokedex.model.PokedexUiState
@@ -17,8 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PokedexViewModel @Inject constructor(
     private val pokemonRepository: PokemonRepository
-) : BaseViewModel<PokedexAction, UiState<PokedexUiState>, PokedexEvent>(
-    initialState = UiState(content = PokedexUiState())
+) : BaseViewModel<PokedexAction, PokedexUiState, PokedexEvent>(
+    initialState = PokedexUiState()
 ) {
     val pokemons = pokemonRepository.fetchPokemons(viewModelScope)
         .map {
@@ -38,11 +37,11 @@ class PokedexViewModel @Inject constructor(
     }
 
     private fun handleOnClickPokemon(action: PokedexAction.OnPokemonClick) {
-        updateContent(
-            uiState.value.content.copy(
+        updateContent {
+            copy(
                 selectedPokemon = action.pokemon
             )
-        )
+        }
     }
 
     private fun handleShowPokemonDetail() {
@@ -68,7 +67,7 @@ class PokedexViewModel @Inject constructor(
                 selectedPokemon = uiState.value.content.selectedPokemon,
                 onPresent = { pokemon ->
                     pokemonRepository.markAsDiscovered(pokemon.id)
-                        .resultCollect<Unit, PokedexUiState>(
+                        .resultCollect(
                             onSuccess = { _ ->
                                 copy(
                                     selectedPokemon = selectedPokemon?.copy(
@@ -88,7 +87,7 @@ class PokedexViewModel @Inject constructor(
                 selectedPokemon = uiState.value.content.selectedPokemon,
                 onPresent = { pokemon ->
                     pokemonRepository.markAsCaught(pokemon.id)
-                        .resultCollect<Unit, PokedexUiState>(
+                        .resultCollect(
                             onSuccess = { _ ->
                                 copy(
                                     selectedPokemon = selectedPokemon?.copy(
@@ -108,7 +107,7 @@ class PokedexViewModel @Inject constructor(
                 selectedPokemon = uiState.value.content.selectedPokemon,
                 onPresent = { pokemon ->
                     pokemonRepository.markAsRelease(pokemon.id)
-                        .resultCollect<Unit, PokedexUiState>(
+                        .resultCollect(
                             onSuccess = { _ ->
                                 copy(
                                     selectedPokemon = selectedPokemon?.copy(

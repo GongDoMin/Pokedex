@@ -2,7 +2,6 @@ package co.kr.mvisample.feature.home.computer.presentation
 
 import co.kr.mvisample.data.repository.PokemonRepository
 import co.kr.mvisample.feature.base.BaseViewModel
-import co.kr.mvisample.feature.base.UiState
 import co.kr.mvisample.feature.home.computer.model.ComputerAction
 import co.kr.mvisample.feature.home.computer.model.ComputerEvent
 import co.kr.mvisample.feature.home.computer.model.ComputerUiState
@@ -14,8 +13,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ComputerViewModel @Inject constructor(
     private val pokemonRepository: PokemonRepository
-) : BaseViewModel<ComputerAction, UiState<ComputerUiState>, ComputerEvent>(
-    initialState = UiState(content = ComputerUiState())
+) : BaseViewModel<ComputerAction, ComputerUiState, ComputerEvent>(
+    initialState = ComputerUiState()
 ) {
     init {
         handleAction(ComputerAction.FetchPokemonIcons)
@@ -31,11 +30,11 @@ class ComputerViewModel @Inject constructor(
     private fun handleFetchPokemonIcons() {
         launch {
             pokemonRepository.fetchPokemonIcons().collect { pokemonIcons ->
-                updateContent(
-                    uiState.value.content.copy(
+                updateContent {
+                    copy(
                         pokemonIcons = pokemonIcons.map { it.toFeature() }
                     )
-                )
+                }
             }
         }
     }
@@ -44,25 +43,25 @@ class ComputerViewModel @Inject constructor(
         with (uiState.value.content) {
             when {
                 selectedPokemonIcon == null -> {
-                    updateContent(
+                    updateContent {
                         copy(
                             selectedPokemonIcon = pokemonIcon
                         )
-                    )
+                    }
                 }
                 selectedPokemonIcon.id == pokemonIcon.id -> {
-                    updateContent(
+                    updateContent {
                         copy(
                             selectedPokemonIcon = null
                         )
-                    )
+                    }
                 }
                 else -> {
                     launch {
                         pokemonRepository.swapPokemonOrder(
                             firstId = selectedPokemonIcon.id,
                             secondId = pokemonIcon.id
-                        ).resultCollect<Unit, ComputerUiState>(
+                        ).resultCollect(
                             onSuccess = {
                                 copy(
                                     selectedPokemonIcon = null

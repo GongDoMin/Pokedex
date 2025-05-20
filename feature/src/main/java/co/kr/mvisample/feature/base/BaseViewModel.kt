@@ -16,16 +16,16 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<Action, UiState: UiStateMarker, Event>(
-    initialState: UiState
+abstract class BaseViewModel<Action, Content, Event>(
+    initialState: Content
 ): ViewModel() {
-    private val _uiState = MutableStateFlow(initialState)
+    private val _uiState = MutableStateFlow(UiState(content = initialState))
     val uiState = _uiState.asStateFlow()
 
     private val _event = Channel<Event>(capacity = Channel.BUFFERED)
     val event = _event.receiveAsFlow()
 
-    protected fun updateUiState(function: (UiState) -> UiState) = _uiState.update(function)
+    protected fun updateUiState(function: (UiState<Content>) -> UiState<Content>) = _uiState.update(function)
 
     protected suspend fun sendEvent(event: Event) = _event.send(event)
 
@@ -52,42 +52,34 @@ abstract class BaseViewModel<Action, UiState: UiStateMarker, Event>(
         )
     }
 
-    protected suspend fun <DataModel, Content> Flow<Result<DataModel>>.resultCollect(
+    protected suspend fun <DataModel> Flow<Result<DataModel>>.resultCollect(
         onSuccess: Content.(DataModel) -> Content,
-        onLoading: (Content.(DataModel?) -> Content)? = null,
-        onError: ((Throwable) -> Unit)? = null
+        onLoading: Content.(DataModel?) -> Content = { uiState.value.content },
+        onError: (Throwable) -> Unit = {}
     ) {
         collect { result ->
-            val currentState = uiState.value as co.kr.mvisample.feature.base.UiState<Content>
-
             when (result) {
                 is Result.Loading -> {
                     updateLoadingState(true)
-                    onLoading?.let { onLoading ->
-                        updateContent(currentState.content.onLoading(result.data))
-                    }
+                    updateContent { onLoading(result.data) }
                 }
                 is Result.Error -> {
                     updateLoadingState(false)
-                    onError?.let { onError ->
-                        onError(result.throwable)
-                    }
+                    onError(result.throwable)
                 }
                 is Result.Success -> {
                     updateLoadingState(false)
-                    updateContent(currentState.content.onSuccess(result.data))
+                    updateContent { onSuccess(result.data) }
                 }
             }
         }
     }
 
-    protected fun <Content> updateContent(content: Content) {
+    protected fun updateContent(content: Content.() -> Content) {
         updateUiState { state ->
-            state.withTypedUiState {
-                (this as co.kr.mvisample.feature.base.UiState<Content>).copy(
-                    content = content
-                ) as UiState
-            }
+            state.copy(
+                content = content(state.content)
+            )
         }
     }
 
@@ -97,36 +89,23 @@ abstract class BaseViewModel<Action, UiState: UiStateMarker, Event>(
         errorContent: String = ""
     ) {
         updateUiState { state ->
-            state.withTypedUiState {
-                this.copy(
-                    error = this.error.copy(
-                        isError = isError,
-                        errorTitle = errorTitle,
-                        errorContent = errorContent
-                    )
-                ) as UiState
-            }
+            state.copy(
+                error = state.error.copy(
+                    isError = isError,
+                    errorTitle = errorTitle,
+                    errorContent = errorContent
+                )
+            )
         }
     }
 
     protected open fun updateLoadingState(isLoading: Boolean) {
         updateUiState { state ->
-            state.withTypedUiState {
-                this.copy(
-                    loading = this.loading.copy(
-                        isLoading = isLoading
-                    )
-                ) as UiState
-            }
-        }
-    }
-
-    private fun UiState.withTypedUiState(
-        block: co.kr.mvisample.feature.base.UiState<*>.() -> UiState
-    ) : UiState {
-        return when (this) {
-            is co.kr.mvisample.feature.base.UiState<*> -> block()
-            else -> this
+            state.copy(
+                loading = state.loading.copy(
+                    isLoading = isLoading
+                )
+            )
         }
     }
 }
