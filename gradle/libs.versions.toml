@@ -27,6 +27,7 @@ serialization-converter = "1.0.0"
 jetbrainsKotlinJvm = "2.0.0"
 room = "2.6.1"
 kotestVersion = "5.9.0"
+turbine = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -71,6 +72,7 @@ androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "
 kotest-runner = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotestVersion" }
 kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotestVersion" }
 kotest-property = { group = "io.kotest", name = "kotest-property", version.ref = "kotestVersion" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

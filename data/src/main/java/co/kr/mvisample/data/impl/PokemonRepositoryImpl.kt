@@ -66,6 +66,9 @@ class PokemonRepositoryImpl @Inject constructor(
         resultMapperWithLocal(
             localAction = {
                 val entity = pokemonDao.getPokemon(id)
+
+                check(entity != null) { "pokemon is unknown" }
+
                 PokemonDetail(
                     id = entity.id,
                     name = entity.name,

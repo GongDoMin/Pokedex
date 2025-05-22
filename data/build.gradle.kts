@@ -32,6 +32,9 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    testOptions {
+        unitTests.all { it.useJUnitPlatform() }
+    }
 }
 
 dependencies {
@@ -50,4 +53,9 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     implementation(libs.androidx.paging.compose)
+
+    testImplementation(libs.kotest.runner)
+    testImplementation(libs.kotest.assertions)
+    testImplementation(libs.kotest.property)
+    testImplementation(libs.turbine)
 }
