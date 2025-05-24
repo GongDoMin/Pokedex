@@ -3,10 +3,11 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.jetbrains.kotlin.kapt)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 android {
-    namespace = "co.kr.mvisample.data"
+    namespace = "co.kr.mvisample.testing"
     compileSdk = 35
 
     defaultConfig {
@@ -32,30 +33,34 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    testOptions {
-        unitTests.all { it.useJUnitPlatform() }
-    }
 }
 
 dependencies {
 
-    implementation(project(":remote"))
-    implementation(project(":local"))
+    implementation(project(":core:local"))
+    implementation(project(":core:remote"))
+    implementation(project(":core:data"))
+    implementation(project(":feature"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.androidx.runner)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    implementation(libs.hilt.android.testing)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
+    implementation(libs.jetbrains.kotlinx.serialization)
+
     implementation(libs.androidx.paging.compose)
 
-    testImplementation(libs.kotest.runner)
-    testImplementation(libs.kotest.assertions)
-    testImplementation(libs.kotest.property)
-    testImplementation(libs.turbine)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
+    kapt(libs.androidx.room.compiler)
+    androidTestImplementation(libs.androidx.room.testing)
 }
