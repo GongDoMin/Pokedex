@@ -44,6 +44,9 @@ android {
     buildFeatures {
         compose = true
     }
+    testOptions {
+        unitTests.all { it.useJUnitPlatform() }
+    }
 }
 
 dependencies {
@@ -75,6 +78,7 @@ dependencies {
 
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
+    testImplementation(libs.androidx.navigation.testing)
 
     implementation(libs.jetbrains.kotlinx.serialization)
 
@@ -82,4 +86,9 @@ dependencies {
     implementation(libs.coil.compose)
 
     implementation(libs.kotlinx.collections.immutable)
+
+    testImplementation(libs.kotest.runner)
+    testImplementation(libs.kotest.assertions)
+    testImplementation(libs.kotest.property)
+    testImplementation(libs.turbine)
 }

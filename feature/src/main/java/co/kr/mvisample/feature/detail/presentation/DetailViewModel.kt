@@ -19,13 +19,11 @@ class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<DetailAction, DetailUiState, DetailEvent>(
     initialState = DetailUiState(
-        pokemonDetail = savedStateHandle.toRoute<PokemonRoutes.PokemonDetail>().let {
-            PokemonDetailModel(
-                id = it.id,
-                name = it.name,
-                isDiscovered = it.isDiscovered
-            )
-        }
+        pokemonDetail = PokemonDetailModel(
+            id = savedStateHandle.get<Int>(ID) ?: 0,
+            name = savedStateHandle.get<String>(NAME) ?: "",
+            isDiscovered = savedStateHandle.get<Boolean>(IS_DISCOVERED) ?: false
+        )
     )
 ) {
 
@@ -75,5 +73,11 @@ class DetailViewModel @Inject constructor(
         launch {
             sendEvent(DetailEvent.OnNavigateToBack)
         }
+    }
+
+    companion object {
+        const val ID = "id"
+        const val NAME = "name"
+        const val IS_DISCOVERED = "isDiscovered"
     }
 }
