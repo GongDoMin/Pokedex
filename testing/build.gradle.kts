@@ -57,4 +57,10 @@ dependencies {
     implementation(libs.jetbrains.kotlinx.serialization)
 
     implementation(libs.androidx.paging.compose)
+
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
+    kapt(libs.androidx.room.compiler)
+    androidTestImplementation(libs.androidx.room.testing)
 }

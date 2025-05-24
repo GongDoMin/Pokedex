@@ -4,6 +4,7 @@ import co.kr.mvisample.local.model.PokemonLocalEntity
 import co.kr.mvisample.local.room.dao.PokemonLocalDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+
 class FakePokemonLocalDao : PokemonLocalDao {
 
     private val pokemonLocals = hashMapOf<Int, PokemonLocalEntity>()
@@ -43,6 +44,10 @@ class FakePokemonLocalDao : PokemonLocalDao {
 
     override suspend fun markAsDiscovered(pokemon: PokemonLocalEntity) {
         pokemonLocals[pokemon.id] = pokemon
+    }
+
+    override suspend fun clearPokemonLocal() {
+        pokemonLocals.clear()
     }
 }
 

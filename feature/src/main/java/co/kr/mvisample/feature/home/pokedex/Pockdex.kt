@@ -33,6 +33,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -128,6 +130,9 @@ private fun PokedexContent(
                 .fillMaxHeight()
                 .pokemonCard()
                 .padding(8.dp)
+                .semantics {
+                    contentDescription = "pokemonList"
+                }
         ) {
             items(
                 count = pokemons.itemCount,
@@ -175,7 +180,7 @@ private fun PokemonImage(
                     }
                     .build()
             ),
-            contentDescription = null,
+            contentDescription = "pokemonImage",
             colorFilter = if (pokemon?.isDiscovered == true) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
         )
     }
@@ -311,6 +316,9 @@ private fun Pokeball(
         modifier = modifier
             .size(16.dp)
             .border(1.dp, color = outlineColor, shape = CircleShape)
+            .semantics {
+                contentDescription = "pokeball_$isCaught"
+            }
     ) {
         val diameter = size.minDimension
         val radius = diameter / 2

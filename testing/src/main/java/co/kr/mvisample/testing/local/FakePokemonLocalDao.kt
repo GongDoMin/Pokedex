@@ -44,5 +44,9 @@ class FakePokemonLocalDao : PokemonLocalDao {
     override suspend fun markAsDiscovered(pokemon: PokemonLocalEntity) {
         pokemonLocals[pokemon.id] = pokemon
     }
+
+    override suspend fun clearPokemonLocal() {
+        pokemonLocals.clear()
+    }
 }
 
