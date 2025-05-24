@@ -1,4 +1,4 @@
-package co.kr.mvisample.core.navigation
+package co.kr.mvisample.navigation
 
 import kotlinx.serialization.Serializable
 

@@ -1,8 +1,6 @@
 package co.kr.mvisample.feature.detail.presentation
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.toRoute
-import co.kr.mvisample.core.navigation.PokemonRoutes
 import co.kr.mvisample.data.repository.PokemonRepository
 import co.kr.mvisample.feature.base.BaseViewModel
 import co.kr.mvisample.feature.detail.model.DetailAction

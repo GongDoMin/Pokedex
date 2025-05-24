@@ -37,17 +37,18 @@ import co.kr.mvisample.feature.components.pokemonCard
 import co.kr.mvisample.feature.home.HomeSections.Companion.toSection
 import co.kr.mvisample.feature.home.computer.ComputerScreen
 import co.kr.mvisample.feature.home.pokedex.PokedexScreen
+import co.kr.mvisample.navigation.HomeRoutes
+import co.kr.mvisample.navigation.rememberHomeNavigator
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.serialization.Serializable
 import kotlin.math.roundToInt
 
 @Composable
 fun HomeContainer(
     onNavigateToPokemonDetail: (id: Int, name: String, isDiscovered: Boolean) -> Unit
 ) {
-    val nestedNavController = rememberNavController()
-    val navBackStackEntry by nestedNavController.currentBackStackEntryAsState()
+    val nestedNavController = rememberHomeNavigator()
+    val navBackStackEntry by nestedNavController.navController.currentBackStackEntryAsState()
     val currentSection = navBackStackEntry?.destination?.route.toSection()
     Scaffold(
         containerColor = PokemonTheme.colors.backgroundRed,
@@ -57,13 +58,7 @@ fun HomeContainer(
                 currentSection = currentSection ?: HomeSections.POKEDEX,
                 onClickSection = {
                     if (it != (currentSection?.route ?: HomeSections.POKEDEX)) {
-                        nestedNavController.navigate(it) {
-                            launchSingleTop = true
-                            restoreState = true
-                            popUpTo(nestedNavController.graph.id) {
-                                saveState = true
-                            }
-                        }
+                        nestedNavController.navigateHomeRoutes(it)
                     }
                 }
             )
@@ -73,7 +68,7 @@ fun HomeContainer(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-            navController = nestedNavController,
+            navController = nestedNavController.navController,
             startDestination = HomeRoutes.Pokedex
         ) {
             composable<HomeRoutes.Pokedex> {
@@ -243,11 +238,6 @@ enum class HomeSections(
             }
         }
     }
-}
-
-sealed interface HomeRoutes {
-    @Serializable data object Pokedex: HomeRoutes
-    @Serializable data object Computer: HomeRoutes
 }
 
 private val BottomNavHeight = 56.dp

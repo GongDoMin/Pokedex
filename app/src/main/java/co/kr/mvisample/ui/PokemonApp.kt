@@ -20,18 +20,18 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import co.kr.mvisample.core.navigation.PokemonRoutes
 import co.kr.mvisample.design.LocalNavAnimatedVisibilityScope
 import co.kr.mvisample.design.LocalSharedTransitionScope
 import co.kr.mvisample.design.PokemonTheme
 import co.kr.mvisample.feature.detail.DetailScreen
 import co.kr.mvisample.feature.home.HomeContainer
+import co.kr.mvisample.navigation.PokemonRoutes
+import co.kr.mvisample.navigation.rememberPokedexNavigator
 import kotlin.reflect.KType
 
 @Composable
 fun PokemonApp() {
-    val navController = rememberNavController()
+    val navController = rememberPokedexNavigator()
 
     PokemonTheme {
         SharedTransitionLayout {
@@ -39,13 +39,13 @@ fun PokemonApp() {
                 LocalSharedTransitionScope provides this
             ) {
                 NavHost(
-                    navController = navController,
+                    navController = navController.navController,
                     startDestination = PokemonRoutes.Home
                 ) {
                     composableWithBasicTransition<PokemonRoutes.Home> {
                         HomeContainer(
                             onNavigateToPokemonDetail = { id, name, isDiscovered ->
-                                navController.navigate(PokemonRoutes.PokemonDetail(id, name, isDiscovered))
+                                navController.navigatePokemonDetail(id, name, isDiscovered)
                             }
                         )
                     }
