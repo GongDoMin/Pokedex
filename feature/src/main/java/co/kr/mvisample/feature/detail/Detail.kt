@@ -116,7 +116,7 @@ fun DetailHeader(
                         onClick = onBackClick
                     ),
                 imageVector = Icons.Default.Close,
-                contentDescription = null,
+                contentDescription = "backIcon",
                 colorFilter = ColorFilter.tint(Color.White)
             )
         }.map { it.measure(Constraints.fixed(width = iconSize, height = iconSize)) }.first()
