@@ -23,14 +23,11 @@ import co.kr.mvisample.local.room.dao.PokemonDao
 import co.kr.mvisample.local.room.dao.PokemonLocalDao
 import co.kr.mvisample.local.room.dao.RemoteKeyDao
 import co.kr.mvisample.remote.datasource.PokemonDataSource
-import co.kr.mvisample.testing.local.FakePokemonLocalDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -42,23 +39,26 @@ class FakePokemonRepository @Inject constructor(
     private val remoteKeyDao: RemoteKeyDao
 ) : PokemonRepository {
 
-    private val pokemonIcons = MutableStateFlow(
-        listOf(
-            PokemonIcon(
-                id = 6,
-                iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
-                order = 1
-            ),
-            PokemonIcon(
-                id = 9,
-                iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/9.png",
-                order = 2
-            )
-        )
-    )
-
     init {
-        runBlocking { pokemonLocalDao.clearPokemonLocal() }
+        runBlocking {
+            pokemonLocalDao.clearPokemonLocal()
+            pokemonLocalDao.markAsDiscovered(
+                PokemonLocalEntity(
+                    id = 6,
+                    iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
+                    isCaught = true,
+                    order = 0
+                )
+            )
+            pokemonLocalDao.markAsDiscovered(
+                PokemonLocalEntity(
+                    id = 9,
+                    iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/9.png",
+                    isCaught = true,
+                    order = 1
+                )
+            )
+        }
     }
 
     override fun fetchPokemons(scope: CoroutineScope): Flow<PagingData<Pokemon>> =
@@ -110,7 +110,10 @@ class FakePokemonRepository @Inject constructor(
             }
         )
 
-    override fun fetchPokemonIcons(): Flow<List<PokemonIcon>> = pokemonIcons
+    override fun fetchPokemonIcons(): Flow<List<PokemonIcon>> =
+        pokemonLocalDao.getPokemonLocals(true).map { pokemonLocals ->
+            pokemonLocals.map { it.toData() }
+        }
 
     override fun markAsDiscovered(id: Int): Flow<Result<Unit>> =
         resultMapper {
@@ -143,14 +146,10 @@ class FakePokemonRepository @Inject constructor(
 
     override fun swapPokemonOrder(firstId: Int, secondId: Int): Flow<Result<Unit>> =
         resultMapper {
-            val firstOrder = pokemonIcons.value.find { it.id == firstId }?.order ?: 0
-            val secondOrder = pokemonIcons.value.find { it.id == secondId }?.order ?: 0
+            val firstPokemon = pokemonLocalDao.getPokemonLocal(firstId) ?: error("Pokemon with id $firstId not found.")
+            val secondPokemon = pokemonLocalDao.getPokemonLocal(secondId) ?: error("Pokemon with id $secondId not found.")
 
-            pokemonIcons.update {
-                listOf(
-                    it.last().copy(order = firstOrder),
-                    it.first().copy(order = secondOrder)
-                )
-            }
+            pokemonLocalDao.swapPokemonOrder(firstPokemon.id, secondPokemon.order)
+            pokemonLocalDao.swapPokemonOrder(secondPokemon.id, firstPokemon.order)
         }
 }
