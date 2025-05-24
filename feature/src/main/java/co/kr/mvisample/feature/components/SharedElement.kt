@@ -5,8 +5,8 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import co.kr.mvisample.core.theme.LocalNavAnimatedVisibilityScope
-import co.kr.mvisample.core.theme.LocalSharedTransitionScope
+import co.kr.mvisample.design.LocalNavAnimatedVisibilityScope
+import co.kr.mvisample.design.LocalSharedTransitionScope
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable

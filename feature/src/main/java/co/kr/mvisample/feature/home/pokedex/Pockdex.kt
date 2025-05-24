@@ -44,9 +44,9 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import co.kr.mvisample.core.theme.PokemonTheme
-import co.kr.mvisample.core.theme.PreviewPokemonTheme
 import co.kr.mvisample.core.utils.LaunchedEventEffect
+import co.kr.mvisample.design.PokemonTheme
+import co.kr.mvisample.design.PreviewPokemonTheme
 import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.components.OverlayWithLoadingAndDialog
 import co.kr.mvisample.feature.components.WeightSpacer

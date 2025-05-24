@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import co.kr.mvisample.core.theme.PokemonTheme
+import co.kr.mvisample.design.PokemonTheme
 
 @Composable
 fun Modifier.pokemonCard(

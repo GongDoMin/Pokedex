@@ -2,7 +2,7 @@
     ExperimentalSharedTransitionApi::class
 )
 
-package co.kr.mvisample.core.theme
+package co.kr.mvisample.design
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope

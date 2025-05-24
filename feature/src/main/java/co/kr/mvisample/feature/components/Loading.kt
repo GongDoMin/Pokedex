@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import co.kr.mvisample.core.theme.PokemonTheme
+import co.kr.mvisample.design.PokemonTheme
 
 @Composable
 fun LoadingIndicator() {

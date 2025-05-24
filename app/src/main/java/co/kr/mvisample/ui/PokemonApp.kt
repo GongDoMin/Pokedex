@@ -22,9 +22,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import co.kr.mvisample.core.navigation.PokemonRoutes
-import co.kr.mvisample.core.theme.LocalNavAnimatedVisibilityScope
-import co.kr.mvisample.core.theme.LocalSharedTransitionScope
-import co.kr.mvisample.core.theme.PokemonTheme
+import co.kr.mvisample.design.LocalNavAnimatedVisibilityScope
+import co.kr.mvisample.design.LocalSharedTransitionScope
+import co.kr.mvisample.design.PokemonTheme
 import co.kr.mvisample.feature.detail.DetailScreen
 import co.kr.mvisample.feature.home.HomeContainer
 import kotlin.reflect.KType

@@ -1,4 +1,4 @@
-package co.kr.mvisample.core.theme
+package co.kr.mvisample.design
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
