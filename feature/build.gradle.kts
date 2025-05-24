@@ -14,7 +14,7 @@ android {
     defaultConfig {
         minSdk = 28
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "co.kr.mvisample.testing.CustomTestRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -53,6 +53,7 @@ dependencies {
 
     implementation(project(":data"))
     implementation(project(":core"))
+    androidTestImplementation(project(":testing"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -74,6 +75,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.hilt.android)
+    implementation(libs.hilt.android.testing)
     kapt(libs.hilt.compiler)
 
     implementation(libs.androidx.hilt.navigation.compose)

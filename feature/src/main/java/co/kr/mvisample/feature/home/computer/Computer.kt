@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -36,6 +37,7 @@ import co.kr.mvisample.feature.components.pokemonCard
 import co.kr.mvisample.feature.home.computer.model.ComputerAction
 import co.kr.mvisample.feature.home.computer.model.PokemonIconModel
 import co.kr.mvisample.feature.home.computer.presentation.ComputerViewModel
+import co.kr.mvisample.feature.utils.sementics.customOffsetY
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 
@@ -117,7 +119,11 @@ private fun PokemonIconGrid(
                     .graphicsLayer {
                         this.scaleX = scaleX
                         this.scaleY = scaleY
-                    }.animateItem(),
+                    }
+                    .animateItem()
+                    .semantics {
+                        customOffsetY = offset.y
+                    },
                 painter = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(context)
                         .data(pokemon.iconUrl)
@@ -128,7 +134,7 @@ private fun PokemonIconGrid(
                         }
                         .build()
                 ),
-                contentDescription = null
+                contentDescription = "pokemonIcon_${pokemon.id}"
             )
         }
     }

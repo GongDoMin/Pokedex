@@ -21,12 +21,12 @@ class FakePokemonRepository : PokemonRepository {
         listOf(
             PokemonIcon(
                 id = 6,
-                iconUrl = "",
+                iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
                 order = 1
             ),
             PokemonIcon(
                 id = 9,
-                iconUrl = "",
+                iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/9.png",
                 order = 2
             )
         )
