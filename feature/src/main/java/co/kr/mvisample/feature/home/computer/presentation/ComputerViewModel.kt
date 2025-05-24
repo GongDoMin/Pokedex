@@ -40,37 +40,44 @@ class ComputerViewModel @Inject constructor(
     }
 
     private fun handleOnPokemonIconClick(pokemonIcon: PokemonIconModel) {
-        with (uiState.value.content) {
-            when {
-                selectedPokemonIcon == null -> {
-                    updateContent {
-                        copy(
-                            selectedPokemonIcon = pokemonIcon
-                        )
-                    }
+        val content = uiState.value.content
+        val selected = content.selectedPokemonIcon
+
+        when {
+            selected == null -> {
+                updateContent {
+                    copy(selectedPokemonIcon = pokemonIcon)
                 }
-                selectedPokemonIcon.id == pokemonIcon.id -> {
-                    updateContent {
-                        copy(
-                            selectedPokemonIcon = null
-                        )
-                    }
+            }
+
+            selected.id == pokemonIcon.id -> {
+                updateContent {
+                    copy(selectedPokemonIcon = null)
                 }
-                else -> {
-                    launch {
-                        pokemonRepository.swapPokemonOrder(
-                            firstId = selectedPokemonIcon.id,
-                            secondId = pokemonIcon.id
-                        ).resultCollect(
-                            onSuccess = {
-                                copy(
-                                    selectedPokemonIcon = null
-                                )
-                            }
-                        )
-                    }
+            }
+
+            content.hasBothIcons(selected.id, pokemonIcon.id) -> {
+                launch {
+                    pokemonRepository.swapPokemonOrder(
+                        firstId = selected.id,
+                        secondId = pokemonIcon.id
+                    ).resultCollect(
+                        onSuccess = {
+                            copy(selectedPokemonIcon = null)
+                        }
+                    )
+                }
+            }
+
+            else -> {
+                updateContent {
+                    copy(selectedPokemonIcon = null)
                 }
             }
         }
+    }
+
+    private fun ComputerUiState.hasBothIcons(firstId: Int, secondId: Int): Boolean {
+        return pokemonIcons.any { it.id == firstId } && pokemonIcons.any { it.id == secondId }
     }
 }
