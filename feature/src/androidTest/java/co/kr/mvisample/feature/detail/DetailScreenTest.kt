@@ -53,7 +53,9 @@ class DetailScreenTest {
             .onNodeWithContentDescription("backIcon")
             .performClick()
 
-        assertFalse(isDetailScreen)
+        composeTestRule.waitUntil {
+            isDetailScreen.not()
+        }
     }
 
     private fun initViewModel() {
