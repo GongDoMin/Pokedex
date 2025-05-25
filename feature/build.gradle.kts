@@ -55,6 +55,7 @@ dependencies {
     implementation(project(":core:design"))
     implementation(project(":core:navigation"))
     implementation(project(":core:common"))
+    testImplementation(project(":core:testing"))
     androidTestImplementation(project(":core:testing"))
 
     implementation(libs.androidx.core.ktx)

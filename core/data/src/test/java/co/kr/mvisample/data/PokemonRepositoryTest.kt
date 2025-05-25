@@ -1,4 +1,4 @@
-package co.kr.mvisample.data.repository
+package co.kr.mvisample.data
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -7,14 +7,14 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import app.cash.turbine.test
-import co.kr.mvisample.data.fake.FakePokemonDao
-import co.kr.mvisample.data.fake.FakePokemonDataSource
-import co.kr.mvisample.data.fake.FakePokemonLocalDao
-import co.kr.mvisample.data.fake.FakeRemoteKeyDao
 import co.kr.mvisample.data.impl.PokemonRepositoryImpl
 import co.kr.mvisample.data.paging.PokemonRemoteMediator
 import co.kr.mvisample.data.result.Result
 import co.kr.mvisample.local.model.PokemonEntity
+import co.kr.mvisample.testing.local.FakePokemonDao
+import co.kr.mvisample.testing.local.FakePokemonDataSource
+import co.kr.mvisample.testing.local.FakePokemonLocalDao
+import co.kr.mvisample.testing.local.FakeRemoteKeyDao
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.Flow

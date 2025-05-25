@@ -1,15 +1,15 @@
 package co.kr.mvisample.feature.computer
 
 import app.cash.turbine.test
-import co.kr.mvisample.feature.fake.FakePokemonRepository
 import co.kr.mvisample.feature.home.computer.model.ComputerAction
 import co.kr.mvisample.feature.home.computer.presentation.ComputerViewModel
+import co.kr.mvisample.testing.data.FakePokemonRepositoryUnitTest
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 class ComputerViewModelTest : StringSpec() {
 
-    private val fakePokemonRepository = FakePokemonRepository()
+    private val fakePokemonRepository = FakePokemonRepositoryUnitTest()
 
     private val computerViewModel = ComputerViewModel(fakePokemonRepository)
 

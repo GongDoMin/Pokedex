@@ -1,17 +1,18 @@
 package co.kr.mvisample.feature.pokedex
 
 import app.cash.turbine.test
-import co.kr.mvisample.feature.fake.FakePokemonRepository
+import co.kr.mvisample.testing.data.FakePokemonRepository
 import co.kr.mvisample.feature.home.pokedex.model.PokedexAction
 import co.kr.mvisample.feature.home.pokedex.model.PokedexEvent
 import co.kr.mvisample.feature.home.pokedex.model.PokemonModel
 import co.kr.mvisample.feature.home.pokedex.presentation.PokedexViewModel
+import co.kr.mvisample.testing.data.FakePokemonRepositoryUnitTest
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 class PokedexViewModelTest : StringSpec() {
 
-    private val fakePokemonRepository = FakePokemonRepository()
+    private val fakePokemonRepository = FakePokemonRepositoryUnitTest()
 
     private val pokedexViewModel = PokedexViewModel(fakePokemonRepository)
 

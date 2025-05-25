@@ -1,4 +1,4 @@
-package co.kr.mvisample.feature.fake
+package co.kr.mvisample.testing.data
 
 import androidx.paging.PagingData
 import co.kr.mvisample.data.model.Pokemon
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.update
 
-class FakePokemonRepository : PokemonRepository {
+class FakePokemonRepositoryUnitTest : PokemonRepository {
 
     private val pokemonIcons = MutableStateFlow(
         listOf(

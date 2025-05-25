@@ -1,12 +1,12 @@
-package co.kr.mvisample.remote.datasource
+package co.kr.mvisample.remote
 
-import co.kr.mvisample.remote.fake.FakePokemonService
 import co.kr.mvisample.remote.impl.PokemonDataSourceImpl
 import co.kr.mvisample.remote.model.PokemonDetailResponse
 import co.kr.mvisample.remote.model.PokemonResponse
 import co.kr.mvisample.remote.model.PokemonResponseWithPaging
 import co.kr.mvisample.remote.model.TypeResponse
 import co.kr.mvisample.remote.model.TypeWithSlotResponse
+import co.kr.mvisample.testing.remote.FakePokemonService
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 

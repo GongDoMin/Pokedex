@@ -7,13 +7,13 @@ import co.kr.mvisample.feature.detail.model.DetailEvent
 import co.kr.mvisample.feature.detail.model.PokemonDetailModel
 import co.kr.mvisample.feature.detail.model.TypeModel
 import co.kr.mvisample.feature.detail.presentation.DetailViewModel
-import co.kr.mvisample.feature.fake.FakePokemonRepository
+import co.kr.mvisample.testing.data.FakePokemonRepositoryUnitTest
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 class DetailViewModelTest : StringSpec() {
 
-    private val fakePokemonRepository = FakePokemonRepository()
+    private val fakePokemonRepository = FakePokemonRepositoryUnitTest()
 
     private val detailViewModel = DetailViewModel(
         pokemonRepository = fakePokemonRepository,
