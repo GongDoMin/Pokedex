@@ -42,8 +42,16 @@ class PokemonRemoteMediator(
         }
 
         try {
+            val requiredCount = (page + 1) * LoadSize
+            val isLastPage = requiredCount >= TotalLoadSize
+            val actualRequiredCount = if (isLastPage) TotalLoadSize else requiredCount
+
+            if (pokemonDao.getPokemonCount() >= actualRequiredCount) {
+                return MediatorResult.Success(endOfPaginationReached = isLastPage)
+            }
+
             val response = pokemonDataSource.fetchPokemons(
-                limit = if (page == 2) TotalLoadSize - (LoadSize * page) else LoadSize,
+                limit = actualRequiredCount,
                 offset = page * LoadSize
             )
 
