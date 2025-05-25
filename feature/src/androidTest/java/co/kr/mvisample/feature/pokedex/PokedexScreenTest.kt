@@ -13,7 +13,7 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import co.kr.mvisample.core.theme.PreviewPokemonTheme
+import co.kr.mvisample.design.PreviewPokemonTheme
 import co.kr.mvisample.feature.home.pokedex.PokedexScreen
 import co.kr.mvisample.testing.HiltTestActivity
 import dagger.hilt.android.testing.HiltAndroidRule

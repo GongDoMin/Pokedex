@@ -4,13 +4,12 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.lifecycle.SavedStateHandle
-import co.kr.mvisample.core.theme.PreviewPokemonTheme
 import co.kr.mvisample.data.repository.PokemonRepository
+import co.kr.mvisample.design.PreviewPokemonTheme
 import co.kr.mvisample.feature.detail.presentation.DetailViewModel
 import co.kr.mvisample.testing.HiltTestActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

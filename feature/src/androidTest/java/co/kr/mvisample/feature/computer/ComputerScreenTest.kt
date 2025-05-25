@@ -12,9 +12,9 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import co.kr.mvisample.core.theme.PreviewPokemonTheme
+import co.kr.mvisample.common.utils.CustomOffsetYKey
+import co.kr.mvisample.design.PreviewPokemonTheme
 import co.kr.mvisample.feature.home.computer.ComputerScreen
-import co.kr.mvisample.feature.utils.sementics.CustomOffsetYKey
 import co.kr.mvisample.testing.HiltTestActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
