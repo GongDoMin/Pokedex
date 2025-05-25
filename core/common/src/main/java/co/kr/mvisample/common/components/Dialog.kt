@@ -19,8 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import co.kr.mvisample.common.base.DialogAction
 import co.kr.mvisample.design.PokemonTheme
-import co.kr.mvisample.feature.base.DialogAction
 
 @Composable
 fun PokemonDialog(

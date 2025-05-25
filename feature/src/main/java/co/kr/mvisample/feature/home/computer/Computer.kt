@@ -30,14 +30,14 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import co.kr.mvisample.common.components.OverlayWithLoadingAndDialog
+import co.kr.mvisample.common.components.pokemonCard
+import co.kr.mvisample.common.utils.customOffsetY
 import co.kr.mvisample.design.PokemonTheme
 import co.kr.mvisample.feature.R
-import co.kr.mvisample.feature.components.OverlayWithLoadingAndDialog
-import co.kr.mvisample.feature.components.pokemonCard
 import co.kr.mvisample.feature.home.computer.model.ComputerAction
 import co.kr.mvisample.feature.home.computer.model.PokemonIconModel
 import co.kr.mvisample.feature.home.computer.presentation.ComputerViewModel
-import co.kr.mvisample.feature.utils.sementics.customOffsetY
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 

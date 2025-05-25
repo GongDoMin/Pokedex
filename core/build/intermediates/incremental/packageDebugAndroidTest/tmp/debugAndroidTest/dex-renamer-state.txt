@@ -1,0 +1,22 @@
+#Sun May 25 00:26:50 KST 2025
+base.0=/Users/gongdomin/develop/AndroidStudioProjects/MVISample/core/build/intermediates/dex/debugAndroidTest/mergeExtDexDebugAndroidTest/classes.dex
+base.1=/Users/gongdomin/develop/AndroidStudioProjects/MVISample/core/build/intermediates/dex/debugAndroidTest/mergeLibDexDebugAndroidTest/10/classes.dex
+base.2=/Users/gongdomin/develop/AndroidStudioProjects/MVISample/core/build/intermediates/dex/debugAndroidTest/mergeLibDexDebugAndroidTest/7/classes.dex
+base.3=/Users/gongdomin/develop/AndroidStudioProjects/MVISample/core/build/intermediates/dex/debugAndroidTest/mergeProjectDexDebugAndroidTest/0/classes.dex
+base.4=/Users/gongdomin/develop/AndroidStudioProjects/MVISample/core/build/intermediates/dex/debugAndroidTest/mergeProjectDexDebugAndroidTest/13/classes.dex
+base.5=/Users/gongdomin/develop/AndroidStudioProjects/MVISample/core/build/intermediates/dex/debugAndroidTest/mergeExtDexDebugAndroidTest/classes2.dex
+base.6=/Users/gongdomin/develop/AndroidStudioProjects/MVISample/core/build/intermediates/dex/debugAndroidTest/mergeExtDexDebugAndroidTest/classes3.dex
+path.0=classes.dex
+path.1=10/classes.dex
+path.2=7/classes.dex
+path.3=0/classes.dex
+path.4=13/classes.dex
+path.5=classes2.dex
+path.6=classes3.dex
+renamed.0=classes.dex
+renamed.1=classes2.dex
+renamed.2=classes3.dex
+renamed.3=classes4.dex
+renamed.4=classes5.dex
+renamed.5=classes6.dex
+renamed.6=classes7.dex

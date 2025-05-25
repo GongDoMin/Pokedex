@@ -1,0 +1,2 @@
+05-25 00:27:19.878 26118 26135 I TestRunner: started: useAppContext(co.kr.mvisample.core.ExampleInstrumentedTest)
+05-25 00:27:19.879 26118 26135 I TestRunner: finished: useAppContext(co.kr.mvisample.core.ExampleInstrumentedTest)

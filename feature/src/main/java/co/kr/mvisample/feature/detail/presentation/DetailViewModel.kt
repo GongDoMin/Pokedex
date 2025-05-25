@@ -1,8 +1,8 @@
 package co.kr.mvisample.feature.detail.presentation
 
 import androidx.lifecycle.SavedStateHandle
+import co.kr.mvisample.common.base.BaseViewModel
 import co.kr.mvisample.data.repository.PokemonRepository
-import co.kr.mvisample.feature.base.BaseViewModel
 import co.kr.mvisample.feature.detail.model.DetailAction
 import co.kr.mvisample.feature.detail.model.DetailEvent
 import co.kr.mvisample.feature.detail.model.DetailUiState

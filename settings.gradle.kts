@@ -22,7 +22,6 @@ dependencyResolutionManagement {
 rootProject.name = "MVISample"
 include(":app")
 include(":feature")
-include(":core")
 include(":core:remote")
 include(":core:local")
 include(":core:data")

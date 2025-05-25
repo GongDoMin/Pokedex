@@ -1,7 +1,7 @@
 package co.kr.mvisample.feature.home.computer.presentation
 
+import co.kr.mvisample.common.base.BaseViewModel
 import co.kr.mvisample.data.repository.PokemonRepository
-import co.kr.mvisample.feature.base.BaseViewModel
 import co.kr.mvisample.feature.home.computer.model.ComputerAction
 import co.kr.mvisample.feature.home.computer.model.ComputerEvent
 import co.kr.mvisample.feature.home.computer.model.ComputerUiState

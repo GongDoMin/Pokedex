@@ -2,8 +2,8 @@ package co.kr.mvisample.feature.home.pokedex.presentation
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.map
+import co.kr.mvisample.common.base.BaseViewModel
 import co.kr.mvisample.data.repository.PokemonRepository
-import co.kr.mvisample.feature.base.BaseViewModel
 import co.kr.mvisample.feature.home.pokedex.model.PokedexAction
 import co.kr.mvisample.feature.home.pokedex.model.PokedexEvent
 import co.kr.mvisample.feature.home.pokedex.model.PokedexUiState
