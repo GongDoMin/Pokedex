@@ -126,3 +126,5 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrai
 compose = ["androidx-ui", "androidx-ui-graphics", "androidx-ui-tooling-preview", "androidx-material3", "material", "androidx-activity-compose"]
 android-test-compose = ["androidx-ui-test-junit4"]
 debug-compose = ["androidx-ui-tooling", "androidx-ui-test-manifest"]
+
+# Custom Plugins

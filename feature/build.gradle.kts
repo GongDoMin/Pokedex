@@ -1,19 +1,16 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.jetbrains.kotlin.kapt)
-    alias(libs.plugins.jetbrains.kotlin.serialization)
+    id("mvisample.android.library")
+    id("mvisample.android.library.compose")
+    id("mvisample.android.serialization")
+    id("mvisample.android.hilt")
+    id("mvisample.kotest")
 }
 
 android {
     namespace = "co.kr.mvisample.feature"
-    compileSdk = 35
 
     defaultConfig {
-        minSdk = 28
-
         testInstrumentationRunner = "co.kr.mvisample.testing.CustomTestRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -27,13 +24,7 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
     kotlinOptions {
-        jvmTarget = "11"
-
         freeCompilerArgs += listOf(
             "-P",
             "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${rootProject.file(".").absolutePath}/compose-metrics",
@@ -41,16 +32,11 @@ android {
             "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${rootProject.file(".").absolutePath}/compose-reports"
         )
     }
-    buildFeatures {
-        compose = true
-    }
-    testOptions {
-        unitTests.all { it.useJUnitPlatform() }
-    }
 }
 
 dependencies {
 
+    // dependencies
     implementation(project(":core:data"))
     implementation(project(":core:design"))
     implementation(project(":core:navigation"))
@@ -60,42 +46,34 @@ dependencies {
     androidTestImplementation(project(":core:design"))
     androidTestImplementation(project(":core:common"))
 
+    // core
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.activity)
-    testImplementation(libs.junit)
+    implementation(libs.androidx.runner)
+
+    // android test
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.android.testing)
-    kapt(libs.hilt.compiler)
+    // JUnit
+    testImplementation(libs.junit)
 
+    // navigation
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.androidx.navigation.testing)
 
-    implementation(libs.jetbrains.kotlinx.serialization)
-
+    // paging
     implementation(libs.androidx.paging.compose)
+
+    // coil
     implementation(libs.coil.compose)
 
+    // immutable collections
     implementation(libs.kotlinx.collections.immutable)
 
-    testImplementation(libs.kotest.runner)
-    testImplementation(libs.kotest.assertions)
-    testImplementation(libs.kotest.property)
+    // turbin
     testImplementation(libs.turbine)
 }

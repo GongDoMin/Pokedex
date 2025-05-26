@@ -1,17 +1,14 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.jetbrains.kotlin.kapt)
+    id("mvisample.android.library")
+    id("mvisample.android.hilt")
+    id("maisample.android.room")
 }
 
 android {
     namespace = "co.kr.mvisample.local"
-    compileSdk = 35
 
     defaultConfig {
-        minSdk = 28
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -25,30 +22,17 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
 }
 
 dependencies {
 
+    // core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    testImplementation(libs.junit)
+    implementation(libs.material)
+    implementation(libs.androidx.runner)
+
+    // androidTest
     androidTestImplementation(libs.androidx.junit)
-
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.paging)
-    kapt(libs.androidx.room.compiler)
-    androidTestImplementation(libs.androidx.room.testing)
-
     androidTestImplementation(libs.kotlinx.coroutines.test)
 }

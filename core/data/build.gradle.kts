@@ -1,17 +1,14 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.jetbrains.kotlin.kapt)
+    id("mvisample.android.library")
+    id("mvisample.android.hilt")
+    id("mvisample.kotest")
 }
 
 android {
     namespace = "co.kr.mvisample.data"
-    compileSdk = 35
 
     defaultConfig {
-        minSdk = 28
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -25,35 +22,27 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-    testOptions {
-        unitTests.all { it.useJUnitPlatform() }
-    }
 }
 
 dependencies {
 
+    // dependencies
     implementation(project(":core:remote"))
     implementation(project(":core:local"))
     testImplementation(project(":core:testing"))
 
+    // core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.runner)
+
+    // JUnit
     testImplementation(libs.junit)
 
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-
+    // paging
     implementation(libs.androidx.paging.compose)
 
-    testImplementation(libs.kotest.runner)
-    testImplementation(libs.kotest.assertions)
-    testImplementation(libs.kotest.property)
+    // turbin
     testImplementation(libs.turbine)
 }
