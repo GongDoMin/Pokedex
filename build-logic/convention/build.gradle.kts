@@ -40,9 +40,9 @@ gradlePlugin {
             implementationClass = "AndroidHiltConventionPlugin"
         }
 
-        register("KotestPlugin") {
+        register("AndroidKotestPlugin") {
             id = "mvisample.kotest"
-            implementationClass = "KotestConventionPlugin"
+            implementationClass = "AndroidKotestConventionPlugin"
         }
 
         register("AndroidSerializationPlugin") {

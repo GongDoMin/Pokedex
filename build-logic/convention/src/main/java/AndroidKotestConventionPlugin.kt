@@ -1,6 +1,5 @@
 @file:Suppress("unused")
 
-import co.kr.build.convention.configureKotlinAndroid
 import co.kr.build.convention.libs
 import com.android.build.gradle.LibraryExtension
 import org.gradle.api.Plugin
@@ -8,7 +7,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
-class KotestConventionPlugin : Plugin<Project> {
+class AndroidKotestConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             extensions.configure<LibraryExtension> {
