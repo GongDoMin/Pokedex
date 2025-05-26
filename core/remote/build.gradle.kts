@@ -6,7 +6,6 @@ val localProperties = Properties().apply {
 }
 
 plugins {
-    alias(libs.plugins.jetbrains.kotlin.kapt)
     id("mvisample.android.library")
     id("mvisample.android.hilt")
     id("mvisample.android.serialization")
