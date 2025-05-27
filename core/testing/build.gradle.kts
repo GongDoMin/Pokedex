@@ -26,18 +26,12 @@ android {
 
 dependencies {
 
-    // dependencies
-    implementation(project(":feature"))
-    implementation(project(":core:local"))
-    implementation(project(":core:remote"))
-    implementation(project(":core:data"))
+    implementation(projects.feature)
+    implementation(projects.core.local)
+    implementation(projects.core.remote)
+    implementation(projects.core.data)
 
-    // core
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(libs.androidx.runner)
-
-    // paging
+    
     implementation(libs.androidx.paging.compose)
 }

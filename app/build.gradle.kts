@@ -30,16 +30,13 @@ android {
 
 dependencies {
 
-    // dependencies
-    implementation(project(":feature"))
-    implementation(project(":core:design"))
-    implementation(project(":core:navigation"))
+    implementation(projects.feature)
+    implementation(projects.core.design)
+    implementation(projects.core.navigation)
 
-    // core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity)
-    implementation(libs.material)
     implementation(libs.androidx.runner)
 
     // JUnit

@@ -25,23 +25,15 @@ android {
 
 dependencies {
 
-    // dependencies
-    implementation(project(":core:remote"))
-    implementation(project(":core:local"))
-    testImplementation(project(":core:testing"))
+    implementation(projects.core.remote)
+    implementation(projects.core.local)
+    testImplementation(projects.core.testing)
 
-    // core
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(libs.androidx.runner)
 
-    // JUnit
     testImplementation(libs.junit)
 
-    // paging
     implementation(libs.androidx.paging.compose)
-
-    // turbin
+    
     testImplementation(libs.turbine)
 }

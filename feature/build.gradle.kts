@@ -35,21 +35,17 @@ android {
 
 dependencies {
 
-    // dependencies
-    implementation(project(":core:data"))
-    implementation(project(":core:design"))
-    implementation(project(":core:navigation"))
-    implementation(project(":core:common"))
-    testImplementation(project(":core:testing"))
-    androidTestImplementation(project(":core:testing"))
-    androidTestImplementation(project(":core:design"))
-    androidTestImplementation(project(":core:common"))
+    implementation(projects.core.data)
+    implementation(projects.core.design)
+    implementation(projects.core.navigation)
+    implementation(projects.core.common)
+    testImplementation(projects.core.testing)
+    androidTestImplementation(projects.core.common)
+    androidTestImplementation(projects.core.testing)
+    androidTestImplementation(projects.core.design)
 
-    // core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.runner)
 
     // android test
     androidTestImplementation(libs.androidx.junit)

@@ -44,19 +44,12 @@ android {
 
 dependencies {
 
-    // dependencies
-    testImplementation(project(":core:testing"))
+    testImplementation(projects.core.testing)
 
-    // core
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(libs.androidx.runner)
 
-    // JUnit
     testImplementation(libs.junit)
-
-    // retrofit and okhttp
+    
     implementation(libs.okhttp)
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
