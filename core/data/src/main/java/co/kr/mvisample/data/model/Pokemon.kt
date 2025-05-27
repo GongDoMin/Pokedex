@@ -23,11 +23,12 @@ fun PokemonResponse.toData(): Pokemon {
     )
 }
 
-fun Pokemon.toEntity(): PokemonEntity =
+fun Pokemon.toEntity(page: Int): PokemonEntity =
     PokemonEntity(
         id = id,
         name = name,
-        imgUrl = imgUrl
+        imgUrl = imgUrl,
+        page = page
     )
 
 fun PokemonEntity.toData(): Pokemon =

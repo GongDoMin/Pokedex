@@ -55,9 +55,9 @@ class PokemonDaoTest : PokemonDatabaseTest() {
 
     companion object {
         private val Pokemon = listOf(
-            PokemonEntity(id = 1, name = "이상해씨", imgUrl = ""),
-            PokemonEntity(id = 2, name = "이상해풀", imgUrl = ""),
-            PokemonEntity(id = 3, name = "이상해꽃", imgUrl = "")
+            PokemonEntity(id = 1, name = "이상해씨", imgUrl = "", page = 0),
+            PokemonEntity(id = 2, name = "이상해풀", imgUrl = "", page = 0),
+            PokemonEntity(id = 3, name = "이상해꽃", imgUrl = "", page = 0)
         )
     }
 }

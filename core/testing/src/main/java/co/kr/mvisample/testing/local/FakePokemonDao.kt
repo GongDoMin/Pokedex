@@ -35,8 +35,9 @@ class FakePokemonDao : PokemonDao {
     override suspend fun getPokemon(id: Int): PokemonEntity? =
         pokemons.find { it.id == id }
 
-    override suspend fun getPokemonCount(): Int =
-        pokemons.size
+    override suspend fun getPokemonCount(page: Int): Int =
+        pokemons.filter { it.page == page }.size
+
 
     override suspend fun insertPokemons(vararg pokemons: PokemonEntity) {
         this.pokemons.addAll(pokemons)

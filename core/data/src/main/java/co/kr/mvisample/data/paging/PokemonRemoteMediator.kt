@@ -42,16 +42,16 @@ class PokemonRemoteMediator(
         }
 
         try {
-            val requiredCount = (page + 1) * LoadSize
-            val isLastPage = requiredCount >= TotalLoadSize
-            val actualRequiredCount = if (isLastPage) TotalLoadSize else requiredCount
+            val isLastPage = page == 2
 
-            if (pokemonDao.getPokemonCount() >= actualRequiredCount) {
+            if (pokemonDao.getPokemonCount(page) != 0) {
                 return MediatorResult.Success(endOfPaginationReached = isLastPage)
             }
 
+            val limit = if (isLastPage) TotalLoadSize - (LoadSize * 2) else LoadSize
+
             val response = pokemonDataSource.fetchPokemons(
-                limit = actualRequiredCount,
+                limit = limit,
                 offset = page * LoadSize
             )
 
@@ -64,7 +64,7 @@ class PokemonRemoteMediator(
             val prevKey = if (page == 0) null else page - 1
             val nextKey = if (endOfPaginationReached) null else page + 1
 
-            val pokemonEntities = response.results.map { it.toData().toEntity() }
+            val pokemonEntities = response.results.map { it.toData().toEntity(page) }
             val keys = pokemonEntities.map {
                 RemoteKeyEntity(pokemonId = it.id, prevKey = prevKey, nextKey = nextKey)
             }

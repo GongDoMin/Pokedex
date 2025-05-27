@@ -15,8 +15,8 @@ interface PokemonDao {
     @Query("SELECT * FROM pokemon WHERE id = :id")
     suspend fun getPokemon(id: Int): PokemonEntity?
 
-    @Query("SELECT COUNT(*) FROM pokemon")
-    suspend fun getPokemonCount(): Int
+    @Query("SELECT COUNT(*) FROM pokemon WHERE page = :page")
+    suspend fun getPokemonCount(page: Int): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPokemons(vararg pokemons: PokemonEntity)
