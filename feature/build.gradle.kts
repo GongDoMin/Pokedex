@@ -11,18 +11,8 @@ android {
 
     defaultConfig {
         testInstrumentationRunner = "co.kr.mvisample.testing.CustomTestRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
     kotlinOptions {
         freeCompilerArgs += listOf(
             "-P",
