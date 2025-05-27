@@ -6,10 +6,6 @@ plugins {
 
 android {
     namespace = "co.kr.mvisample.data"
-
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
 }
 
 dependencies {

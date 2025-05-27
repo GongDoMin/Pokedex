@@ -30,6 +30,11 @@ gradlePlugin {
             implementationClass = "AndroidLibraryConventionPlugin"
         }
 
+        register("AndroidFeatureLibraryPlugin") {
+            id = "mvisample.android.feature.library"
+            implementationClass = "AndroidFeatureLibraryConventionPlugin"
+        }
+
         register("AndroidLibraryComposePlugin") {
             id = "mvisample.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"

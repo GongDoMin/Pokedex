@@ -15,10 +15,6 @@ plugins {
 android {
     namespace = "co.kr.mvisample.remote"
 
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
     buildTypes {
         debug {
             buildConfigField("String", "POKEMON_API", "\"https://pokeapi.co/api/v2/\"")

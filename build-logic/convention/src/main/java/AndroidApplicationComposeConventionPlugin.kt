@@ -12,6 +12,10 @@ internal class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
         with(target) {
             extensions.configure<ApplicationExtension> {
                 configureAndroidCompose(this)
+
+                defaultConfig {
+                    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+                }
             }
         }
     }

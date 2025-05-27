@@ -1,6 +1,5 @@
 plugins {
-    id("mvisample.android.library")
-    id("mvisample.android.library.compose")
+    id("mvisample.android.feature.library")
     id("mvisample.android.serialization")
     id("mvisample.android.hilt")
     id("mvisample.kotest")
@@ -8,57 +7,28 @@ plugins {
 
 android {
     namespace = "co.kr.mvisample.feature"
-
-    defaultConfig {
-        testInstrumentationRunner = "co.kr.mvisample.testing.CustomTestRunner"
-    }
-
-    kotlinOptions {
-        freeCompilerArgs += listOf(
-            "-P",
-            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${rootProject.file(".").absolutePath}/compose-metrics",
-            "-P",
-            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${rootProject.file(".").absolutePath}/compose-reports"
-        )
-    }
 }
 
 dependencies {
 
-    implementation(projects.core.data)
-    implementation(projects.core.design)
-    implementation(projects.core.navigation)
-    implementation(projects.core.common)
-    testImplementation(projects.core.testing)
-    androidTestImplementation(projects.core.common)
-    androidTestImplementation(projects.core.testing)
-    androidTestImplementation(projects.core.design)
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
 
-    // android test
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
-    // JUnit
     testImplementation(libs.junit)
 
-    // navigation
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.androidx.navigation.testing)
 
-    // paging
     implementation(libs.androidx.paging.compose)
 
-    // coil
     implementation(libs.coil.compose)
 
-    // immutable collections
     implementation(libs.kotlinx.collections.immutable)
 
-    // turbin
     testImplementation(libs.turbine)
 }
