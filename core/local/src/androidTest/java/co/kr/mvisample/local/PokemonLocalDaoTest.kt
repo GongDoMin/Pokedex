@@ -1,7 +1,9 @@
 package co.kr.mvisample.local
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import co.kr.mvisample.local.model.PokemonEntity
 import co.kr.mvisample.local.model.PokemonLocalEntity
+import co.kr.mvisample.local.room.dao.PokemonDao
 import co.kr.mvisample.local.room.dao.PokemonLocalDao
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -17,11 +19,16 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class PokemonLocalDaoTest : PokemonDatabaseTest() {
 
+    private lateinit var pokemonDao: PokemonDao
     private lateinit var pokemonLocalDao: PokemonLocalDao
 
     @Before
-    fun setUp() {
+    fun setUp() = runTest {
         setupDatabase()
+        pokemonDao = pokemonDatabase.pokemonDao()
+        pokemonDao.insertPokemons(
+            * Pokemons.map { PokemonEntity(id = it.id) }.toTypedArray()
+        )
         pokemonLocalDao = pokemonDatabase.pokemonLocalDao()
     }
 

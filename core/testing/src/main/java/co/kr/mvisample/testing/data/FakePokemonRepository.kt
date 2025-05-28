@@ -13,6 +13,7 @@ import co.kr.mvisample.data.model.PokemonDetail
 import co.kr.mvisample.data.model.PokemonIcon
 import co.kr.mvisample.data.model.Type
 import co.kr.mvisample.data.model.toData
+import co.kr.mvisample.data.model.toEntity
 import co.kr.mvisample.data.paging.PokemonRemoteMediator
 import co.kr.mvisample.data.repository.PokemonRepository
 import co.kr.mvisample.data.result.Result
@@ -41,7 +42,9 @@ class FakePokemonRepository @Inject constructor(
 
     init {
         runBlocking {
-            pokemonLocalDao.clearPokemonLocal()
+            pokemonDao.insertPokemons(
+                * pokemonDataSource.fetchPokemons(20, 0).results.map { it.toData().toEntity(1) }.toTypedArray()
+            )
             pokemonLocalDao.markAsDiscovered(
                 PokemonLocalEntity(
                     id = 6,
