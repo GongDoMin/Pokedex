@@ -2,11 +2,9 @@ package co.kr.mvisample.testing.di
 
 import android.content.Context
 import androidx.room.Room
-import co.kr.mvisample.data.di.RepositoryModule
 import co.kr.mvisample.local.di.DatabaseModule
 import co.kr.mvisample.local.room.dao.PokemonDao
 import co.kr.mvisample.local.room.dao.PokemonLocalDao
-import co.kr.mvisample.local.room.dao.RemoteKeyDao
 import co.kr.mvisample.local.room.database.PokemonDatabase
 import dagger.Module
 import dagger.Provides
@@ -37,9 +35,4 @@ class FakeDataBaseModule {
     @Provides
     fun providePokemonLocalDao(database: PokemonDatabase) : PokemonLocalDao =
         database.pokemonLocalDao()
-
-
-    @Provides
-    fun provideRemoteKeyDao(database: PokemonDatabase) : RemoteKeyDao =
-        database.remoteKeyDao()
 }

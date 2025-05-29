@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import co.kr.mvisample.local.room.dao.PokemonDao
 import co.kr.mvisample.local.room.dao.PokemonLocalDao
-import co.kr.mvisample.local.room.dao.RemoteKeyDao
 import co.kr.mvisample.local.room.database.PokemonDatabase
 import dagger.Module
 import dagger.Provides
@@ -32,9 +31,4 @@ class DatabaseModule {
     @Provides
     fun providePokemonLocalDao(database: PokemonDatabase) : PokemonLocalDao =
         database.pokemonLocalDao()
-
-
-    @Provides
-    fun provideRemoteKeyDao(database: PokemonDatabase) : RemoteKeyDao =
-        database.remoteKeyDao()
 }

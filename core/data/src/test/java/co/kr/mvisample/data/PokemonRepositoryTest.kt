@@ -14,7 +14,6 @@ import co.kr.mvisample.local.model.PokemonEntity
 import co.kr.mvisample.testing.local.FakePokemonDao
 import co.kr.mvisample.testing.local.FakePokemonDataSource
 import co.kr.mvisample.testing.local.FakePokemonLocalDao
-import co.kr.mvisample.testing.local.FakeRemoteKeyDao
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.Flow
@@ -24,18 +23,15 @@ class PokemonRepositoryTest : StringSpec() {
 
     private val fakePokemonDataSource = FakePokemonDataSource()
     private val fakePokemonDao = FakePokemonDao()
-    private val fakeRemoteKeyDao = FakeRemoteKeyDao()
     private val fakePokemonLocalDao = FakePokemonLocalDao()
 
     private val remoteMediator = PokemonRemoteMediator(
         pokemonDataSource = fakePokemonDataSource,
-        pokemonDao = fakePokemonDao,
-        remoteKeyDao = fakeRemoteKeyDao
+        pokemonDao = fakePokemonDao
     )
     private val pokemonRepository = PokemonRepositoryImpl(
         pokemonDataSource = fakePokemonDataSource,
         pokemonDao = fakePokemonDao,
-        remoteKeyDao = fakeRemoteKeyDao,
         pokemonLocalDao = fakePokemonLocalDao
     )
 

@@ -18,7 +18,6 @@ import co.kr.mvisample.data.resultMapperWithLocal
 import co.kr.mvisample.local.model.PokemonLocalEntity
 import co.kr.mvisample.local.room.dao.PokemonDao
 import co.kr.mvisample.local.room.dao.PokemonLocalDao
-import co.kr.mvisample.local.room.dao.RemoteKeyDao
 import co.kr.mvisample.remote.datasource.PokemonDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -32,8 +31,7 @@ import javax.inject.Inject
 class PokemonRepositoryImpl @Inject constructor(
     private val pokemonDataSource : PokemonDataSource,
     private val pokemonDao: PokemonDao,
-    private val pokemonLocalDao: PokemonLocalDao,
-    private val remoteKeyDao: RemoteKeyDao
+    private val pokemonLocalDao: PokemonLocalDao
 ): PokemonRepository {
     override fun fetchPokemons(scope: CoroutineScope): Flow<PagingData<Pokemon>> =
         Pager(
@@ -41,7 +39,7 @@ class PokemonRepositoryImpl @Inject constructor(
                 pageSize = LoadSize,
                 initialLoadSize = InitialLoadSize
             ),
-            remoteMediator = PokemonRemoteMediator(pokemonDataSource, pokemonDao, remoteKeyDao),
+            remoteMediator = PokemonRemoteMediator(pokemonDataSource, pokemonDao),
             pagingSourceFactory = { pokemonDao.getPokemons() }
         ).flow.map { pagingData ->
             pagingData.map { pokemonEntity ->
@@ -134,4 +132,5 @@ class PokemonRepositoryImpl @Inject constructor(
 
 const val LoadSize = 100
 const val TotalLoadSize = 251
+const val LastPage = TotalLoadSize / LoadSize
 const val InitialLoadSize = 100

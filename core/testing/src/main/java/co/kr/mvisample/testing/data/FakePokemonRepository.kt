@@ -22,7 +22,6 @@ import co.kr.mvisample.data.resultMapperWithLocal
 import co.kr.mvisample.local.model.PokemonLocalEntity
 import co.kr.mvisample.local.room.dao.PokemonDao
 import co.kr.mvisample.local.room.dao.PokemonLocalDao
-import co.kr.mvisample.local.room.dao.RemoteKeyDao
 import co.kr.mvisample.remote.datasource.PokemonDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -36,8 +35,7 @@ import javax.inject.Inject
 class FakePokemonRepository @Inject constructor(
     private val pokemonDataSource: PokemonDataSource,
     private val pokemonDao: PokemonDao,
-    private val pokemonLocalDao: PokemonLocalDao,
-    private val remoteKeyDao: RemoteKeyDao
+    private val pokemonLocalDao: PokemonLocalDao
 ) : PokemonRepository {
 
     init {
@@ -70,7 +68,7 @@ class FakePokemonRepository @Inject constructor(
                 pageSize = LoadSize,
                 initialLoadSize = InitialLoadSize
             ),
-            remoteMediator = PokemonRemoteMediator(pokemonDataSource, pokemonDao, remoteKeyDao),
+            remoteMediator = PokemonRemoteMediator(pokemonDataSource, pokemonDao),
             pagingSourceFactory = { pokemonDao.getPokemons() }
         ).flow
             .map { pagingData ->
