@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<testsuite name="co.kr.mvisample.core.ExampleInstrumentedTest" tests="1" failures="0" errors="0" skipped="0" time="0.296" timestamp="2025-05-24T15:27:19" hostname="localhost">
-  <properties>
-    <property name="device" value="Pixel_4a_API_33(AVD) - 13" />
-    <property name="flavor" value="" />
-    <property name="project" value=":core" />
-  </properties>
-  <testcase name="useAppContext" classname="co.kr.mvisample.core.ExampleInstrumentedTest" time="0.008" />
-</testsuite>
