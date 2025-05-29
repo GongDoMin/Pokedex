@@ -16,7 +16,10 @@ import co.kr.mvisample.remote.datasource.PokemonDataSource
 @OptIn(ExperimentalPagingApi::class)
 class PokemonRemoteMediator(
     private val pokemonDataSource: PokemonDataSource,
-    private val pokemonDao: PokemonDao
+    private val pokemonDao: PokemonDao,
+    private val loadSize: Int = LoadSize,
+    private val totalLoadSize: Int = TotalLoadSize,
+    private val lastPage: Int = LastPage
 ) : RemoteMediator<Int, PokemonEntity>() {
 
     override suspend fun load(
@@ -34,30 +37,30 @@ class PokemonRemoteMediator(
             }
             LoadType.APPEND -> {
                 val key = getKeyForLastItem(state)
-                if (key == null || key == LastPage) return MediatorResult.Success(endOfPaginationReached = true)
+                if (key == null || key == lastPage) return MediatorResult.Success(endOfPaginationReached = true)
                 else key
             }
         }
 
         try {
-            val isLastPage = page == LastPage
+            val isLastPage = page == lastPage
 
             if (pokemonDao.getPokemonCount(page) != 0) {
                 return MediatorResult.Success(endOfPaginationReached = isLastPage)
             }
 
-            val limit = if (isLastPage) TotalLoadSize - (LoadSize * 2) else LoadSize
+            val limit = if (isLastPage) totalLoadSize - (loadSize * lastPage) else loadSize
 
             val response = pokemonDataSource.fetchPokemons(
                 limit = limit,
-                offset = page * LoadSize
+                offset = page * loadSize
             )
 
             if (loadType == LoadType.REFRESH) {
                 pokemonDao.clearPokemons()
             }
 
-            val endOfPaginationReached = response.results.size < LoadSize
+            val endOfPaginationReached = response.results.size < loadSize
 
             val pokemonEntities = response.results.map { it.toData().toEntity(page) }
 

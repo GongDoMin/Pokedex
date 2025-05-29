@@ -65,10 +65,16 @@ class FakePokemonRepository @Inject constructor(
     override fun fetchPokemons(scope: CoroutineScope): Flow<PagingData<Pokemon>> =
         Pager(
             config = PagingConfig(
-                pageSize = LoadSize,
-                initialLoadSize = InitialLoadSize
+                pageSize = FakeLoadSize,
+                initialLoadSize = FakeInitialLoadSize
             ),
-            remoteMediator = PokemonRemoteMediator(pokemonDataSource, pokemonDao),
+            remoteMediator = PokemonRemoteMediator(
+                pokemonDataSource = pokemonDataSource,
+                pokemonDao = pokemonDao,
+                lastPage = FakeLastPage,
+                loadSize = FakeLoadSize,
+                totalLoadSize = FakeTotalLoadSize
+            ),
             pagingSourceFactory = { pokemonDao.getPokemons() }
         ).flow
             .map { pagingData ->
@@ -154,3 +160,8 @@ class FakePokemonRepository @Inject constructor(
             pokemonLocalDao.swapPokemonOrder(secondPokemon.id, firstPokemon.order)
         }
 }
+
+private const val FakeLoadSize = 20
+private const val FakeInitialLoadSize = 20
+private const val FakeTotalLoadSize = 20
+private const val FakeLastPage = 0
