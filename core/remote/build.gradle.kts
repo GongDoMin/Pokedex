@@ -1,10 +1,3 @@
-import java.io.FileInputStream
-import java.util.Properties
-
-val localProperties = Properties().apply {
-    load(FileInputStream(rootProject.file("local.properties")))
-}
-
 plugins {
     id("mvisample.android.library")
     id("mvisample.android.hilt")
