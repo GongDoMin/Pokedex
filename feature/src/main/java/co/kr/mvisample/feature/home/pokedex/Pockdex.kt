@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
@@ -102,6 +103,8 @@ private fun PokedexContent(
     modifier: Modifier = Modifier,
     selectedPokemon: PokemonModel? = null
 ) {
+    val context = LocalContext.current
+
     Row(
         modifier = modifier
             .fillMaxSize()
@@ -130,9 +133,7 @@ private fun PokedexContent(
                 .fillMaxHeight()
                 .pokemonCard()
                 .padding(8.dp)
-                .semantics {
-                    contentDescription = "pokemonList"
-                }
+                .semantics { contentDescription = context.getString(R.string.pokemon_name_list) }
         ) {
             items(
                 count = pokemons.itemCount,
@@ -180,7 +181,7 @@ private fun PokemonImage(
                     }
                     .build()
             ),
-            contentDescription = "pokemonImage",
+            contentDescription = stringResource(R.string.pokemon_image),
             colorFilter = if (pokemon?.isDiscovered == true) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
         )
     }
@@ -300,6 +301,8 @@ private fun Pokeball(
     outlineColor: Color = PokemonTheme.colors.basicText,
     centerCircleColor: Color = Color.White
 ) {
+    val context = LocalContext.current
+
     val animatedTopColor by animateColorAsState(
         targetValue = if (isCaught) caughtColorTop else uncaughtColorTop,
         animationSpec = tween(durationMillis = 300),
@@ -317,7 +320,7 @@ private fun Pokeball(
             .size(16.dp)
             .border(1.dp, color = outlineColor, shape = CircleShape)
             .semantics {
-                contentDescription = "pokeball_$isCaught"
+                contentDescription = context.getString(R.string.pokeball, isCaught.toString())
             }
     ) {
         val diameter = size.minDimension

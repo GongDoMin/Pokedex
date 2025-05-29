@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
@@ -200,7 +201,7 @@ private fun PokemonImage(
                 }
                 .build()
         ),
-        contentDescription =  null,
+        contentDescription = stringResource(R.string.pokemon_detail_image),
         colorFilter = if (pokemonDetail.isDiscovered) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
     )
 }

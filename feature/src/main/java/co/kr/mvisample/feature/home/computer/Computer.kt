@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -107,7 +108,7 @@ private fun PokemonIconGrid(
             val pokemon = pokemonIcons[it]
 
             val offset by animateIntOffsetAsState(
-                targetValue = if (pokemon.id == selectedPokemonIcon?.id) IntOffset(0, with (density) { 8.dp.roundToPx().times(-1) }) else IntOffset(0, 0),
+                targetValue = if (pokemon.id == selectedPokemonIcon?.id) IntOffset(0, with (density) { yOffset.roundToPx().times(-1) }) else IntOffset(0, 0),
                 animationSpec = tween(durationMillis = 300)
             )
 
@@ -121,9 +122,7 @@ private fun PokemonIconGrid(
                         this.scaleY = scaleY
                     }
                     .animateItem()
-                    .semantics {
-                        customOffsetY = offset.y
-                    },
+                    .semantics { customOffsetY = offset.y },
                 painter = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(context)
                         .data(pokemon.iconUrl)
@@ -134,11 +133,13 @@ private fun PokemonIconGrid(
                         }
                         .build()
                 ),
-                contentDescription = "pokemonIcon_${pokemon.id}"
+                contentDescription = stringResource(R.string.pokemon_icon, pokemon.id)
             )
         }
     }
 }
+
+val yOffset = 8.dp
 
 @Preview
 @Composable

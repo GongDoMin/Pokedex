@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import co.kr.mvisample.design.PreviewPokemonTheme
+import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.home.pokedex.PokedexScreen
 import co.kr.mvisample.testing.HiltTestActivity
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -31,6 +32,7 @@ class PokedexScreenTest {
 
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<HiltTestActivity>()
+    val activity get() = composeTestRule.activity
 
     @Before
     fun setUp() {
@@ -49,20 +51,20 @@ class PokedexScreenTest {
     fun 포켓몬이름을_클릭한다() = runTest {
         waitUntil {
             composeTestRule
-                .onNodeWithContentDescription("pokemonList")
+                .onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                 .onChildren()
                 .onFirst()
                 .isDisplayed()
         }
 
         composeTestRule
-            .onNodeWithContentDescription("pokemonList")
+            .onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
             .onChildren()
             .onFirst()
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("pokemonImage")
+            .onNodeWithContentDescription(activity.getString(R.string.pokemon_image))
             .assertIsDisplayed()
     }
 
@@ -70,14 +72,14 @@ class PokedexScreenTest {
     fun 발견하기를_클릭한다() = runTest {
         waitUntil {
             composeTestRule
-                .onNodeWithContentDescription("pokemonList")
+                .onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                 .onChildren()
                 .onFirst()
                 .isDisplayed()
         }
 
         composeTestRule
-            .onNodeWithContentDescription("pokemonList")
+            .onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
             .onChildren()
             .onFirst()
             .performClick()
@@ -87,7 +89,7 @@ class PokedexScreenTest {
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("pokemonList")
+            .onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
             .onChildren()
             .assertAny(hasText("bulbasaur"))
     }
@@ -96,20 +98,20 @@ class PokedexScreenTest {
     fun 포획하기를_클릭한다() = runTest {
         waitUntil {
             composeTestRule
-                .onNodeWithContentDescription("pokemonList")
+                .onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                 .onChildren()
                 .onFirst()
                 .isDisplayed()
         }
 
         composeTestRule
-            .onNodeWithContentDescription("pokemonList")
+            .onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
             .onChildren()
             .onFirst()
             .performClick()
 
         val node = composeTestRule
-            .onNodeWithContentDescription("pokemonList")
+            .onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
             .onChildren()
             .onFirst()
 
@@ -131,12 +133,12 @@ class PokedexScreenTest {
 
         waitUntil {
             val node = composeTestRule
-                .onNodeWithContentDescription("pokemonList")
+                .onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                 .onChildren()
                 .onFirst()
                 .fetchSemanticsNode()
 
-            hasContentDescription("pokeball_true").matches(node)
+            hasContentDescription(activity.getString(R.string.pokeball, true.toString())).matches(node)
         }
     }
 
@@ -144,20 +146,20 @@ class PokedexScreenTest {
     fun 놓아주기를_클릭한다() = runTest {
         waitUntil {
             composeTestRule
-                .onNodeWithContentDescription("pokemonList")
+                .onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                 .onChildren()
                 .onFirst()
                 .isDisplayed()
         }
 
         composeTestRule
-            .onNodeWithContentDescription("pokemonList")
+            .onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
             .onChildren()
             .onFirst()
             .performClick()
 
         val node = composeTestRule
-            .onNodeWithContentDescription("pokemonList")
+            .onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
             .onChildren()
             .onFirst()
 
@@ -199,12 +201,12 @@ class PokedexScreenTest {
 
         waitUntil {
             val node = composeTestRule
-                .onNodeWithContentDescription("pokemonList")
+                .onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                 .onChildren()
                 .onFirst()
                 .fetchSemanticsNode()
 
-            hasContentDescription("pokeball_false").matches(node)
+            hasContentDescription(activity.getString(R.string.pokeball, false.toString())).matches(node)
         }
     }
 
@@ -212,7 +214,7 @@ class PokedexScreenTest {
     fun 선택된_포켓몬이_없을때_발견하기를_클릭한다() = runTest {
         waitUntil {
             composeTestRule
-                .onNodeWithContentDescription("pokemonList")
+                .onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                 .onChildren()
                 .onFirst()
                 .isDisplayed()

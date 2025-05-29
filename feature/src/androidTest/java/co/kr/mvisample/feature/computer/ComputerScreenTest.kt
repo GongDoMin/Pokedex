@@ -11,10 +11,11 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.dp
 import co.kr.mvisample.common.utils.CustomOffsetYKey
 import co.kr.mvisample.design.PreviewPokemonTheme
+import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.home.computer.ComputerScreen
+import co.kr.mvisample.feature.home.computer.yOffset
 import co.kr.mvisample.testing.HiltTestActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -31,6 +32,7 @@ class ComputerScreenTest {
 
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<HiltTestActivity>()
+    private val activity get() = composeTestRule.activity
 
     lateinit var density: Density
 
@@ -49,75 +51,78 @@ class ComputerScreenTest {
     @Test
     fun 포켓몬아이콘이_초기화면에_보인다() {
         composeTestRule
-            .onNodeWithContentDescription("pokemonIcon_6")
+            .onNodeWithContentDescription(getPokemonIcon(6))
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithContentDescription("pokemonIcon_9")
+            .onNodeWithContentDescription(getPokemonIcon(9))
             .assertIsDisplayed()
     }
 
     @Test
     fun 리자몽을_누른후_offset이_변경되는지_확인한다() = runTest {
+        println(getPokemonIcon(6))
         composeTestRule
-            .onNodeWithContentDescription("pokemonIcon_6")
+            .onNodeWithContentDescription(getPokemonIcon(6))
             .performClick()
 
-        composeTestRule.awaitIdle()
+        composeTestRule.waitForIdle()
 
         composeTestRule
-            .onNodeWithContentDescription("pokemonIcon_6")
-            .assert(SemanticsMatcher.expectValue(CustomOffsetYKey, with(density) { 8.dp.roundToPx().times(-1) }))
+            .onNodeWithContentDescription(getPokemonIcon(6))
+            .assert(SemanticsMatcher.expectValue(CustomOffsetYKey, with(density) { yOffset.roundToPx().times(-1) }))
     }
 
     @Test
     fun 리자몽을_누른후_다시_리자몽을_누른다() = runTest {
         composeTestRule
-            .onNodeWithContentDescription("pokemonIcon_6")
+            .onNodeWithContentDescription(getPokemonIcon(6))
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("pokemonIcon_6")
+            .onNodeWithContentDescription(getPokemonIcon(6))
             .performClick()
 
-        composeTestRule.awaitIdle()
+        composeTestRule.waitForIdle()
 
         composeTestRule
-            .onNodeWithContentDescription("pokemonIcon_6")
+            .onNodeWithContentDescription(getPokemonIcon(6))
             .assert(SemanticsMatcher.expectValue(CustomOffsetYKey, 0))
     }
 
     @Test
     fun 리자몽을_누른후_거북왕을_누른다() = runTest {
-        with (composeTestRule.onAllNodes(hasContentPrefixDescription())) {
-            this[0].assertContentDescriptionEquals("pokemonIcon_6")
-            this[1].assertContentDescriptionEquals("pokemonIcon_9")
+        with (composeTestRule.onAllNodes(hasPrefixContentDescription())) {
+            this[0].assertContentDescriptionEquals(getPokemonIcon(6))
+            this[1].assertContentDescriptionEquals(getPokemonIcon(9))
         }
 
         composeTestRule
-            .onNodeWithContentDescription("pokemonIcon_6")
+            .onNodeWithContentDescription(getPokemonIcon(6))
             .performClick()
 
         composeTestRule
-            .onNodeWithContentDescription("pokemonIcon_9")
+            .onNodeWithContentDescription(getPokemonIcon(9))
             .performClick()
 
-        composeTestRule.awaitIdle()
+        composeTestRule.waitForIdle()
 
-        with (composeTestRule.onAllNodes(hasContentPrefixDescription())) {
-            this[0].assertContentDescriptionEquals("pokemonIcon_9")
-            this[1].assertContentDescriptionEquals("pokemonIcon_6")
+        with (composeTestRule.onAllNodes(hasPrefixContentDescription())) {
+            this[0].assertContentDescriptionEquals(getPokemonIcon(9))
+            this[1].assertContentDescriptionEquals(getPokemonIcon(6))
         }
     }
 
-    private fun hasContentPrefixDescription(
-        prefixes: String = "pokemonIcon_",
+    private fun hasPrefixContentDescription(
+        prefix: String = "pokemonIcon_",
     ): SemanticsMatcher {
         return SemanticsMatcher(
-            "ContentDescription starts with $prefixes"
+            "ContentDescription starts with $prefix"
         ) { semanticsNode ->
             val descriptions = semanticsNode.config.getOrNull(SemanticsProperties.ContentDescription)
-            descriptions?.any { desc -> prefixes.any { prefix -> desc.startsWith(prefix) } } == true
+            descriptions?.any { desc -> desc.startsWith(prefix) } == true
         }
     }
+
+    private fun getPokemonIcon(id: Int) = activity.getString(R.string.pokemon_icon, id)
 }
