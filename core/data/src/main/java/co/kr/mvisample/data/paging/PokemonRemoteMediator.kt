@@ -33,12 +33,12 @@ class PokemonRemoteMediator(
             LoadType.PREPEND -> {
                 val key = getKeyForFirstItem(state)
                 if (key == null || key == 0) return MediatorResult.Success(endOfPaginationReached = true)
-                else key
+                else key.minus(1)
             }
             LoadType.APPEND -> {
                 val key = getKeyForLastItem(state)
                 if (key == null || key == lastPage) return MediatorResult.Success(endOfPaginationReached = true)
-                else key
+                else key.plus(1)
             }
         }
 
