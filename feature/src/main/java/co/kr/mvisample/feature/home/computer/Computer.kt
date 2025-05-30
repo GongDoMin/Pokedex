@@ -144,7 +144,7 @@ val yOffset = 8.dp
 @Preview
 @Composable
 private fun PokemonIconGridPreview() {
-    val pokemons = remember {
+    val pokemons =
         listOf(
             PokemonIconModel(
                 id = 1,
@@ -167,7 +167,6 @@ private fun PokemonIconGridPreview() {
                 order = 3
             ),
         )
-    }
 
     var selectedPokemon: PokemonIconModel? by remember {
         mutableStateOf(null)
