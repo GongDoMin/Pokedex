@@ -1,6 +1,5 @@
 [versions]
-androidGradlePlugin = "8.1.1"
-agp = "8.7.3"
+androidGradlePlugin = "8.3.2"
 ksp = "1.9.10-1.0.13"
 coilCompose = "2.7.0"
 kotlin = "2.0.0"
@@ -16,11 +15,10 @@ composeBom = "2024.04.01"
 dagger = "2.51.1"
 hiltAndroidTesting = "2.51.1"
 kapt = "1.5.30"
-navigationTesting = "2.9.0-alpha06"
 pagingCompose = "3.3.6"
 plugin-serialization = "2.0.0"
 hiltNavigationCompose = "1.2.0"
-navigationCompose = "2.9.0"
+androidxComposeNavigation = "2.8.0-beta02"
 kotlinx-serialization = "1.7.1"
 appcompat = "1.7.0"
 material = "1.12.0"
@@ -51,7 +49,7 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "navigationTesting" }
+androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidxComposeNavigation" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -66,7 +64,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxComposeNavigation" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 
 # coroutine for test
@@ -113,13 +111,13 @@ kotest-property = { group = "io.kotest", name = "kotest-property", version.ref =
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.9.24" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kapt" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "plugin-serialization" }
-android-library = { id = "com.android.library", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 [bundles]
