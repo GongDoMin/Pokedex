@@ -12,7 +12,7 @@ import co.kr.mvisample.data.paging.PokemonRemoteMediator
 import co.kr.mvisample.data.result.Result
 import co.kr.mvisample.local.model.PokemonEntity
 import co.kr.mvisample.testing.local.FakePokemonDao
-import co.kr.mvisample.testing.local.FakePokemonDataSource
+import co.kr.mvisample.testing.remote.FakePokemonDataSource
 import co.kr.mvisample.testing.local.FakePokemonLocalDao
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe

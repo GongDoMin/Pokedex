@@ -54,8 +54,8 @@ class ComputerViewModelTest : StringSpec() {
                 val uiState = awaitItem()
 
                 uiState.content.selectedPokemonIcon shouldBe null
-                uiState.content.pokemonIcons.first().id shouldBe 9
-                uiState.content.pokemonIcons.last().id shouldBe 6
+                uiState.content.pokemonIcons.first { it.id == 6 }.order shouldBe 2
+                uiState.content.pokemonIcons.first { it.id == 9 }.order shouldBe 1
             }
         }
     }

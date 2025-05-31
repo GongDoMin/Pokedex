@@ -1,4 +1,4 @@
-package co.kr.mvisample.testing.local
+package co.kr.mvisample.testing.remote
 
 import co.kr.mvisample.remote.datasource.PokemonDataSource
 import co.kr.mvisample.remote.model.PokemonDetailResponse

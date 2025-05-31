@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 class FakePokemonRepositoryUnitTest : PokemonRepository {
@@ -55,7 +56,7 @@ class FakePokemonRepositoryUnitTest : PokemonRepository {
             }
         )
 
-    override fun fetchPokemonIcons(): Flow<List<PokemonIcon>> = pokemonIcons
+    override fun fetchPokemonIcons(): Flow<List<PokemonIcon>> = pokemonIcons.map { it.sortedBy { it.id } }
 
     override fun markAsDiscovered(id: Int): Flow<Result<Unit>> =
         resultMapper {}
@@ -68,14 +69,20 @@ class FakePokemonRepositoryUnitTest : PokemonRepository {
 
     override fun swapPokemonOrder(firstId: Int, secondId: Int): Flow<Result<Unit>> =
         resultMapper {
-            val firstOrder = pokemonIcons.value.find { it.id == firstId }?.order ?: 0
-            val secondOrder = pokemonIcons.value.find { it.id == secondId }?.order ?: 0
+            val first = pokemonIcons.value.find { it.id == firstId }
+            val second = pokemonIcons.value.find { it.id == secondId }
 
-            pokemonIcons.update {
-                listOf(
-                    it.last().copy(order = firstOrder),
-                    it.first().copy(order = secondOrder)
-                )
+            if (first != null && second != null) {
+                pokemonIcons.update {
+                    it.map { icon ->
+                        when (icon.id) {
+                            firstId -> icon.copy(order = second.order)
+                            secondId -> icon.copy(order = first.order)
+                            else -> icon
+                        }
+                    }
+                }
             }
+
         }
 }

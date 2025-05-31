@@ -5,7 +5,7 @@ import co.kr.mvisample.data.repository.PokemonRepository
 import co.kr.mvisample.local.room.dao.PokemonDao
 import co.kr.mvisample.local.room.dao.PokemonLocalDao
 import co.kr.mvisample.testing.data.FakePokemonRepository
-import co.kr.mvisample.testing.local.FakePokemonDataSource
+import co.kr.mvisample.testing.remote.FakePokemonDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent

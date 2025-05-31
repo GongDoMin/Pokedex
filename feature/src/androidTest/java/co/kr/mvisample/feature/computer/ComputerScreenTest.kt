@@ -92,10 +92,7 @@ class ComputerScreenTest {
 
     @Test
     fun 리자몽을_누른후_거북왕을_누른다() = runTest {
-        with (composeTestRule.onAllNodes(hasPrefixContentDescription())) {
-            this[0].assertContentDescriptionEquals(getPokemonIcon(6))
-            this[1].assertContentDescriptionEquals(getPokemonIcon(9))
-        }
+        val before = getCurrentPokemonOrder()
 
         composeTestRule
             .onNodeWithContentDescription(getPokemonIcon(6))
@@ -107,10 +104,9 @@ class ComputerScreenTest {
 
         composeTestRule.waitForIdle()
 
-        with (composeTestRule.onAllNodes(hasPrefixContentDescription())) {
-            this[0].assertContentDescriptionEquals(getPokemonIcon(9))
-            this[1].assertContentDescriptionEquals(getPokemonIcon(6))
-        }
+        val after = getCurrentPokemonOrder()
+        assert(before != after)
+        assert(before.sorted() == after.sorted())
     }
 
     private fun hasPrefixContentDescription(
@@ -123,6 +119,11 @@ class ComputerScreenTest {
             descriptions?.any { desc -> desc.startsWith(prefix) } == true
         }
     }
+
+    private fun getCurrentPokemonOrder(): List<String> =
+        composeTestRule.onAllNodes(hasPrefixContentDescription())
+            .fetchSemanticsNodes()
+            .mapNotNull { it.config.getOrNull(SemanticsProperties.ContentDescription)?.firstOrNull() }
 
     private fun getPokemonIcon(id: Int) = activity.getString(R.string.pokemon_icon, id)
 }

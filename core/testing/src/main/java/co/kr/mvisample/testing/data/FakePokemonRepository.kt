@@ -6,8 +6,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import co.kr.mvisample.data.impl.InitialLoadSize
-import co.kr.mvisample.data.impl.LoadSize
 import co.kr.mvisample.data.model.Pokemon
 import co.kr.mvisample.data.model.PokemonDetail
 import co.kr.mvisample.data.model.PokemonIcon
@@ -153,11 +151,13 @@ class FakePokemonRepository @Inject constructor(
 
     override fun swapPokemonOrder(firstId: Int, secondId: Int): Flow<Result<Unit>> =
         resultMapper {
-            val firstPokemon = pokemonLocalDao.getPokemonLocal(firstId) ?: error("Pokemon with id $firstId not found.")
-            val secondPokemon = pokemonLocalDao.getPokemonLocal(secondId) ?: error("Pokemon with id $secondId not found.")
+            val first = pokemonLocalDao.getPokemonLocal(firstId)
+            val second = pokemonLocalDao.getPokemonLocal(secondId)
 
-            pokemonLocalDao.swapPokemonOrder(firstPokemon.id, secondPokemon.order)
-            pokemonLocalDao.swapPokemonOrder(secondPokemon.id, firstPokemon.order)
+            if (first != null && second != null) {
+                pokemonLocalDao.swapPokemonOrder(first.id, second.order)
+                pokemonLocalDao.swapPokemonOrder(second.id, first.order)
+            }
         }
 }
 
