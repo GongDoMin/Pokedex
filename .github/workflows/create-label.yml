@@ -1,0 +1,18 @@
+name: Validate new label
+
+on: 
+  label:
+    types:
+      - created
+
+jobs:
+  validate-label:
+    runs-on: ubuntu-latest
+      steps: 
+        - name: Check label name
+          run: |
+            echo "Checking label: ${{ github.event.label.name }}"
+            if [[ ! "${{ github.event.label.name }}" =~ ^[a-z0-9_-]+$ ]]; then
+              echo "레이블 이름은 소문자, 숫자, 하이픈(-), 언더스코어(_) 만 허용됩니다."
+              exit 1
+            fi
