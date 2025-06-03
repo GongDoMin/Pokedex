@@ -28,7 +28,19 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Upload Event File
+        uses: actions/upload-artifact@v4
+        with:
+          name: Event File
+          path: ${{ github.event_path }}
+
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest --stacktrace
 
+      - name: Upload Test Result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Test Results ${{ github.run_id }}
+          path: "**/test-results/**/*.xml"
 
