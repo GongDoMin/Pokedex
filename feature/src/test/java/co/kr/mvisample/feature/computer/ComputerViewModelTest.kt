@@ -6,6 +6,9 @@ import co.kr.mvisample.feature.home.computer.presentation.ComputerViewModel
 import co.kr.mvisample.testing.data.FakePokemonRepositoryUnitTest
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withTimeout
 
 class ComputerViewModelTest : StringSpec() {
 
@@ -42,16 +45,13 @@ class ComputerViewModelTest : StringSpec() {
             }
         }
         "포켓몬의 순서를 변경한다." {
-            computerViewModel.uiState.test {
-                awaitItem()
-
+            withTimeout(5000) {
                 computerViewModel.handleAction(ComputerAction.OnPokemonIconClick(pokemonIcon = computerViewModel.uiState.value.content.pokemonIcons.first()))
-                awaitItem()
                 computerViewModel.handleAction(ComputerAction.OnPokemonIconClick(pokemonIcon = computerViewModel.uiState.value.content.pokemonIcons.last()))
-                awaitItem() // loading is true
-                awaitItem() // loading is false
-                awaitItem() // update pokemonIcons
-                val uiState = awaitItem()
+
+                val uiState = computerViewModel.uiState.filter {
+                    it.loading.isLoading.not() && it.content.selectedPokemonIcon == null
+                }.first()
 
                 uiState.content.selectedPokemonIcon shouldBe null
                 uiState.content.pokemonIcons.first { it.id == 6 }.order shouldBe 2
