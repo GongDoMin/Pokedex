@@ -52,10 +52,16 @@ jobs:
           profile: pixel
           script: ./gradlew connectedDebugAndroidTest
 
-      - name: Upload Test Result
+      - name: Upload Unit Test Result
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Test Results ${{ github.run_id }}
+          name: Unit Test Results
           path: "**/test-results/**/*.xml"
 
+      - name: Upload Android Test Result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android Test Results
+          path: "**/outputs/androidTest-results/connected/**/*.xml"
