@@ -53,6 +53,18 @@ class PokemonDaoTest : PokemonDatabaseTest() {
         assertNull(result)
     }
 
+    @Test
+    fun 페이지별_포켓몬_개수를_반환한다() = runTest {
+        // given
+        pokemonDao.insertPokemons(*Pokemon.toTypedArray())
+
+        // when
+        val result = pokemonDao.getPokemonCount(0)
+
+        // then
+        assertEquals(3, result)
+    }
+
     companion object {
         private val Pokemon = listOf(
             PokemonEntity(id = 1, name = "이상해씨", imgUrl = "", page = 0),
