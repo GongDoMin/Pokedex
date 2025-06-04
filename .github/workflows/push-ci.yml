@@ -1,0 +1,11 @@
+name: Push CI
+
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  run-tests:
+    uses: ./.github/workflows/build-and-test.yml
+    with:
+      api-level: 33

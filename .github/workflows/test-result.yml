@@ -1,9 +1,9 @@
-name: Publish Test
+name: Test Result
 
 on:
   workflow_run:
     workflows:
-      - "Android Pull Request CI"
+      - "PR CI"
     types:
       - completed
 
