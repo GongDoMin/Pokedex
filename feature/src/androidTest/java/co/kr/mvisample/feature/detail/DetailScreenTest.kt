@@ -1,8 +1,5 @@
 package co.kr.mvisample.feature.detail
 
-import androidx.compose.ui.test.assertCountEquals
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -13,6 +10,7 @@ import co.kr.mvisample.data.repository.PokemonRepository
 import co.kr.mvisample.design.PreviewPokemonTheme
 import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.detail.presentation.DetailViewModel
+import co.kr.mvisample.feature.utils.waitUntil
 import co.kr.mvisample.testing.HiltTestActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -55,40 +53,45 @@ class DetailScreenTest {
 
     @Test
     fun 포켓몬상세정보를_불러온다() {
-        composeTestRule
-            .onNodeWithContentDescription(activity.getString(R.string.pokemon_detail_image))
-            .assertIsDisplayed()
+        composeTestRule.waitUntil(
+            node = composeTestRule
+                .onNodeWithContentDescription(activity.getString(R.string.pokemon_detail_image))
+        )
 
-        composeTestRule
-            .onAllNodesWithText("charizard")
-            .assertCountEquals(2)
+        composeTestRule.waitUntil {
+            composeTestRule.onAllNodesWithText("charizard").fetchSemanticsNodes().size == 2
+        }
 
-        composeTestRule
-            .onNodeWithText("006")
-            .assertIsDisplayed()
+        composeTestRule.waitUntil(
+            node = composeTestRule
+                .onNodeWithText("006")
+        )
 
-        composeTestRule
-            .onNodeWithText("90.5 KG")
-            .assertIsDisplayed()
+        composeTestRule.waitUntil(
+            node = composeTestRule
+                .onNodeWithText("90.5 KG")
+        )
 
-        composeTestRule
-            .onNodeWithText("1.7 M")
-            .assertIsDisplayed()
+        composeTestRule.waitUntil(
+            node = composeTestRule
+                .onNodeWithText("1.7 M")
+        )
 
-        composeTestRule
-            .onNodeWithText("fire\nflying")
-            .isDisplayed()
+        composeTestRule.waitUntil(
+            node = composeTestRule
+                .onNodeWithText("fire\nflying")
+        )
     }
 
     @Test
     fun 뒤로가기를_누른다() {
-        composeTestRule
-            .onNodeWithContentDescription("backIcon")
-            .performClick()
+        composeTestRule.waitUntil(
+            node = composeTestRule
+                .onNodeWithContentDescription("backIcon"),
+            action = { it.performClick() }
+        )
 
-        composeTestRule.waitUntil {
-            isDetailScreen.not()
-        }
+        composeTestRule.waitUntil { !isDetailScreen }
     }
 
     private fun initViewModel() {
