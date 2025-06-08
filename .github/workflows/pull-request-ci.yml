@@ -1,4 +1,4 @@
-name: Android Pull Request CI
+name: Pull Request CI
 
 on:
   pull_request:
@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   build_test_lint:
-    name: "Build Test and Lint"
+    name: "Unit Test and Lint"
     runs-on: ubuntu-latest
 
     steps:
@@ -29,9 +29,6 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
 
       - name: Run local unit tests
         run: ./gradlew testDebugUnitTest
@@ -75,9 +72,6 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
-      - name: Build
-        run: ./gradlew assembleDebug assembleDebugAndroidTest
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
