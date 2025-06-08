@@ -19,3 +19,10 @@ fun AndroidComposeTestRule<ActivityScenarioRule<HiltTestActivity>, HiltTestActiv
     )
     action(node)
 }
+
+fun AndroidComposeTestRule<ActivityScenarioRule<HiltTestActivity>, HiltTestActivity>.waitUntil(condition: () -> Boolean) {
+    this.waitUntil(
+        timeoutMillis = 5000L,
+        condition = condition
+    )
+}
