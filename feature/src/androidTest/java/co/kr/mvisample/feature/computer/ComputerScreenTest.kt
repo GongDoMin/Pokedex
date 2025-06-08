@@ -16,6 +16,7 @@ import co.kr.mvisample.design.PreviewPokemonTheme
 import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.home.computer.ComputerScreen
 import co.kr.mvisample.feature.home.computer.yOffset
+import co.kr.mvisample.feature.utils.waitUntil
 import co.kr.mvisample.testing.HiltTestActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -50,21 +51,24 @@ class ComputerScreenTest {
 
     @Test
     fun 포켓몬아이콘이_초기화면에_보인다() {
-        composeTestRule
-            .onNodeWithContentDescription(getPokemonIcon(6))
-            .assertIsDisplayed()
+        composeTestRule.waitUntil(
+            node = composeTestRule
+                .onNodeWithContentDescription(getPokemonIcon(6))
+        )
 
-        composeTestRule
-            .onNodeWithContentDescription(getPokemonIcon(9))
-            .assertIsDisplayed()
+        composeTestRule.waitUntil(
+            node = composeTestRule
+                .onNodeWithContentDescription(getPokemonIcon(9))
+        )
     }
 
     @Test
     fun 리자몽을_누른후_offset이_변경되는지_확인한다() = runTest {
-        println(getPokemonIcon(6))
-        composeTestRule
-            .onNodeWithContentDescription(getPokemonIcon(6))
-            .performClick()
+        composeTestRule.waitUntil(
+            node = composeTestRule
+                .onNodeWithContentDescription(getPokemonIcon(6)),
+            action = { it.performClick() }
+        )
 
         composeTestRule.waitForIdle()
 
@@ -75,9 +79,13 @@ class ComputerScreenTest {
 
     @Test
     fun 리자몽을_누른후_다시_리자몽을_누른다() = runTest {
-        composeTestRule
-            .onNodeWithContentDescription(getPokemonIcon(6))
-            .performClick()
+        composeTestRule.waitUntil(
+            node = composeTestRule
+                .onNodeWithContentDescription(getPokemonIcon(6)),
+            action = { it.performClick() }
+        )
+
+        composeTestRule.waitForIdle()
 
         composeTestRule
             .onNodeWithContentDescription(getPokemonIcon(6))
@@ -120,10 +128,20 @@ class ComputerScreenTest {
         }
     }
 
-    private fun getCurrentPokemonOrder(): List<String> =
-        composeTestRule.onAllNodes(hasPrefixContentDescription())
+    private fun getCurrentPokemonOrder(): List<String> {
+        composeTestRule.waitUntil(timeoutMillis = 5_000) {
+            composeTestRule
+                .onAllNodes(hasPrefixContentDescription())
+                .fetchSemanticsNodes().isNotEmpty()
+        }
+
+        return composeTestRule
+            .onAllNodes(hasPrefixContentDescription())
             .fetchSemanticsNodes()
-            .mapNotNull { it.config.getOrNull(SemanticsProperties.ContentDescription)?.firstOrNull() }
+            .mapNotNull {
+                it.config.getOrNull(SemanticsProperties.ContentDescription)?.firstOrNull()
+            }
+    }
 
     private fun getPokemonIcon(id: Int) = activity.getString(R.string.pokemon_icon, id)
 }
