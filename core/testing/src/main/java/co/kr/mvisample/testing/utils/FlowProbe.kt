@@ -2,6 +2,7 @@ package co.kr.mvisample.testing.utils
 
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ChannelResult
 import kotlinx.coroutines.channels.ReceiveChannel
@@ -67,8 +68,12 @@ class FlowProbeImpl <T> (
 }
 
 internal suspend fun <T> ReceiveChannel<T>.awaitEvent() : Event<T> =
-    withTimeout(2_000L) {
-        receiveCatching().toEvent()!!
+    try {
+        withTimeout(2_000L) {
+            receiveCatching().toEvent()!!
+        }
+    } catch (e: TimeoutCancellationException) {
+        throw IllegalStateException("Expected Event but TimeoutCancellationException")
     }
 
 internal suspend fun <T> ReceiveChannel<T>.awaitItem(): T =
