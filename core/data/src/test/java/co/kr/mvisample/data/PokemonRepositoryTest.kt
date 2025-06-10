@@ -6,17 +6,20 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import app.cash.turbine.test
 import co.kr.mvisample.data.impl.PokemonRepositoryImpl
+import co.kr.mvisample.data.model.PokemonDetail
+import co.kr.mvisample.data.model.Type
 import co.kr.mvisample.data.paging.PokemonRemoteMediator
 import co.kr.mvisample.data.result.Result
 import co.kr.mvisample.local.model.PokemonEntity
+import co.kr.mvisample.local.model.PokemonLocalEntity
 import co.kr.mvisample.testing.local.FakePokemonDao
-import co.kr.mvisample.testing.remote.FakePokemonDataSource
 import co.kr.mvisample.testing.local.FakePokemonLocalDao
+import co.kr.mvisample.testing.remote.FakePokemonDataSource
+import co.kr.mvisample.testing.utils.flowTest
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalPagingApi::class)
 class PokemonRepositoryTest : StringSpec() {
@@ -61,83 +64,96 @@ class PokemonRepositoryTest : StringSpec() {
             result.nextKey shouldBe 1
         }
         "포켓몬을 발견한다." {
-            assertSuccessAndComplete(
-                flow = pokemonRepository.markAsDiscovered(6),
-                assertBlock = {
-                    val pokemon = fakePokemonLocalDao.getPokemonLocal(6)
-                    pokemon?.id shouldBe 6
-                    pokemon?.isCaught shouldBe false
-                }
-            )
+            pokemonRepository.markAsDiscovered(6).flowTest {
+                awaitItem()
+                awaitItem()
+
+                val pokemon = fakePokemonLocalDao.getPokemonLocal(6)
+
+                pokemon shouldBe PokemonLocalEntity(
+                    id = 6,
+                    iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
+                    isCaught = false,
+                    order = null
+                )
+            }
         }
         "포켓몬을 포획한다." {
-            assertSuccessAndComplete(
-                flow = pokemonRepository.markAsCaught(6),
-                assertBlock = {
-                    val pokemon = fakePokemonLocalDao.getPokemonLocal(6)
-                    pokemon?.id shouldBe 6
-                    pokemon?.isCaught shouldBe true
-                    pokemon?.order shouldBe 1
-                }
-            )
+            pokemonRepository.markAsCaught(6).flowTest {
+                awaitItem()
+                awaitItem()
+
+                val pokemon = fakePokemonLocalDao.getPokemonLocal(6)
+
+                pokemon shouldBe PokemonLocalEntity(
+                    id = 6,
+                    iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
+                    isCaught = true,
+                    order = 1
+                )
+            }
         }
         "포켓몬을 놓아준다." {
-            assertSuccessAndComplete(
-                flow = pokemonRepository.markAsRelease(6),
-                assertBlock = {
-                    val pokemon = fakePokemonLocalDao.getPokemonLocal(6)
-                    pokemon?.id shouldBe 6
-                    pokemon?.isCaught shouldBe false
-                    pokemon?.order shouldBe null
-                }
-            )
+            pokemonRepository.markAsRelease(6).flowTest {
+                awaitItem()
+                awaitItem()
+
+                val pokemon = fakePokemonLocalDao.getPokemonLocal(6)
+
+                pokemon shouldBe PokemonLocalEntity(
+                    id = 6,
+                    iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
+                    isCaught = false,
+                    order = null
+                )
+            }
         }
         "포켓몬 상세 정보를 불러온다." {
-            pokemonRepository.fetchPokemonDetail(id = 6, "charizard").test {
+            pokemonRepository.fetchPokemonDetail(id = 6, name = "charizard").flowTest {
                 val loading = awaitItem()
-                (loading as Result.Loading).data?.id shouldBe 6
-                loading.data?.name shouldBe "charizard"
-                loading.data?.id shouldBe 6
+                (loading as Result.Loading).data shouldBe PokemonDetail(
+                    id = 6,
+                    name = "charizard",
+                    imgUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/gold/transparent/6.png"
+                )
 
                 val success = awaitItem()
-                (success as Result.Success).data.weight shouldBe  90.5f
-                success.data.height shouldBe 1.7f
-
-                awaitComplete()
+                (success as Result.Success).data shouldBe PokemonDetail(
+                    weight = 90.5f,
+                    height = 1.7f,
+                    types = listOf(
+                        Type(name = "fire"),
+                        Type(name = "flying")
+                    )
+                )
             }
         }
         "포켓몬 순서를 변경한다." {
-            assertSuccessAndComplete(
-                flow = pokemonRepository.markAsCaught(6)
-            )
-            assertSuccessAndComplete(
-                flow = pokemonRepository.markAsDiscovered(9)
-            )
-            assertSuccessAndComplete(
-                flow = pokemonRepository.markAsCaught(9),
-            )
-            assertSuccessAndComplete(
-                flow = pokemonRepository.swapPokemonOrder(6, 9),
-                assertBlock = {
-                    val charizard = fakePokemonLocalDao.getPokemonLocal(6)
-                    val blastoise = fakePokemonLocalDao.getPokemonLocal(9)
+            pokemonRepository.markAsDiscovered(6).collect()
+            pokemonRepository.markAsCaught(6).collect()
+            pokemonRepository.markAsDiscovered(9).collect()
+            pokemonRepository.markAsCaught(9).collect()
 
-                    charizard?.order shouldBe 2
-                    blastoise?.order shouldBe 1
-                }
-            )
-        }
-    }
+            pokemonRepository.swapPokemonOrder(6, 9).flowTest {
+                awaitItem()
+                awaitItem()
 
-    private suspend fun assertSuccessAndComplete(
-        flow: Flow<Result<Unit>>,
-        assertBlock: suspend () -> Unit ={}
-    ) {
-        flow.test {
-            awaitItem() // loading
-            awaitItem() // success
-            assertBlock()
-            awaitComplete()
+                val charizard = fakePokemonLocalDao.getPokemonLocal(6)
+                val blastoise = fakePokemonLocalDao.getPokemonLocal(9)
+
+                charizard shouldBe PokemonLocalEntity(
+                    id = 6,
+                    iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
+                    isCaught = true,
+                    order = 2
+                )
+                blastoise shouldBe PokemonLocalEntity(
+                    id = 9,
+                    iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/9.png",
+                    isCaught = true,
+                    order = 1
+                )
+            }
         }
     }
 }
