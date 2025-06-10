@@ -11,9 +11,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 
-suspend fun <T> Flow<T>.testFlowUntil(
-    trigger: suspend () -> Unit,
-    predicate: suspend (T) -> Boolean,
+suspend fun <T> Flow<T>.flowTest(
+    validate: suspend FlowProbe<T>.() -> Unit
 ) = coroutineScope {
     val channel = Channel<T>(Channel.UNLIMITED)
     val job = launch(start = CoroutineStart.UNDISPATCHED) {
@@ -22,22 +21,17 @@ suspend fun <T> Flow<T>.testFlowUntil(
 
     val flowProbe = FlowProbeImpl(channel, job)
 
-    trigger()
-
-    while (true) {
-        val item = flowProbe.awaitItem()
-        if (predicate(item)) {
-            flowProbe.cancel()
-            flowProbe.ensureAllEventsConsumed()
-            break
-        }
-    }
+    validate(flowProbe)
+    flowProbe.cancel()
+    flowProbe.ensureAllEventsConsumed()
 }
 
 
 interface FlowProbe <T> {
     suspend fun cancel()
+    suspend fun awaitEvent(): Event<T>
     suspend fun awaitItem(): T
+    suspend fun awaitLastItem(expected: T): T
     fun ensureAllEventsConsumed()
 }
 
@@ -52,7 +46,11 @@ class FlowProbeImpl <T> (
         job.cancel()
     }
 
+    override suspend fun awaitEvent(): Event<T> = channel.awaitEvent()
+
     override suspend fun awaitItem(): T = channel.awaitItem()
+
+    override suspend fun awaitLastItem(expected: T): T = channel.awaitLastItem(expected)
 
     override fun ensureAllEventsConsumed() {
         val unconsumed = mutableListOf<Event<T>>()
@@ -67,13 +65,15 @@ class FlowProbeImpl <T> (
 
 }
 
-internal suspend fun <T> ReceiveChannel<T>.awaitEvent() : Event<T> =
+internal suspend fun <T> ReceiveChannel<T>.awaitEvent(
+    withTimeout: Long = 2_000L
+) : Event<T> =
     try {
-        withTimeout(2_000L) {
+        withTimeout(withTimeout) {
             receiveCatching().toEvent()!!
         }
     } catch (e: TimeoutCancellationException) {
-        throw IllegalStateException("Expected Event but TimeoutCancellationException")
+        Event.Error(e)
     }
 
 internal suspend fun <T> ReceiveChannel<T>.awaitItem(): T =
@@ -81,6 +81,25 @@ internal suspend fun <T> ReceiveChannel<T>.awaitItem(): T =
         is Event.Item -> result.value
         else -> unexpectedEvent(result, "Event.Item")
     }
+
+internal suspend fun <T> ReceiveChannel<T>.awaitLastItem(expected: T): T {
+    val value: T
+
+    while (true) {
+        val item = awaitItem()
+        if (item == expected) {
+            val event = awaitEvent(withTimeout = 500L)
+            if (event is Event.Error && event.throwable is TimeoutCancellationException) {
+                value = item
+                break
+            } else {
+                throw IllegalStateException("$expected is not the last item")
+            }
+        }
+    }
+
+    return value
+}
 
 private fun unexpectedEvent(event: Event<*>?, expected: String): Nothing {
     val eventAsString = event?.toString() ?: "no event"
