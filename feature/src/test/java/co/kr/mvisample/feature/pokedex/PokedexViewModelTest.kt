@@ -1,12 +1,13 @@
 package co.kr.mvisample.feature.pokedex
 
-import app.cash.turbine.test
-import co.kr.mvisample.testing.data.FakePokemonRepository
+import co.kr.mvisample.common.base.UiState
 import co.kr.mvisample.feature.home.pokedex.model.PokedexAction
 import co.kr.mvisample.feature.home.pokedex.model.PokedexEvent
+import co.kr.mvisample.feature.home.pokedex.model.PokedexUiState
 import co.kr.mvisample.feature.home.pokedex.model.PokemonModel
 import co.kr.mvisample.feature.home.pokedex.presentation.PokedexViewModel
 import co.kr.mvisample.testing.data.FakePokemonRepositoryUnitTest
+import co.kr.mvisample.testing.utils.flowTest
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -18,9 +19,7 @@ class PokedexViewModelTest : StringSpec() {
 
     init {
         "포켓몬 클릭한다." {
-            pokedexViewModel.uiState.test {
-                awaitItem() // initial
-
+            pokedexViewModel.uiState.flowTest {
                 pokedexViewModel.handleAction(
                     PokedexAction.OnPokemonClick(
                         pokemon = PokemonModel(
@@ -30,14 +29,17 @@ class PokedexViewModelTest : StringSpec() {
                     )
                 )
 
-                val uiState = awaitItem()
-
-                uiState.content.selectedPokemon?.id shouldBe 6
-                uiState.content.selectedPokemon?.name shouldBe "charizard"
+                awaitLastItem(
+                    UiState(
+                        content = PokedexUiState(
+                            selectedPokemon = PokemonModel(id = 6, name = "charizard", isDiscovered = false, isCaught = false)
+                        )
+                    )
+                )
             }
         }
         "포켓몬 상세보기를 클릭한다." {
-            pokedexViewModel.event.test {
+            pokedexViewModel.event.flowTest {
                 pokedexViewModel.handleAction(PokedexAction.ShowPokemonDetail)
 
                 val event = awaitItem()
@@ -46,42 +48,42 @@ class PokedexViewModelTest : StringSpec() {
             }
         }
         "포켓몬 발견하기를 클릭한다." {
-            pokedexViewModel.uiState.test {
-                awaitItem() // initial
-
+            pokedexViewModel.uiState.flowTest {
                 pokedexViewModel.handleAction(PokedexAction.MarkPokemonAsDiscovered)
 
-                awaitItem() // loading = true
-                awaitItem() // loading = false
-                val uiState = awaitItem()
-
-                uiState.content.selectedPokemon shouldBe PokemonModel(id = 6, name = "charizard", isDiscovered = true, isCaught = false)
+                awaitLastItem(
+                    UiState(
+                        content = PokedexUiState(
+                            selectedPokemon = PokemonModel(id = 6, name = "charizard", isDiscovered = true, isCaught = false)
+                        )
+                    )
+                )
             }
         }
         "포켓몬 포획하기를 클릭한다." {
-            pokedexViewModel.uiState.test {
-                awaitItem()
-
+            pokedexViewModel.uiState.flowTest {
                 pokedexViewModel.handleAction(PokedexAction.AttemptCatchPokemon)
 
-                awaitItem() // loading = true
-                awaitItem() // loading = false
-                val uiState = awaitItem()
-
-                uiState.content.selectedPokemon shouldBe PokemonModel(id = 6, name = "charizard", isDiscovered = true, isCaught = true)
+                awaitLastItem(
+                    UiState(
+                        content = PokedexUiState(
+                            selectedPokemon = PokemonModel(id = 6, name = "charizard", isDiscovered = true, isCaught = true)
+                        )
+                    )
+                )
             }
         }
         "포켓몬 놓아주기를 클릭한다." {
-            pokedexViewModel.uiState.test {
-                awaitItem()
-
+            pokedexViewModel.uiState.flowTest {
                 pokedexViewModel.handleAction(PokedexAction.ReleasePokemon)
 
-                awaitItem() // loading = true
-                awaitItem() // loading = false
-                val uiState = awaitItem()
-
-                uiState.content.selectedPokemon shouldBe PokemonModel(id = 6, name = "charizard", isDiscovered = true, isCaught = false)
+                awaitLastItem(
+                    UiState(
+                        content = PokedexUiState(
+                            selectedPokemon = PokemonModel(id = 6, name = "charizard", isDiscovered = true, isCaught = false)
+                        )
+                    )
+                )
             }
         }
     }
