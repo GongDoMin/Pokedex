@@ -1,5 +1,6 @@
 [versions]
 androidGradlePlugin = "8.3.2"
+kotlinxCoroutinesCore = "1.10.1"
 ksp = "1.9.10-1.0.13"
 coilCompose = "2.7.0"
 kotlin = "2.0.0"
@@ -69,6 +70,8 @@ kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collec
 
 # coroutine for test
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 
 # hilt
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
