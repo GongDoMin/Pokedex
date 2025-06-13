@@ -13,6 +13,7 @@ dependencies {
     implementation(projects.core.remote)
     implementation(projects.core.local)
     testImplementation(projects.core.testing)
+    testImplementation(projects.turbino)
 
     implementation(libs.androidx.runner)
 
