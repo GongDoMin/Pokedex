@@ -38,4 +38,8 @@ dependencies {
     // navigation
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
+
+    // 라이브러리 참고를 위해 삭제하지 않음
+    // turbine
+    testImplementation(libs.turbine)
 }

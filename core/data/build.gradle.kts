@@ -20,6 +20,4 @@ dependencies {
     testImplementation(libs.junit)
 
     implementation(libs.androidx.paging.compose)
-    
-    testImplementation(libs.turbine)
 }
