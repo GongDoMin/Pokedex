@@ -19,4 +19,5 @@ dependencies {
     implementation(libs.androidx.runner)
     
     implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.ui.test.junit4.android)
 }

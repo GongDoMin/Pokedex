@@ -32,6 +32,7 @@ room = "2.6.1"
 kotestVersion = "5.9.0"
 turbine = "1.2.0"
 runner = "1.6.2"
+uiTestJunit4Android = "1.7.0-beta02"
 
 [libraries]
 
@@ -67,6 +68,7 @@ androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxComposeNavigation" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
+androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
 
 # coroutine for test
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
