@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import co.kr.mvisample.design.PreviewPokemonTheme
 import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.home.pokedex.PokedexScreen
@@ -56,7 +57,7 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
            },
-            assert = { onFirst().assertIsDisplayed() },
+            assert = { onFirst().performScrollTo().assertIsDisplayed() },
             action = { performClick() }
         )
 
@@ -73,7 +74,7 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { assertAny(hasPrefixContentDescription("isDiscover is false")).onFirst().assertIsDisplayed() },
+            assert = { assertAny(hasPrefixContentDescription("isDiscover is false")).onFirst().performScrollTo().assertIsDisplayed() },
             action = { performClick() }
         )
 
@@ -99,7 +100,7 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { assertAny(hasPrefixContentDescription("isDiscover is false")).onFirst().assertIsDisplayed() },
+            assert = { assertAny(hasPrefixContentDescription("isDiscover is false")).onFirst().performScrollTo().assertIsDisplayed() },
             action = { performClick() }
         )
 
@@ -131,7 +132,7 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { assertAny(hasPrefixContentDescription("isDiscover is false")).onFirst().assertIsDisplayed() },
+            assert = { assertAny(hasPrefixContentDescription("isDiscover is false")).onFirst().performScrollTo().assertIsDisplayed() },
             action = { performClick() }
         )
 
@@ -169,7 +170,7 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { onFirst().assertIsDisplayed() }
+            assert = { onFirst().performScrollTo().assertIsDisplayed() }
         )
 
         composeTestRule.waitUntilAssert(
