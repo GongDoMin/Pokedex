@@ -25,7 +25,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -33,7 +32,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.mvisample.common.components.OverlayWithLoadingAndDialog
 import co.kr.mvisample.common.components.pokemonCard
-import co.kr.mvisample.common.utils.customOffsetY
 import co.kr.mvisample.design.PokemonTheme
 import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.home.computer.model.ComputerAction
@@ -121,8 +119,7 @@ private fun PokemonIconGrid(
                         this.scaleX = scaleX
                         this.scaleY = scaleY
                     }
-                    .animateItem()
-                    .semantics { customOffsetY = offset.y },
+                    .animateItem(),
                 painter = rememberAsyncImagePainter(
                     model = ImageRequest.Builder(context)
                         .data(pokemon.iconUrl)
@@ -133,7 +130,7 @@ private fun PokemonIconGrid(
                         }
                         .build()
                 ),
-                contentDescription = stringResource(R.string.pokemon_icon, pokemon.id)
+                contentDescription = stringResource(R.string.pokemon_icon, pokemon.id, offset.y)
             )
         }
     }

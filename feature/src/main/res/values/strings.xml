@@ -4,5 +4,5 @@
     <string name="pokemon_image">pokemonImage</string>
     <string name="pokeball">pokeball_%s</string>
     <string name="pokemon_detail_image">pokemonDetailImage</string>
-    <string name="pokemon_icon">pokemonIcon_%d</string>
+    <string name="pokemon_icon">pokemonIcon_%d_%d</string>
 </resources>
