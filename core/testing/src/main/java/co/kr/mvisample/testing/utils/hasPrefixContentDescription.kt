@@ -5,7 +5,7 @@ import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
 
 fun hasPrefixContentDescription(
-    prefix: String = "pokemonIcon_",
+    prefix: String,
 ): SemanticsMatcher {
     return SemanticsMatcher(
         "ContentDescription starts with $prefix"
@@ -16,7 +16,7 @@ fun hasPrefixContentDescription(
 }
 
 fun hasSuffixContentDescription(
-    suffix: String = "pokemonIcon_",
+    suffix: String,
 ): SemanticsMatcher {
     return SemanticsMatcher(
         "ContentDescription ends with $suffix"
