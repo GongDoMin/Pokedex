@@ -7,7 +7,7 @@ import co.kr.mvisample.feature.home.pokedex.model.PokedexUiState
 import co.kr.mvisample.feature.home.pokedex.model.PokemonModel
 import co.kr.mvisample.feature.home.pokedex.presentation.PokedexViewModel
 import co.kr.mvisample.testing.data.FakePokemonRepositoryUnitTest
-import co.kr.mvisample.testing.utils.flowTest
+import co.kr.turbino.testTurbino
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -19,7 +19,7 @@ class PokedexViewModelTest : StringSpec() {
 
     init {
         "포켓몬 클릭한다." {
-            pokedexViewModel.uiState.flowTest {
+            pokedexViewModel.uiState.testTurbino {
                 pokedexViewModel.handleAction(
                     PokedexAction.OnPokemonClick(
                         pokemon = PokemonModel(
@@ -39,7 +39,7 @@ class PokedexViewModelTest : StringSpec() {
             }
         }
         "포켓몬 상세보기를 클릭한다." {
-            pokedexViewModel.event.flowTest {
+            pokedexViewModel.event.testTurbino {
                 pokedexViewModel.handleAction(PokedexAction.ShowPokemonDetail)
 
                 val event = awaitItem()
@@ -48,7 +48,7 @@ class PokedexViewModelTest : StringSpec() {
             }
         }
         "포켓몬 발견하기를 클릭한다." {
-            pokedexViewModel.uiState.flowTest {
+            pokedexViewModel.uiState.testTurbino {
                 pokedexViewModel.handleAction(PokedexAction.MarkPokemonAsDiscovered)
 
                 awaitLastItem(
@@ -61,7 +61,7 @@ class PokedexViewModelTest : StringSpec() {
             }
         }
         "포켓몬 포획하기를 클릭한다." {
-            pokedexViewModel.uiState.flowTest {
+            pokedexViewModel.uiState.testTurbino {
                 pokedexViewModel.handleAction(PokedexAction.AttemptCatchPokemon)
 
                 awaitLastItem(
@@ -74,7 +74,7 @@ class PokedexViewModelTest : StringSpec() {
             }
         }
         "포켓몬 놓아주기를 클릭한다." {
-            pokedexViewModel.uiState.flowTest {
+            pokedexViewModel.uiState.testTurbino {
                 pokedexViewModel.handleAction(PokedexAction.ReleasePokemon)
 
                 awaitLastItem(

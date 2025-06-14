@@ -16,7 +16,7 @@ import co.kr.mvisample.local.model.PokemonLocalEntity
 import co.kr.mvisample.testing.local.FakePokemonDao
 import co.kr.mvisample.testing.local.FakePokemonLocalDao
 import co.kr.mvisample.testing.remote.FakePokemonDataSource
-import co.kr.mvisample.testing.utils.flowTest
+import co.kr.turbino.testTurbino
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.collect
@@ -64,7 +64,7 @@ class PokemonRepositoryTest : StringSpec() {
             result.nextKey shouldBe 1
         }
         "포켓몬을 발견한다." {
-            pokemonRepository.markAsDiscovered(6).flowTest {
+            pokemonRepository.markAsDiscovered(6).testTurbino {
                 awaitItem()
                 awaitItem()
 
@@ -79,7 +79,7 @@ class PokemonRepositoryTest : StringSpec() {
             }
         }
         "포켓몬을 포획한다." {
-            pokemonRepository.markAsCaught(6).flowTest {
+            pokemonRepository.markAsCaught(6).testTurbino {
                 awaitItem()
                 awaitItem()
 
@@ -94,7 +94,7 @@ class PokemonRepositoryTest : StringSpec() {
             }
         }
         "포켓몬을 놓아준다." {
-            pokemonRepository.markAsRelease(6).flowTest {
+            pokemonRepository.markAsRelease(6).testTurbino {
                 awaitItem()
                 awaitItem()
 
@@ -109,7 +109,7 @@ class PokemonRepositoryTest : StringSpec() {
             }
         }
         "포켓몬 상세 정보를 불러온다." {
-            pokemonRepository.fetchPokemonDetail(id = 6, name = "charizard").flowTest {
+            pokemonRepository.fetchPokemonDetail(id = 6, name = "charizard").testTurbino {
                 val loading = awaitItem()
                 (loading as Result.Loading).data shouldBe PokemonDetail(
                     id = 6,
@@ -134,7 +134,7 @@ class PokemonRepositoryTest : StringSpec() {
             pokemonRepository.markAsDiscovered(9).collect()
             pokemonRepository.markAsCaught(9).collect()
 
-            pokemonRepository.swapPokemonOrder(6, 9).flowTest {
+            pokemonRepository.swapPokemonOrder(6, 9).testTurbino {
                 awaitItem()
                 awaitItem()
 

@@ -11,6 +11,8 @@ android {
 
 dependencies {
 
+    testImplementation(projects.turbino)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
 
@@ -29,6 +31,4 @@ dependencies {
     implementation(libs.coil.compose)
 
     implementation(libs.kotlinx.collections.immutable)
-
-    testImplementation(libs.turbine)
 }
