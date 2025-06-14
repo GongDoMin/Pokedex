@@ -7,6 +7,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.lifecycle.SavedStateHandle
 import co.kr.mvisample.data.repository.PokemonRepository
 import co.kr.mvisample.design.PreviewPokemonTheme
@@ -91,7 +92,7 @@ class DetailScreenTest {
 
         composeTestRule.waitUntilAssert(
             node = { onNodeWithText("fire\nflying") },
-            assert = { assertIsDisplayed() }
+            assert = { performScrollTo().assertIsDisplayed() }
         )
     }
 
