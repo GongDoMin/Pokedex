@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Text
@@ -68,7 +70,10 @@ fun DetailScreen(
         errorContent = uiState.error.errorContent,
         onSendAction = viewModel::handleBasicDialogAction
     ) {
-        Column {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+        ) {
             DetailHeader(
                 pokemonDetail = uiState.content.pokemonDetail,
                 onBackClick = { viewModel.handleAction(DetailAction.OnBackClick) }

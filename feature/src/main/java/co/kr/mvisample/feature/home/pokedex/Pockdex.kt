@@ -262,7 +262,8 @@ private fun PokemonListItem(
                 width = if (isSelected) 1.dp else 0.dp,
                 color = if (isSelected) Color.White else Color.Transparent
             )
-            .clickable { onClickPokemon(pokemon) },
+            .clickable { onClickPokemon(pokemon) }
+            .semantics { contentDescription = "isDiscover is ${pokemon.isDiscovered} and isCaught is ${pokemon.isCaught}" },
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (pokemon.isDiscovered) {
@@ -301,8 +302,6 @@ private fun Pokeball(
     outlineColor: Color = PokemonTheme.colors.basicText,
     centerCircleColor: Color = Color.White
 ) {
-    val context = LocalContext.current
-
     val animatedTopColor by animateColorAsState(
         targetValue = if (isCaught) caughtColorTop else uncaughtColorTop,
         animationSpec = tween(durationMillis = 300),
@@ -319,9 +318,6 @@ private fun Pokeball(
         modifier = modifier
             .size(16.dp)
             .border(1.dp, color = outlineColor, shape = CircleShape)
-            .semantics {
-                contentDescription = context.getString(R.string.pokeball, isCaught.toString())
-            }
     ) {
         val diameter = size.minDimension
         val radius = diameter / 2
