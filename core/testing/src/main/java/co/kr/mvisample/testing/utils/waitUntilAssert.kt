@@ -27,10 +27,9 @@ fun AndroidComposeTestRule<*, *>.waitUntilAssert(
     targetNode.action()
 }
 
-fun AndroidComposeTestRule<*, *>.waitUntilAssertAll(
+fun AndroidComposeTestRule<*, *>.waitUntilAllNodesAsserted(
     node: AndroidComposeTestRule<*, *>.() -> SemanticsNodeInteractionCollection,
     assert: SemanticsNodeInteractionCollection.() -> Unit,
-    action: SemanticsNodeInteractionCollection.() -> Unit = {},
     timeoutMillis: Long = 2_000L
 ) {
     val targetNode = this.node()
@@ -46,6 +45,28 @@ fun AndroidComposeTestRule<*, *>.waitUntilAssertAll(
             }
         }
     )
+}
 
-    targetNode.action()
+fun AndroidComposeTestRule<*, *>.waitUntilNodeAssertedAndAction(
+    node: AndroidComposeTestRule<*, *>.() -> SemanticsNodeInteractionCollection,
+    assert: SemanticsNodeInteractionCollection.() -> SemanticsNodeInteraction,
+    action: SemanticsNodeInteraction.() -> Unit = {},
+    timeoutMillis: Long = 2_000L
+) {
+    val targetNode = this.node()
+    var semanticsNodeInteraction: SemanticsNodeInteraction? = null
+
+    waitUntil (
+        timeoutMillis = timeoutMillis,
+        condition = {
+            try {
+                semanticsNodeInteraction = targetNode.assert()
+                true
+            } catch (e: AssertionError) {
+                false
+            }
+        }
+    )
+
+    semanticsNodeInteraction?.action()
 }

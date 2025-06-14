@@ -13,8 +13,8 @@ import co.kr.mvisample.design.PreviewPokemonTheme
 import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.detail.presentation.DetailViewModel
 import co.kr.mvisample.testing.HiltTestActivity
+import co.kr.mvisample.testing.utils.waitUntilAllNodesAsserted
 import co.kr.mvisample.testing.utils.waitUntilAssert
-import co.kr.mvisample.testing.utils.waitUntilAssertAll
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -69,7 +69,7 @@ class DetailScreenTest {
             assert = { assertIsDisplayed() }
         )
 
-        composeTestRule.waitUntilAssertAll(
+        composeTestRule.waitUntilAllNodesAsserted(
             node = { onAllNodesWithText("charizard") },
             assert = { assertCountEquals(2) }
         )

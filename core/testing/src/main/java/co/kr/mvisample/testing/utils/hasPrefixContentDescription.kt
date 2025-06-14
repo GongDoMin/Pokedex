@@ -14,3 +14,14 @@ fun hasPrefixContentDescription(
         descriptions?.any { desc -> desc.startsWith(prefix) } == true
     }
 }
+
+fun hasSuffixContentDescription(
+    suffix: String = "pokemonIcon_",
+): SemanticsMatcher {
+    return SemanticsMatcher(
+        "ContentDescription ends with $suffix"
+    ) { semanticsNode ->
+        val descriptions = semanticsNode.config.getOrNull(SemanticsProperties.ContentDescription)
+        descriptions?.any { desc -> desc.endsWith(suffix) } == true
+    }
+}
