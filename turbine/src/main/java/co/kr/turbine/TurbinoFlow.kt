@@ -7,9 +7,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-internal fun <T> Flow<T>.collectTurbino(
+internal fun <T> Flow<T>.collectTurbine(
     coroutineScope: CoroutineScope
-) : Turbino<T> {
+) : Turbine<T> {
     val channel = Channel<T>(Channel.UNLIMITED)
     val job = coroutineScope.launch(
         context = Dispatchers.Unconfined,
@@ -23,7 +23,7 @@ internal fun <T> Flow<T>.collectTurbino(
         }
     }
 
-    return TurbinoImpl(
+    return TurbineImpl(
         channel = channel,
         job = job
     )

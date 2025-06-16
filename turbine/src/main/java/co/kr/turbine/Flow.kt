@@ -7,26 +7,26 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.time.Duration
 
-private suspend fun turbinoScope(
+private suspend fun turbineScope(
     eventTimeout: Duration?,
     completeTimeout: Duration?,
     block: suspend CoroutineScope.() -> Unit
 ) {
     val coroutineContext = buildList {
-        eventTimeout?.let { add(TurbinoEventTimeoutElement(it)) }
-        completeTimeout?.let { add(TurbinoCompleteTimeoutElement(it)) }
+        eventTimeout?.let { add(TurbineEventTimeoutElement(it)) }
+        completeTimeout?.let { add(TurbineCompleteTimeoutElement(it)) }
     }.fold(EmptyCoroutineContext, CoroutineContext::plus)
 
     withContext(coroutineContext, block)
 }
 
-suspend fun <T> Flow<T>.testTurbino(
+suspend fun <T> Flow<T>.testTurbine(
     eventTimeout: Duration? = null,
     completeTimeout: Duration? = null,
-    validate: suspend Turbino<T>.() -> Unit,
+    validate: suspend Turbine<T>.() -> Unit,
 ) {
-    turbinoScope(eventTimeout, completeTimeout) {
-        collectTurbino(this).apply {
+    turbineScope(eventTimeout, completeTimeout) {
+        collectTurbine(this).apply {
             this.validate()
             cancel()
             ensureAllEventsConsumed()

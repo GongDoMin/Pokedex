@@ -9,7 +9,7 @@ import co.kr.mvisample.feature.detail.model.PokemonDetailModel
 import co.kr.mvisample.feature.detail.model.TypeModel
 import co.kr.mvisample.feature.detail.presentation.DetailViewModel
 import co.kr.mvisample.testing.data.FakePokemonRepositoryUnitTest
-import co.kr.turbine.testTurbino
+import co.kr.turbine.testTurbine
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
@@ -30,7 +30,7 @@ class DetailViewModelTest : StringSpec() {
 
     init {
         "포켓몬 상세 정보를 불러온다" {
-            detailViewModel.uiState.testTurbino {
+            detailViewModel.uiState.testTurbine {
                 awaitLastItem(
                     UiState(
                         content = DetailUiState(
@@ -52,7 +52,7 @@ class DetailViewModelTest : StringSpec() {
             }
         }
         "뒤로 가기를 누른다." {
-            detailViewModel.event.testTurbino {
+            detailViewModel.event.testTurbine {
                 detailViewModel.handleAction(DetailAction.OnBackClick)
 
                 awaitItem() shouldBe DetailEvent.OnNavigateToBack

@@ -3,7 +3,7 @@ package co.kr.turbine
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 
-interface Turbino <T> {
+interface Turbine <T> {
     suspend fun cancel()
 
     suspend fun awaitEvent(): Event<T>
@@ -17,10 +17,10 @@ interface Turbino <T> {
     fun ensureAllEventsConsumed()
 }
 
-internal class TurbinoImpl <T> (
+internal class TurbineImpl <T> (
     channel: Channel<T>,
     private val job: Job
-) : Turbino<T> {
+) : Turbine<T> {
     private val channel = object : Channel<T> by channel {}
 
     override suspend fun cancel() {
