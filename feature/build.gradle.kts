@@ -11,7 +11,7 @@ android {
 
 dependencies {
 
-    testImplementation(projects.turbino)
+    testImplementation(projects.turbine)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
