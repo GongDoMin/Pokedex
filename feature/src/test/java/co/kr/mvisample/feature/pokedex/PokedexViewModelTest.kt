@@ -7,7 +7,7 @@ import co.kr.mvisample.feature.home.pokedex.model.PokedexUiState
 import co.kr.mvisample.feature.home.pokedex.model.PokemonModel
 import co.kr.mvisample.feature.home.pokedex.presentation.PokedexViewModel
 import co.kr.mvisample.testing.data.FakePokemonRepositoryUnitTest
-import co.kr.turbino.testTurbino
+import co.kr.turbine.testTurbino
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 

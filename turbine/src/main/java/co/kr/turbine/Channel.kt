@@ -1,4 +1,4 @@
-package co.kr.turbino
+package co.kr.turbine
 
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.channels.ChannelResult

@@ -16,7 +16,7 @@ import co.kr.mvisample.local.model.PokemonLocalEntity
 import co.kr.mvisample.testing.local.FakePokemonDao
 import co.kr.mvisample.testing.local.FakePokemonLocalDao
 import co.kr.mvisample.testing.remote.FakePokemonDataSource
-import co.kr.turbino.testTurbino
+import co.kr.turbine.testTurbino
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.collect

@@ -1,4 +1,4 @@
-package co.kr.turbino
+package co.kr.turbine
 
 sealed interface Event<out T> {
     data object Complete : Event<Nothing>

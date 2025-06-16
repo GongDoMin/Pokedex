@@ -1,4 +1,4 @@
-package co.kr.turbino
+package co.kr.turbine
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow

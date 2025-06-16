@@ -6,7 +6,7 @@ import co.kr.mvisample.feature.home.computer.model.ComputerUiState
 import co.kr.mvisample.feature.home.computer.model.PokemonIconModel
 import co.kr.mvisample.feature.home.computer.presentation.ComputerViewModel
 import co.kr.mvisample.testing.data.FakePokemonRepositoryUnitTest
-import co.kr.turbino.testTurbino
+import co.kr.turbine.testTurbino
 import io.kotest.core.spec.style.StringSpec
 
 class ComputerViewModelTest : StringSpec() {
