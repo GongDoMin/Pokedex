@@ -52,6 +52,8 @@ dependencies {
     testImplementation(libs.roborazzi.jUnit)
 
     testRuntimeOnly(libs.junit.vintage.engine)
+
+    testImplementation(libs.coil.test)
 }
 
 roborazzi {

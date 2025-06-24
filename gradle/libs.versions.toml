@@ -3,7 +3,7 @@ androidGradlePlugin = "8.11.0-rc02"
 junitVintageEngine = "5.13.1"
 kotlinxCoroutinesCore = "1.10.1"
 ksp = "1.9.10-1.0.13"
-coilCompose = "2.7.0"
+coil = "3.2.0"
 kotlin = "2.0.0"
 coreKtx = "1.14.0-alpha01"
 junit = "4.13.2"
@@ -93,7 +93,8 @@ jetbrains-kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-seri
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
 
 # coil
-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-test = { module = "io.coil-kt.coil3:coil-test", version.ref = "coil" }
 
 # retrofit and okhttp
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
