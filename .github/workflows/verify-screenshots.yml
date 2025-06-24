@@ -1,0 +1,52 @@
+name: verify screenshots
+
+on:
+  workflow_run:
+    workflows:
+      - "store screenshots"
+    types:
+      - completed
+
+env:
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx6g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
+
+jobs:
+  test:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2
+
+      # Download screenshots
+      - uses: dawidd6/action-download-artifact@v2
+        with:
+          name: screenshots
+          path: feature/src/screenshot
+
+      - name: compare screenshot
+        id: compare-screenshot
+        run: |
+          ./gradlew app:compareRoborazziDebug --stacktrace
+
+      - name: verify test
+        id: verify-test
+        run: |
+          # If there is a difference between the screenshots, the test will fail.
+          ./gradlew app:verifyRoborazziDebug --stacktrace
+
+      - uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: screenshot-diff
+          path: feature/build/test-results/roborazzi/result-summary.json
+          retention-days: 30
