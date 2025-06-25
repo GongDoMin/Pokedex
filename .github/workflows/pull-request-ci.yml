@@ -111,9 +111,9 @@ jobs:
         - name: Grant execute permission for gradlew
           run: chmod +x gradlew
 
-
         - name: Verify Roborazzi Screenshots
           id: screenshotsverify
+          continue-on-error: true
           run: ./gradlew verifyRoborazziDebug
 
         - name: Generate new screenshots if verification failed
