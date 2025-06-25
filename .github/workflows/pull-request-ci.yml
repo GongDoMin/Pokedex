@@ -10,6 +10,8 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
+  checks: write
+  pull-requests: write
   contents: write
 
 jobs:
@@ -88,3 +90,128 @@ jobs:
         with:
           name: Android Test Results
           path: "**/outputs/androidTest-results/connected/**/*.xml"
+
+  verify_screenshots:
+      steps:
+        - name: Checkout the code
+          uses: actions/checkout@v4
+
+        - name: Set up JDK 17
+          uses: actions/setup-java@v4
+          with:
+            java-version: '17'
+            distribution: 'temurin'
+
+        - name: Set up Android SDK
+          uses: android-actions/setup-android@v3
+
+        - name: Grant execute permission for gradlew
+          run: chmod +x gradlew
+
+
+        - name: Verify Roborazzi Screenshots
+          id: screenshotsverify
+          run: ./gradlew verifyRoborazziDebug
+
+        - name: Generate new screenshots if verification failed
+          id: screenshotsrecord
+          if: steps.screenshotsverify.outcome == 'failure'
+          run: ./gradlew recordRoborazziDebug
+
+        - name: Push new screenshots if available
+          uses: stefanzweifel/git-auto-commit-action@v5
+          if: steps.screenshotsrecord.outcome == 'success'
+          with:
+            file_pattern: '**/*.png'
+            disable_globbing: false
+            commit_message: "스크린샷 자동 커밋"
+
+        - name: Copy screenshot comparison files
+          id: copy_screenshots
+          if: steps.screenshotsverify.outcome == 'failure'
+          run: |
+            mkdir -p /tmp/screenshot-diff
+
+            cd ${{ github.workspace }}
+            find . -name "*_compare.png" -exec cp {} /tmp/screenshot-diff/ \;
+
+            if [ -z "$(find /tmp/screenshot-diff -type f -name '*.png')" ]; then
+              echo "No screenshot files found"
+              echo "has_images=false" >> $GITHUB_OUTPUT
+            else
+              echo "Found screenshot comparison images:"
+              ls -la /tmp/screenshot-diff
+              echo "has_images=true" >> $GITHUB_OUTPUT
+            fi
+
+        - name: Create companion branch for screenshot comparison
+          id: companion_branch
+          if: steps.copy_screenshots.outputs.has_images == 'true'
+          run: |
+            BRANCH_NAME="screenshot-compare-${{ github.event.pull_request.number }}"
+            echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+            
+            git config --global user.name "GitHub Actions"
+            git config --global user.email "actions@github.com"
+            
+            git stash -u || true
+            
+            git branch -D "$BRANCH_NAME" || true
+            git checkout --orphan "$BRANCH_NAME"
+            git rm -rf .
+            
+            mkdir -p screenshot-diff
+            
+            cp /tmp/screenshot-diff/*.png screenshot-diff/
+            
+            git add screenshot-diff
+            git commit -m "Add screenshot comparison results"
+            git push origin "$BRANCH_NAME" -f
+            
+            echo "companion_push_success=echo "companion_push_success=true" >> $GITHUB_OUTPUT
+            
+            git checkout -f ${{ github.head_ref }} || git checkout -f HEAD
+
+        - name: Generate markdown report for screenshot diffs
+          id: generate_report
+          if: steps.companion_branch.outputs.companion_push_success == 'true'
+          run: |
+            REPORT="## 📸 스크린샷 비교 결과\n\n"
+            REPORT+="| 화면 이름 | 비교 이미지 |\n"
+            REPORT+="|:--------:|:----------:|\n"
+
+            BRANCH_NAME="${{ steps.companion_branch.outputs.branch_name }}"
+
+            for FILE in /tmp/screenshot-diff/*.png; do
+              FILENAME=$(basename "$FILE")
+              SCREENNAME=${FILENAME%_compare.png}
+
+              IMG_URL="https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/screenshot-diff/$FILENAME?raw=true"
+
+              REPORT+="| \`$SCREENNAME\` | ![Screenshot]($IMG_URL) |\n"
+            done
+
+            EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+            echo "report<<$EOF" >> $GITHUB_OUTPUT
+            echo -e "$REPORT" >> $GITHUB_OUTPUT
+            echo "$EOF" >> $GITHUB_OUTPUT
+
+            echo "found_images=true" >> $GITHUB_OUTPUT
+
+        - name: Find existing comment
+          uses: peter-evans/find-comment@v3
+          id: find_comment
+          if: steps.generate_report.outputs.found_images == 'true'
+          with:
+            issue-number: ${{ github.event.pull_request.number }}
+            comment-author: 'github-actions[bot]'
+            body-includes: '## 📸 스크린샷 비교 결과'
+
+        - name: Create or update comment with comparison results
+          uses: peter-evans/create-or-update-comment@v4
+          if: steps.generate_report.outputs.found_images == 'true'
+          with:
+            comment-id: ${{ steps.find_comment.outputs.comment-id }}
+            issue-number: ${{ github.event.pull_request.number }}
+            body: ${{ steps.generate_report.outputs.report }}
+            edit-mode: replace
