@@ -92,6 +92,9 @@ jobs:
           path: "**/outputs/androidTest-results/connected/**/*.xml"
 
   verify_screenshots:
+      name: "verify screen"
+      runs-on: ubuntu-latest
+
       steps:
         - name: Checkout the code
           uses: actions/checkout@v4
