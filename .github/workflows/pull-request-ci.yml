@@ -210,11 +210,11 @@ jobs:
 
         - name: Generate markdown report for artifact notice
           id: generate_report
+          if: steps.screenshotsverify.outcome == 'failure'
           run: |
             REPORT="## 📸 스크린샷 비교 결과\n\n"
             REPORT+="🔍 변경된 UI가 감지되었습니다.\n\n"
             REPORT+="비교된 스크린샷은 아래 GitHub Actions Artifacts에 업로드되어 있습니다.\n"
-            REPORT+="**\"reference-screenshots\"** 항목을 다운로드하여 직접 확인해 주세요.\n\n"
             REPORT+="➡️ [Artifacts 확인하기](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n"
 
             EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
