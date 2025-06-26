@@ -122,14 +122,7 @@ private fun PokemonIconGrid(
                     }
                     .animateItem(),
                 painter = rememberAsyncImagePainter(
-                    model = ImageRequest.Builder(context)
-                        .data(pokemon.iconUrl)
-                        .apply {
-                            if (LocalInspectionMode.current) {
-                                placeholder(R.drawable.img_charizard_icon)
-                            }
-                        }
-                        .build()
+                    model = if (LocalInspectionMode.current) R.drawable.img_charizard_icon else pokemon.iconUrl
                 ),
                 contentDescription = stringResource(R.string.pokemon_icon, pokemon.id, offset.y)
             )

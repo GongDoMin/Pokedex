@@ -173,14 +173,7 @@ private fun PokemonImage(
                     key = "image" + pokemon?.id
                 ),
             painter = rememberAsyncImagePainter(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(pokemon?.imageUrl)
-                    .apply {
-                        if (LocalInspectionMode.current) {
-                            placeholder(R.drawable.img_charizard)
-                        }
-                    }
-                    .build()
+                model = if (LocalInspectionMode.current) R.drawable.img_charizard else pokemon?.imageUrl
             ),
             contentDescription = stringResource(R.string.pokemon_image),
             colorFilter = if (pokemon?.isDiscovered == true) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
