@@ -37,8 +37,9 @@ import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.home.computer.model.ComputerAction
 import co.kr.mvisample.feature.home.computer.model.PokemonIconModel
 import co.kr.mvisample.feature.home.computer.presentation.ComputerViewModel
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
+import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
+import coil3.request.placeholder
 
 @Composable
 fun ComputerScreen(
