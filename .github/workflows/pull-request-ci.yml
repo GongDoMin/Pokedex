@@ -129,74 +129,97 @@ jobs:
             disable_globbing: false
             commit_message: "스크린샷 자동 커밋"
 
-        - name: Copy screenshot comparison files
-          id: copy_screenshots
-          if: steps.screenshotsverify.outcome == 'failure'
-          run: |
-            mkdir -p /tmp/screenshot-diff
+        - name: Store reference images as artifacts
+          uses: actions/upload-artifact@v4
+          with:
+            name: reference-screenshots
+            path: "feature/build/outputs/screenshots_comparison/*_compare.png"
+            retention-days: 30
 
-            cd ${{ github.workspace }}
-            find . -name "*_compare.png" -exec cp {} /tmp/screenshot-diff/ \;
+#        - name: Copy screenshot comparison files
+#          id: copy_screenshots
+#          if: steps.screenshotsverify.outcome == 'failure'
+#          run: |
+#            mkdir -p /tmp/screenshot-diff
+#
+#            cd ${{ github.workspace }}
+#            find . -name "*_compare.png" -exec cp {} /tmp/screenshot-diff/ \;
+#
+#            if [ -z "$(find /tmp/screenshot-diff -type f -name '*.png')" ]; then
+#              echo "No screenshot files found"
+#              echo "has_images=false" >> $GITHUB_OUTPUT
+#            else
+#              echo "Found screenshot comparison images:"
+#              ls -la /tmp/screenshot-diff
+#              echo "has_images=true" >> $GITHUB_OUTPUT
+#            fi
 
-            if [ -z "$(find /tmp/screenshot-diff -type f -name '*.png')" ]; then
-              echo "No screenshot files found"
-              echo "has_images=false" >> $GITHUB_OUTPUT
-            else
-              echo "Found screenshot comparison images:"
-              ls -la /tmp/screenshot-diff
-              echo "has_images=true" >> $GITHUB_OUTPUT
-            fi
+#        - name: Create companion branch for screenshot comparison
+#          id: companion_branch
+#          if: steps.copy_screenshots.outputs.has_images == 'true'
+#          run: |
+#            BRANCH_NAME="screenshot-compare-${{ github.event.pull_request.number }}"
+#            echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+#
+#            git config --global user.name "GitHub Actions"
+#            git config --global user.email "actions@github.com"
+#
+#            git stash -u || true
+#
+#            git branch -D "$BRANCH_NAME" || true
+#            git checkout --orphan "$BRANCH_NAME"
+#            git rm -rf .
+#
+#            mkdir -p screenshot-diff
+#
+#            cp /tmp/screenshot-diff/*.png screenshot-diff/
+#
+#            git add screenshot-diff
+#            git commit -m "Add screenshot comparison results"
+#            git push origin "$BRANCH_NAME" -f
+#
+#            echo "companion_push_success=true" >> $GITHUB_OUTPUT
+#
+#            git checkout -f ${{ github.head_ref }} || git checkout -f HEAD
 
-        - name: Create companion branch for screenshot comparison
-          id: companion_branch
-          if: steps.copy_screenshots.outputs.has_images == 'true'
-          run: |
-            BRANCH_NAME="screenshot-compare-${{ github.event.pull_request.number }}"
-            echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-            
-            git config --global user.name "GitHub Actions"
-            git config --global user.email "actions@github.com"
-            
-            git stash -u || true
-            
-            git branch -D "$BRANCH_NAME" || true
-            git checkout --orphan "$BRANCH_NAME"
-            git rm -rf .
-            
-            mkdir -p screenshot-diff
-            
-            cp /tmp/screenshot-diff/*.png screenshot-diff/
-            
-            git add screenshot-diff
-            git commit -m "Add screenshot comparison results"
-            git push origin "$BRANCH_NAME" -f
-            
-            echo "companion_push_success=true" >> $GITHUB_OUTPUT
-            
-            git checkout -f ${{ github.head_ref }} || git checkout -f HEAD
+#        - name: Generate markdown report for screenshot diffs
+#          id: generate_report
+#          if: steps.companion_branch.outputs.companion_push_success == 'true'
+#          run: |
+#            REPORT="## 📸 스크린샷 비교 결과\n\n"
+#            REPORT+="| 화면 이름 | 비교 이미지 |\n"
+#            REPORT+="|:--------:|:----------:|\n"
+#
+#            BRANCH_NAME="${{ steps.companion_branch.outputs.branch_name }}"
+#
+#            for FILE in /tmp/screenshot-diff/*.png; do
+#              FILENAME=$(basename "$FILE")
+#              SCREENNAME=${FILENAME%_compare.png}
+#
+#              IMG_URL="https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/screenshot-diff/$FILENAME?raw=true"
+#
+#              REPORT+="| \`$SCREENNAME\` | ![Screenshot]($IMG_URL) |\n"
+#            done
+#
+#            EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+#            echo "report<<$EOF" >> $GITHUB_OUTPUT
+#            echo -e "$REPORT" >> $GITHUB_OUTPUT
+#            echo "$EOF" >> $GITHUB_OUTPUT
+#
+#            echo "found_images=true" >> $GITHUB_OUTPUT
 
-        - name: Generate markdown report for screenshot diffs
+        - name: Generate markdown report for artifact notice
           id: generate_report
-          if: steps.companion_branch.outputs.companion_push_success == 'true'
           run: |
             REPORT="## 📸 스크린샷 비교 결과\n\n"
-            REPORT+="| 화면 이름 | 비교 이미지 |\n"
-            REPORT+="|:--------:|:----------:|\n"
-
-            BRANCH_NAME="${{ steps.companion_branch.outputs.branch_name }}"
-
-            for FILE in /tmp/screenshot-diff/*.png; do
-              FILENAME=$(basename "$FILE")
-              SCREENNAME=${FILENAME%_compare.png}
-
-              IMG_URL="https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/screenshot-diff/$FILENAME?raw=true"
-
-              REPORT+="| \`$SCREENNAME\` | ![Screenshot]($IMG_URL) |\n"
-            done
+            REPORT+="🔍 변경된 UI가 감지되었습니다.\n\n"
+            REPORT+="비교된 스크린샷은 아래 GitHub Actions Artifacts에 업로드되어 있습니다.\n"
+            REPORT+="**\"reference-screenshots\"** 항목을 다운로드하여 직접 확인해 주세요.\n\n"
+            REPORT+="➡️ [Artifacts 확인하기](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n"
 
             EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
             echo "report<<$EOF" >> $GITHUB_OUTPUT
-            echo -e "$REPORT" >> $GITHUB_OUTPUT
+            echo "$REPORT" >> $GITHUB_OUTPUT
             echo "$EOF" >> $GITHUB_OUTPUT
 
             echo "found_images=true" >> $GITHUB_OUTPUT
