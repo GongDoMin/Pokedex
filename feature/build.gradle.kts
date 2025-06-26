@@ -3,26 +3,14 @@ plugins {
     id("mvisample.android.serialization")
     id("mvisample.android.hilt")
     id("mvisample.kotest")
-    alias(libs.plugins.roborazzi)
 }
 
 android {
     namespace = "co.kr.mvisample.feature"
-
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-
-            all {
-                it.systemProperties["robolectric.pixelCopyRenderMode"] = "hardware"
-            }
-        }
-    }
 }
 
 dependencies {
 
-    implementation(libs.androidx.ui.test.junit4.android)
     testImplementation(projects.turbine)
 
     implementation(libs.androidx.core.ktx)
@@ -44,22 +32,4 @@ dependencies {
     implementation(libs.coil.compose)
 
     implementation(libs.kotlinx.collections.immutable)
-
-    testImplementation(libs.robolectric)
-
-    testImplementation(libs.roborazzi)
-    testImplementation(libs.roborazzi.compose)
-    testImplementation(libs.roborazzi.jUnit)
-
-    testRuntimeOnly(libs.junit.vintage.engine)
-
-    testImplementation(libs.coil.test)
-}
-
-roborazzi {
-    outputDir.set(file("src/screenshots"))
-
-    compare {
-        outputDir.set(file("build/outputs/screenshots_comparison"))
-    }
 }

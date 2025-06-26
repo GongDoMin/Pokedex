@@ -58,9 +58,8 @@ import co.kr.mvisample.feature.home.pokedex.model.PokedexAction
 import co.kr.mvisample.feature.home.pokedex.model.PokedexEvent
 import co.kr.mvisample.feature.home.pokedex.model.PokemonModel
 import co.kr.mvisample.feature.home.pokedex.presentation.PokedexViewModel
-import coil3.compose.rememberAsyncImagePainter
-import coil3.request.ImageRequest
-import coil3.request.placeholder
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import kotlinx.coroutines.flow.flowOf
 
 @Composable

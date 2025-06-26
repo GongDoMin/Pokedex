@@ -44,9 +44,8 @@ import co.kr.mvisample.feature.detail.model.DetailEvent
 import co.kr.mvisample.feature.detail.model.PokemonDetailModel
 import co.kr.mvisample.feature.detail.model.TypeModel
 import co.kr.mvisample.feature.detail.presentation.DetailViewModel
-import coil3.compose.rememberAsyncImagePainter
-import coil3.request.ImageRequest
-import coil3.request.placeholder
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 
 @Composable
 fun DetailScreen(
