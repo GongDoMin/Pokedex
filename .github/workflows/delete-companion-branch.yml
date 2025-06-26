@@ -1,0 +1,16 @@
+name: Delete screenshot companion branch
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  delete-companion-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Delete companion branches
+        uses: dawidd6/action-delete-branch@v3
+        with:
+          github_token: ${{github.token}}
+          branch: screenshot-compare-${{ github.event.pull_request.number }}
