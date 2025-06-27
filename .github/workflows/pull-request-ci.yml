@@ -111,6 +111,12 @@ jobs:
         - name: Grant execute permission for gradlew
           run: chmod +x gradlew
 
+        # 레퍼런스 이미지만 별도의 브랜치에서 가져오기
+        - name: Download reference screenshots from screenshots-main
+          run: |
+            git fetch origin screenshots-main
+            git checkout origin/screenshots-main -- feature/src/screenshots/
+
         - name: Verify Roborazzi Screenshots
           id: screenshotsverify
           continue-on-error: true
@@ -121,6 +127,12 @@ jobs:
           if: steps.screenshotsverify.outcome == 'failure'
           run: ./gradlew recordRoborazziDebug
 
+        - name: Checkout screenshots-main branch
+          if: steps.screenshotsrecord.outcome == 'success'
+          run: |
+            git fetch origin
+            git checkout -B screenshots-main origin/screenshots-main || git checkout -b screenshots-main
+
         - name: Push new screenshots if available
           uses: stefanzweifel/git-auto-commit-action@v5
           if: steps.screenshotsrecord.outcome == 'success'
@@ -128,6 +140,7 @@ jobs:
             file_pattern: '**/*.png'
             disable_globbing: false
             commit_message: "스크린샷 자동 커밋"
+            push_options: '--force'
 
         - name: Store reference images as artifacts
           uses: actions/upload-artifact@v4
