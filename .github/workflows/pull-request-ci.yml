@@ -127,16 +127,11 @@ jobs:
           if: steps.screenshotsverify.outcome == 'failure'
           run: ./gradlew recordRoborazziDebug
 
-        - name: Checkout screenshots-main branch
-          if: steps.screenshotsrecord.outcome == 'success'
-          run: |
-            git fetch origin
-            git checkout -B screenshots-main origin/screenshots-main || git checkout -b screenshots-main
-
         - name: Push new screenshots if available
           uses: stefanzweifel/git-auto-commit-action@v5
           if: steps.screenshotsrecord.outcome == 'success'
           with:
+            branch: screenshots-main
             file_pattern: '**/*.png'
             disable_globbing: false
             commit_message: "스크린샷 자동 커밋"
