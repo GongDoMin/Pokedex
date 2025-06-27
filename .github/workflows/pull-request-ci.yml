@@ -132,7 +132,7 @@ jobs:
           if: steps.screenshotsrecord.outcome == 'success'
           with:
             branch: screenshots-main
-            file_pattern: '**/*.png'
+            file_pattern: 'feature/src/screenshots/*.png'
             disable_globbing: false
             commit_message: "스크린샷 자동 커밋"
             push_options: '--force'
