@@ -44,8 +44,9 @@ import co.kr.mvisample.feature.detail.model.DetailEvent
 import co.kr.mvisample.feature.detail.model.PokemonDetailModel
 import co.kr.mvisample.feature.detail.model.TypeModel
 import co.kr.mvisample.feature.detail.presentation.DetailViewModel
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
+import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
+import coil3.request.placeholder
 
 @Composable
 fun DetailScreen(
@@ -197,14 +198,7 @@ private fun PokemonImage(
                 key = "image" + pokemonDetail.id
             ),
         painter = rememberAsyncImagePainter(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(pokemonDetail.imageUrl)
-                .apply {
-                    if (LocalInspectionMode.current) {
-                        placeholder(R.drawable.img_charizard)
-                    }
-                }
-                .build()
+            model = if (LocalInspectionMode.current) R.drawable.img_charizard else pokemonDetail.imageUrl
         ),
         contentDescription = stringResource(R.string.pokemon_detail_image),
         colorFilter = if (pokemonDetail.isDiscovered) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)

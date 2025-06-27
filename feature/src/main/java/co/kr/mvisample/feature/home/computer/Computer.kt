@@ -37,8 +37,9 @@ import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.home.computer.model.ComputerAction
 import co.kr.mvisample.feature.home.computer.model.PokemonIconModel
 import co.kr.mvisample.feature.home.computer.presentation.ComputerViewModel
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
+import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
+import coil3.request.placeholder
 
 @Composable
 fun ComputerScreen(
@@ -121,14 +122,7 @@ private fun PokemonIconGrid(
                     }
                     .animateItem(),
                 painter = rememberAsyncImagePainter(
-                    model = ImageRequest.Builder(context)
-                        .data(pokemon.iconUrl)
-                        .apply {
-                            if (LocalInspectionMode.current) {
-                                placeholder(R.drawable.img_charizard_icon)
-                            }
-                        }
-                        .build()
+                    model = if (LocalInspectionMode.current) R.drawable.img_charizard_icon else pokemon.iconUrl
                 ),
                 contentDescription = stringResource(R.string.pokemon_icon, pokemon.id, offset.y)
             )

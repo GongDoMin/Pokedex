@@ -58,8 +58,9 @@ import co.kr.mvisample.feature.home.pokedex.model.PokedexAction
 import co.kr.mvisample.feature.home.pokedex.model.PokedexEvent
 import co.kr.mvisample.feature.home.pokedex.model.PokemonModel
 import co.kr.mvisample.feature.home.pokedex.presentation.PokedexViewModel
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
+import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
+import coil3.request.placeholder
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
@@ -172,14 +173,7 @@ private fun PokemonImage(
                     key = "image" + pokemon?.id
                 ),
             painter = rememberAsyncImagePainter(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(pokemon?.imageUrl)
-                    .apply {
-                        if (LocalInspectionMode.current) {
-                            placeholder(R.drawable.img_charizard)
-                        }
-                    }
-                    .build()
+                model = if (LocalInspectionMode.current) R.drawable.img_charizard else pokemon?.imageUrl
             ),
             contentDescription = stringResource(R.string.pokemon_image),
             colorFilter = if (pokemon?.isDiscovered == true) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
