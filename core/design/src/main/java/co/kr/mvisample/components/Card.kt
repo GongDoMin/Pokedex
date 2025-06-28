@@ -1,4 +1,4 @@
-package co.kr.mvisample.common.components
+package co.kr.mvisample.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

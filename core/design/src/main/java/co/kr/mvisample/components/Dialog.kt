@@ -1,4 +1,4 @@
-package co.kr.mvisample.common.components
+package co.kr.mvisample.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,19 +19,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import co.kr.mvisample.common.base.DialogAction
 import co.kr.mvisample.design.PokemonTheme
 
 @Composable
 fun PokemonDialog(
     title: String,
     content: String,
-    onSendAction: (DialogAction.BasicDialogAction) -> Unit,
+    onDismissRequest: () -> Unit,
+    onClickPositiveButton: () -> Unit,
     modifier: Modifier = Modifier,
     dialogProperties: DialogProperties = DialogProperties(),
 ) {
     Dialog(
-        onDismissRequest = { onSendAction(DialogAction.BasicDialogAction.OnDismissDialog) },
+        onDismissRequest = onDismissRequest,
         properties = dialogProperties
     ) {
         Surface(
@@ -62,9 +62,7 @@ fun PokemonDialog(
                     horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(
-                        onClick = {
-                            onSendAction(DialogAction.BasicDialogAction.OnClickPositiveButton)
-                        }
+                        onClick = onClickPositiveButton
                     ) {
                         Text(
                             text = "확인",
@@ -85,7 +83,8 @@ fun PokemonDialogPreview() {
         PokemonDialog(
             title = "포켓몬이 선택되지 않았습니다.",
             content = "포켓몬을 선택한 후 다시 시도해주세요.",
-            onSendAction = {}
+            onDismissRequest = {},
+            onClickPositiveButton = {}
         )
     }
 }

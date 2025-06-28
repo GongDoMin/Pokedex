@@ -1,4 +1,4 @@
-package co.kr.mvisample.common.components
+package co.kr.mvisample.components
 
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi

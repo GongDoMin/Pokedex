@@ -1,10 +1,9 @@
-package co.kr.mvisample.common.components
+package co.kr.mvisample.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import co.kr.mvisample.common.base.DialogAction
 
 @Composable
 fun OverlayWithLoadingAndDialog(
@@ -12,7 +11,8 @@ fun OverlayWithLoadingAndDialog(
     isError: Boolean,
     errorTitle: String,
     errorContent: String,
-    onSendAction: (DialogAction.BasicDialogAction) -> Unit,
+    onDismissDialog: () -> Unit,
+    onClickPositiveButton: () -> Unit,
     content: @Composable () -> Unit
 ) {
     Box(
@@ -24,7 +24,8 @@ fun OverlayWithLoadingAndDialog(
         if (isError) PokemonDialog(
             title = errorTitle,
             content = errorContent,
-            onSendAction = onSendAction
+            onDismissRequest = onDismissDialog,
+            onClickPositiveButton = onClickPositiveButton
         )
 
         content()

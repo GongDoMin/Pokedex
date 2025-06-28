@@ -31,7 +31,7 @@ import androidx.compose.ui.util.fastMap
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import co.kr.mvisample.common.components.pokemonCard
+import co.kr.mvisample.components.pokemonCard
 import co.kr.mvisample.design.PokemonTheme
 import co.kr.mvisample.feature.home.HomeSections.Companion.toSection
 import co.kr.mvisample.feature.home.computer.ComputerScreen

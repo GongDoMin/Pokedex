@@ -1,4 +1,4 @@
-package co.kr.mvisample.common.components
+package co.kr.mvisample.components
 
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable

@@ -30,16 +30,15 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import co.kr.mvisample.common.components.OverlayWithLoadingAndDialog
-import co.kr.mvisample.common.components.pokemonCard
+import co.kr.mvisample.common.base.DialogAction
+import co.kr.mvisample.components.OverlayWithLoadingAndDialog
+import co.kr.mvisample.components.pokemonCard
 import co.kr.mvisample.design.PokemonTheme
 import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.home.computer.model.ComputerAction
 import co.kr.mvisample.feature.home.computer.model.PokemonIconModel
 import co.kr.mvisample.feature.home.computer.presentation.ComputerViewModel
 import coil3.compose.rememberAsyncImagePainter
-import coil3.request.ImageRequest
-import coil3.request.placeholder
 
 @Composable
 fun ComputerScreen(
@@ -52,7 +51,8 @@ fun ComputerScreen(
         isError = uiState.error.isError,
         errorTitle = uiState.error.errorTitle,
         errorContent = uiState.error.errorContent,
-        onSendAction = computerViewModel::handleBasicDialogAction
+        onDismissDialog = { computerViewModel.handleBasicDialogAction(DialogAction.BasicDialogAction.OnDismissDialog) },
+        onClickPositiveButton = { computerViewModel.handleBasicDialogAction(DialogAction.BasicDialogAction.OnClickPositiveButton) }
     ) {
         PokemonIconGrid(
             pokemonIcons = uiState.content.pokemonIcons,

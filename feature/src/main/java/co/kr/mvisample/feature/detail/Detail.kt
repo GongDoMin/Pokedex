@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.SubcomposeLayout
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -32,10 +31,11 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import co.kr.mvisample.common.components.OverlayWithLoadingAndDialog
-import co.kr.mvisample.common.components.pokemonCard
-import co.kr.mvisample.common.components.sharedElement
+import co.kr.mvisample.common.base.DialogAction
 import co.kr.mvisample.common.utils.LaunchedEventEffect
+import co.kr.mvisample.components.OverlayWithLoadingAndDialog
+import co.kr.mvisample.components.pokemonCard
+import co.kr.mvisample.components.sharedElement
 import co.kr.mvisample.design.PokemonTheme
 import co.kr.mvisample.design.PreviewPokemonTheme
 import co.kr.mvisample.feature.R
@@ -45,8 +45,6 @@ import co.kr.mvisample.feature.detail.model.PokemonDetailModel
 import co.kr.mvisample.feature.detail.model.TypeModel
 import co.kr.mvisample.feature.detail.presentation.DetailViewModel
 import coil3.compose.rememberAsyncImagePainter
-import coil3.request.ImageRequest
-import coil3.request.placeholder
 
 @Composable
 fun DetailScreen(
@@ -69,7 +67,8 @@ fun DetailScreen(
         isError = uiState.error.isError,
         errorTitle = uiState.error.errorTitle,
         errorContent = uiState.error.errorContent,
-        onSendAction = viewModel::handleBasicDialogAction
+        onDismissDialog = { viewModel.handleBasicDialogAction(DialogAction.BasicDialogAction.OnDismissDialog) },
+        onClickPositiveButton = { viewModel.handleBasicDialogAction(DialogAction.BasicDialogAction.OnClickPositiveButton) }
     ) {
         Column(
             modifier = Modifier

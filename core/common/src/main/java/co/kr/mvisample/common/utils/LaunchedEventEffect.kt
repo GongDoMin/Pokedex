@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 
 @Composable
-fun <Event>LaunchedEventEffect(
+fun <Event> LaunchedEventEffect(
     event: Flow<Event>,
     collector: FlowCollector<Event>,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,

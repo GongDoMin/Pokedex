@@ -45,12 +45,13 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import co.kr.mvisample.common.components.OverlayWithLoadingAndDialog
-import co.kr.mvisample.common.components.WeightSpacer
-import co.kr.mvisample.common.components.WidthSpacer
-import co.kr.mvisample.common.components.pokemonCard
-import co.kr.mvisample.common.components.sharedElement
+import co.kr.mvisample.common.base.DialogAction
 import co.kr.mvisample.common.utils.LaunchedEventEffect
+import co.kr.mvisample.components.OverlayWithLoadingAndDialog
+import co.kr.mvisample.components.WeightSpacer
+import co.kr.mvisample.components.WidthSpacer
+import co.kr.mvisample.components.pokemonCard
+import co.kr.mvisample.components.sharedElement
 import co.kr.mvisample.design.PokemonTheme
 import co.kr.mvisample.design.PreviewPokemonTheme
 import co.kr.mvisample.feature.R
@@ -59,8 +60,6 @@ import co.kr.mvisample.feature.home.pokedex.model.PokedexEvent
 import co.kr.mvisample.feature.home.pokedex.model.PokemonModel
 import co.kr.mvisample.feature.home.pokedex.presentation.PokedexViewModel
 import coil3.compose.rememberAsyncImagePainter
-import coil3.request.ImageRequest
-import coil3.request.placeholder
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
@@ -86,7 +85,8 @@ fun PokedexScreen(
         isError = uiState.error.isError,
         errorTitle = uiState.error.errorTitle,
         errorContent = uiState.error.errorContent,
-        onSendAction = pokedexViewModel::handleBasicDialogAction
+        onDismissDialog = { pokedexViewModel.handleBasicDialogAction(DialogAction.BasicDialogAction.OnDismissDialog) },
+        onClickPositiveButton = { pokedexViewModel.handleBasicDialogAction(DialogAction.BasicDialogAction.OnClickPositiveButton) }
     ) {
         PokedexContent(
             modifier = modifier,
