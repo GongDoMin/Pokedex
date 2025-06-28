@@ -3,5 +3,10 @@
     <string name="pokemon_name_list">pokemonNameList</string>
     <string name="pokemon_image">pokemonImage</string>
     <string name="pokemon_detail_image">pokemonDetailImage</string>
-    <string name="pokemon_icon">pokemonIcon_%d_%d</string>
+    <string name="pokemon_icon">pokemonIcon_%s</string>
+    <string name="pokemon_status">isDiscovered is %s and isCaught is %s</string>
+    <string name="release_pokemon">놓아주기</string>
+    <string name="catch_pokemon">포획하기</string>
+    <string name="discover_pokemon">발견하기</string>
+    <string name="view_detail_pokemon">상세보기</string>
 </resources>

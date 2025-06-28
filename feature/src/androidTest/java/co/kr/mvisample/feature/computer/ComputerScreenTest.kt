@@ -5,6 +5,7 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -13,6 +14,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import co.kr.mvisample.common.utils.OffsetY
 import co.kr.mvisample.design.PreviewPokemonTheme
 import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.home.computer.ComputerScreen
@@ -51,11 +53,11 @@ class ComputerScreenTest {
     @Test
     fun 포켓몬아이콘이_초기화면에_보인다() = runTest {
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(6, dpToInt(0.dp))) },
+            node = { onNodeWithContentDescription(getPokemonIcon("charizard")) },
             assert = { assertIsDisplayed() }
         )
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(9, dpToInt(0.dp))) },
+            node = { onNodeWithContentDescription(getPokemonIcon("blastoise")) },
             assert = { assertIsDisplayed() }
         )
     }
@@ -63,44 +65,45 @@ class ComputerScreenTest {
     @Test
     fun 리자몽을_누른후_offset이_변경되는지_확인한다() = runTest {
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(6, dpToInt(0.dp))) },
+            node = { onNodeWithContentDescription(getPokemonIcon("charizard")) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(6, dpToInt((-8).dp))) },
-            assert = { assertIsDisplayed() }
+            node = { onNodeWithContentDescription(getPokemonIcon("charizard")) },
+            assert = { assert(SemanticsMatcher.expectValue(OffsetY, dpToInt(8.dp.times(-1)))) }
         )
     }
 
     @Test
     fun 리자몽을_누른후_다시_리자몽을_누른다() = runTest {
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(6, dpToInt(0.dp))) },
+            node = { onNodeWithContentDescription(getPokemonIcon("charizard")) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
-        composeTestRule.onNode(hasPrefixContentDescription("pokemonIcon_6_"))
+        composeTestRule.onNodeWithContentDescription(getPokemonIcon("charizard"))
             .performClick()
 
+
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(6, dpToInt(0.dp))) },
-            assert = { assertIsDisplayed() }
+            node = { onNodeWithContentDescription(getPokemonIcon("charizard")) },
+            assert = { assert(SemanticsMatcher.expectValue(OffsetY, dpToInt(0.dp))) }
         )
     }
 
     @Test
     fun 리자몽을_누른후_거북왕을_누른다() = runTest {
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(6, dpToInt(0.dp))) },
+            node = { onNodeWithContentDescription(getPokemonIcon("charizard")) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(9, dpToInt(0.dp))) },
+            node = { onNodeWithContentDescription(getPokemonIcon("blastoise")) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
@@ -108,8 +111,8 @@ class ComputerScreenTest {
         composeTestRule.waitUntil {
             val pokemonDescriptions = getPokemonDescriptions()
             pokemonDescriptions.size == 2 &&
-                pokemonDescriptions[0] == getPokemonIcon(9, dpToInt(0.dp)) &&
-                pokemonDescriptions[1] == getPokemonIcon(6, dpToInt(0.dp))
+                pokemonDescriptions[0] == getPokemonIcon("blastoise") &&
+                pokemonDescriptions[1] == getPokemonIcon("charizard")
         }
     }
 
@@ -154,5 +157,5 @@ class ComputerScreenTest {
         }
     }
 
-    private fun getPokemonIcon(id: Int, offsetY: Int) = activity.getString(R.string.pokemon_icon, id, offsetY)
+    private fun getPokemonIcon(name: String) = activity.getString(R.string.pokemon_icon, name)
 }

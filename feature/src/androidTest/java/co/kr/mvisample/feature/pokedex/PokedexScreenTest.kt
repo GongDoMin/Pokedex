@@ -75,12 +75,12 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { filter(hasPrefixContentDescription("isDiscover is false")).onFirst().performScrollTo().assertIsDisplayed() },
+            assert = { filter(hasPrefixContentDescription("isDiscovered is false")).onFirst().performScrollTo().assertIsDisplayed() },
             action = { performClick() }
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithText("발견하기") },
+            node = { onNodeWithText(getString(R.string.discover_pokemon)) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
@@ -90,7 +90,7 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { assertAny(hasPrefixContentDescription("isDiscover is true")) },
+            assert = { assertAny(hasPrefixContentDescription("isDiscovered is true")) },
         )
     }
 
@@ -101,18 +101,18 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { filter(hasPrefixContentDescription("isDiscover is false")).onFirst().performScrollTo().assertIsDisplayed() },
+            assert = { filter(hasPrefixContentDescription("isDiscovered is false")).onFirst().performScrollTo().assertIsDisplayed() },
             action = { performClick() }
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithText("발견하기") },
+            node = { onNodeWithText(getString(R.string.discover_pokemon)) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithText("포획하기") },
+            node = { onNodeWithText(getString(R.string.catch_pokemon)) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
@@ -122,7 +122,7 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { assertAny(hasContentDescription("isDiscover is true and isCaught is true")) },
+            assert = { assertAny(hasContentDescription("isDiscovered is true and isCaught is true")) },
         )
     }
 
@@ -133,24 +133,24 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { filter(hasPrefixContentDescription("isDiscover is false")).onFirst().performScrollTo().assertIsDisplayed() },
+            assert = { filter(hasPrefixContentDescription("isDiscovered is false")).onFirst().performScrollTo().assertIsDisplayed() },
             action = { performClick() }
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithText("발견하기") },
+            node = { onNodeWithText(getString(R.string.discover_pokemon)) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithText("포획하기") },
+            node = { onNodeWithText(getString(R.string.catch_pokemon)) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithText("놓아주기") },
+            node = { onNodeWithText(getString(R.string.release_pokemon)) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
@@ -175,7 +175,7 @@ class PokedexScreenTest {
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithText("발견하기") },
+            node = { onNodeWithText(getString(R.string.discover_pokemon)) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
@@ -186,4 +186,6 @@ class PokedexScreenTest {
             action = { performClick() }
         )
     }
+
+    private fun getString(resId: Int) = activity.getString(resId)
 }

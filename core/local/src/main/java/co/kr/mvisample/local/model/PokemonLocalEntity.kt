@@ -17,6 +17,7 @@ import androidx.room.PrimaryKey
 )
 data class PokemonLocalEntity(
     @PrimaryKey val id: Int = 0,
+    val name: String = "",
     val iconUrl: String = "",
     val isCaught: Boolean = false,
     val order: Int? = null

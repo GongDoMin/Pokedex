@@ -94,6 +94,7 @@ class PokemonRepositoryImpl @Inject constructor(
             pokemonLocalDao.markAsDiscovered(
                 PokemonLocalEntity(
                     id = id,
+                    name = pokemonDao.getPokemon(id)?.name ?: "",
                     iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$id.png",
                     isCaught = false,
                     order = null

@@ -44,6 +44,7 @@ class FakePokemonRepository @Inject constructor(
             pokemonLocalDao.markAsDiscovered(
                 PokemonLocalEntity(
                     id = 6,
+                    name = "charizard",
                     iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
                     isCaught = true,
                     order = 0
@@ -52,6 +53,7 @@ class FakePokemonRepository @Inject constructor(
             pokemonLocalDao.markAsDiscovered(
                 PokemonLocalEntity(
                     id = 9,
+                    name = "blastoise",
                     iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/9.png",
                     isCaught = true,
                     order = 1
@@ -125,6 +127,7 @@ class FakePokemonRepository @Inject constructor(
             pokemonLocalDao.markAsDiscovered(
                 PokemonLocalEntity(
                     id = id,
+                    name = pokemonDao.getPokemon(id)?.name ?: "",
                     iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/$id.png",
                     isCaught = false,
                     order = null

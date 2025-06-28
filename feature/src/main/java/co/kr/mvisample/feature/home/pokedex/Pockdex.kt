@@ -209,23 +209,23 @@ private fun PokedexActionButtons(
         if (isDiscovered) {
             if (isCaught) {
                 PokedexActionButton(
-                    text = "놓아주기",
+                    text = stringResource(R.string.release_pokemon),
                     onClick = onReleaseClick
                 )
             } else {
                 PokedexActionButton(
-                    text = "포획하기",
+                    text = stringResource(R.string.catch_pokemon),
                     onClick = onCatchClick
                 )
             }
         } else {
             PokedexActionButton(
-                text = "발견하기",
+                text = stringResource(R.string.discover_pokemon),
                 onClick = onDiscoverClick
             )
         }
         PokedexActionButton(
-            text = "상세보기",
+            text = stringResource(R.string.view_detail_pokemon),
             onClick = onDetailClick
         )
     }
@@ -257,6 +257,8 @@ private fun PokemonListItem(
     isSelected: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -265,7 +267,7 @@ private fun PokemonListItem(
                 color = if (isSelected) Color.White else Color.Transparent
             )
             .clickable { onClickPokemon(pokemon) }
-            .semantics { contentDescription = "isDiscover is ${pokemon.isDiscovered} and isCaught is ${pokemon.isCaught}" },
+            .semantics { contentDescription = context.getString(R.string.pokemon_status, pokemon.isDiscovered.toString(), pokemon.isCaught.toString()) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (pokemon.isDiscovered) {
