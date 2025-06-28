@@ -26,12 +26,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.kr.mvisample.common.base.DialogAction
+import co.kr.mvisample.common.utils.offsetY
 import co.kr.mvisample.components.OverlayWithLoadingAndDialog
 import co.kr.mvisample.components.pokemonCard
 import co.kr.mvisample.design.PokemonTheme
@@ -122,7 +124,10 @@ private fun PokemonIconGrid(
                         this.scaleX = scaleX
                         this.scaleY = scaleY
                     }
-                    .animateItem(),
+                    .animateItem()
+                    .semantics {
+                        offsetY = offset.y
+                    },
                 painter = if (LocalInspectionMode.current) {
                     painterResource(R.drawable.img_charizard_icon)
                 } else {
@@ -132,7 +137,7 @@ private fun PokemonIconGrid(
                             .build()
                     )
                 },
-                contentDescription = stringResource(R.string.pokemon_icon, pokemon.id, offset.y)
+                contentDescription = stringResource(R.string.pokemon_icon, pokemon.id)
             )
         }
     }

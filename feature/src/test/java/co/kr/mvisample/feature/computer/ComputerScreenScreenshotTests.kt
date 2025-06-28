@@ -41,7 +41,7 @@ class ComputerScreenScreenshotTests {
         }
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(composeTestRule.activity.getString(R.string.pokemon_icon, 6, 0)) },
+            node = { onNodeWithContentDescription(composeTestRule.activity.getString(R.string.pokemon_icon, 6)) },
             assert = { assertIsDisplayed() },
         )
 
