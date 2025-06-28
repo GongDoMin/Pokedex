@@ -24,8 +24,9 @@ import co.kr.mvisample.design.LocalNavAnimatedVisibilityScope
 import co.kr.mvisample.design.LocalSharedTransitionScope
 import co.kr.mvisample.design.PokemonTheme
 import co.kr.mvisample.feature.detail.DetailScreen
-import co.kr.mvisample.feature.home.HomeContainer
-import co.kr.mvisample.navigation.PokemonRoutes
+import co.kr.mvisample.feature.detail.navigation.PokemonDetail
+import co.kr.mvisample.navigation.Home
+import co.kr.mvisample.navigation.HomeContainer
 import co.kr.mvisample.navigation.rememberPokedexNavigator
 import kotlin.reflect.KType
 
@@ -40,18 +41,16 @@ fun PokemonApp() {
             ) {
                 NavHost(
                     navController = navController.navController,
-                    startDestination = PokemonRoutes.Home
+                    startDestination = Home
                 ) {
-                    composableWithBasicTransition<PokemonRoutes.Home> {
+                    composableWithBasicTransition<Home> {
                         HomeContainer(
-                            onNavigateToPokemonDetail = { id, name, isDiscovered ->
-                                navController.navigatePokemonDetail(id, name, isDiscovered)
-                            }
+                            onNavigateToPokemonDetail = navController::navigatePokemonDetail
                         )
                     }
-                    composableWithBasicTransition<PokemonRoutes.PokemonDetail> {
+                    composableWithBasicTransition<PokemonDetail> {
                         DetailScreen(
-                            onNavigateToBack = { navController.popBackStack() }
+                            onNavigateToBack = navController::popBackStack
                         )
                     }
                 }

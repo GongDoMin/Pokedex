@@ -20,7 +20,6 @@ dependencies {
 
     implementation(projects.feature)
     implementation(projects.core.design)
-    implementation(projects.core.navigation)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

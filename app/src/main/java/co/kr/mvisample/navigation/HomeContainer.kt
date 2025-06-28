@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import co.kr.mvisample.components.HomeRoutes
 import co.kr.mvisample.components.HomeSections
 import co.kr.mvisample.components.HomeSections.Companion.toSection
 import co.kr.mvisample.components.PokemonBottomBar
