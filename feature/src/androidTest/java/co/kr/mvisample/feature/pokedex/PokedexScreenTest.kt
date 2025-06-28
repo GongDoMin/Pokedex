@@ -80,7 +80,7 @@ class PokedexScreenTest {
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithText("발견하기") },
+            node = { onNodeWithText(getString(R.string.discover_pokemon)) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
@@ -106,13 +106,13 @@ class PokedexScreenTest {
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithText("발견하기") },
+            node = { onNodeWithText(getString(R.string.discover_pokemon)) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithText("포획하기") },
+            node = { onNodeWithText(getString(R.string.catch_pokemon)) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
@@ -138,19 +138,19 @@ class PokedexScreenTest {
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithText("발견하기") },
+            node = { onNodeWithText(getString(R.string.discover_pokemon)) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithText("포획하기") },
+            node = { onNodeWithText(getString(R.string.catch_pokemon)) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithText("놓아주기") },
+            node = { onNodeWithText(getString(R.string.release_pokemon)) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
@@ -175,7 +175,7 @@ class PokedexScreenTest {
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithText("발견하기") },
+            node = { onNodeWithText(getString(R.string.discover_pokemon)) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
@@ -186,4 +186,6 @@ class PokedexScreenTest {
             action = { performClick() }
         )
     }
+
+    private fun getString(resId: Int) = activity.getString(resId)
 }

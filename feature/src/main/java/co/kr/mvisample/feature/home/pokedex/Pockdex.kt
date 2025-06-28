@@ -209,23 +209,23 @@ private fun PokedexActionButtons(
         if (isDiscovered) {
             if (isCaught) {
                 PokedexActionButton(
-                    text = "놓아주기",
+                    text = stringResource(R.string.release_pokemon),
                     onClick = onReleaseClick
                 )
             } else {
                 PokedexActionButton(
-                    text = "포획하기",
+                    text = stringResource(R.string.discover_pokemon),
                     onClick = onCatchClick
                 )
             }
         } else {
             PokedexActionButton(
-                text = "발견하기",
+                text = stringResource(R.string.discover_pokemon),
                 onClick = onDiscoverClick
             )
         }
         PokedexActionButton(
-            text = "상세보기",
+            text = stringResource(R.string.view_detail_pokemon),
             onClick = onDetailClick
         )
     }
