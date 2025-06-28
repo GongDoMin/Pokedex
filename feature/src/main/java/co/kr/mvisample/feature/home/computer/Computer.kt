@@ -73,7 +73,6 @@ private fun PokemonIconGrid(
     onClickPokemonIcon: (PokemonIconModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
     val density = LocalDensity.current
 
     val infinityTransition = rememberInfiniteTransition()
@@ -137,7 +136,7 @@ private fun PokemonIconGrid(
                             .build()
                     )
                 },
-                contentDescription = stringResource(R.string.pokemon_icon, pokemon.id)
+                contentDescription = stringResource(R.string.pokemon_icon, pokemon.name)
             )
         }
     }

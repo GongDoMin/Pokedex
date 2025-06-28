@@ -72,6 +72,7 @@ class PokemonRepositoryTest : StringSpec() {
 
                 pokemon shouldBe PokemonLocalEntity(
                     id = 6,
+                    name = "charizard",
                     iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
                     isCaught = false,
                     order = null
@@ -87,6 +88,7 @@ class PokemonRepositoryTest : StringSpec() {
 
                 pokemon shouldBe PokemonLocalEntity(
                     id = 6,
+                    name = "charizard",
                     iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
                     isCaught = true,
                     order = 1
@@ -102,6 +104,7 @@ class PokemonRepositoryTest : StringSpec() {
 
                 pokemon shouldBe PokemonLocalEntity(
                     id = 6,
+                    name = "charizard",
                     iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
                     isCaught = false,
                     order = null
@@ -143,12 +146,14 @@ class PokemonRepositoryTest : StringSpec() {
 
                 charizard shouldBe PokemonLocalEntity(
                     id = 6,
+                    name = "charizard",
                     iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/6.png",
                     isCaught = true,
                     order = 2
                 )
                 blastoise shouldBe PokemonLocalEntity(
                     id = 9,
+                    name = "charizard",
                     iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/9.png",
                     isCaught = true,
                     order = 1

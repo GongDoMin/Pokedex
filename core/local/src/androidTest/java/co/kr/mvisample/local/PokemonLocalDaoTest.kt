@@ -122,7 +122,7 @@ class PokemonLocalDaoTest : PokemonDatabaseTest() {
     @Test
     fun 포켓몬을_발견하면_DB에_저장된다() = runTest {
         // given
-        val expected = PokemonLocalEntity(id = 1, iconUrl = "", isCaught = false, order = null)
+        val expected = PokemonLocalEntity(id = 1, name = "charizard", iconUrl = "", isCaught = false, order = null)
 
         // when
         pokemonLocalDao.markAsDiscovered(expected)
@@ -152,12 +152,12 @@ class PokemonLocalDaoTest : PokemonDatabaseTest() {
 
     companion object {
         private val Pokemons = listOf(
-            PokemonLocalEntity(1, "", true, 1),
-            PokemonLocalEntity(2, "", false, null),
-            PokemonLocalEntity(3, "", true, 2),
-            PokemonLocalEntity(4, "", true, 3),
-            PokemonLocalEntity(5, "", false, null),
-            PokemonLocalEntity(6, "", true, 4)
+            PokemonLocalEntity(1, name = "bulbasaur", "", true, 1),
+            PokemonLocalEntity(2, name = "ivysaur", "", false, null),
+            PokemonLocalEntity(3, name = "venusaur", "", true, 2),
+            PokemonLocalEntity(4, name = "charmander", "", true, 3),
+            PokemonLocalEntity(5, name = "charmeleon", "", false, null),
+            PokemonLocalEntity(6, name = "charizard", "", true, 4)
         )
     }
 }

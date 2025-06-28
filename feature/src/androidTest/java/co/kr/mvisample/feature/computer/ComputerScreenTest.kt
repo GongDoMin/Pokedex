@@ -53,11 +53,11 @@ class ComputerScreenTest {
     @Test
     fun 포켓몬아이콘이_초기화면에_보인다() = runTest {
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(6)) },
+            node = { onNodeWithContentDescription(getPokemonIcon("charizard")) },
             assert = { assertIsDisplayed() }
         )
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(9)) },
+            node = { onNodeWithContentDescription(getPokemonIcon("blastoise")) },
             assert = { assertIsDisplayed() }
         )
     }
@@ -65,31 +65,31 @@ class ComputerScreenTest {
     @Test
     fun 리자몽을_누른후_offset이_변경되는지_확인한다() = runTest {
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(6)) },
+            node = { onNodeWithContentDescription(getPokemonIcon("charizard")) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(6)) },
-            assert = { assert(SemanticsMatcher.expectValue(OffsetY, dpToInt(8.dp))) }
+            node = { onNodeWithContentDescription(getPokemonIcon("charizard")) },
+            assert = { assert(SemanticsMatcher.expectValue(OffsetY, dpToInt(8.dp.times(-1)))) }
         )
     }
 
     @Test
     fun 리자몽을_누른후_다시_리자몽을_누른다() = runTest {
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(6)) },
+            node = { onNodeWithContentDescription(getPokemonIcon("charizard")) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
-        composeTestRule.onNodeWithContentDescription(getPokemonIcon(6))
+        composeTestRule.onNodeWithContentDescription(getPokemonIcon("charizard"))
             .performClick()
 
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(6)) },
+            node = { onNodeWithContentDescription(getPokemonIcon("charizard")) },
             assert = { assert(SemanticsMatcher.expectValue(OffsetY, dpToInt(0.dp))) }
         )
     }
@@ -97,13 +97,13 @@ class ComputerScreenTest {
     @Test
     fun 리자몽을_누른후_거북왕을_누른다() = runTest {
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(6)) },
+            node = { onNodeWithContentDescription(getPokemonIcon("charizard")) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
         composeTestRule.waitUntilAssert(
-            node = { onNodeWithContentDescription(getPokemonIcon(9)) },
+            node = { onNodeWithContentDescription(getPokemonIcon("blastoise")) },
             assert = { assertIsDisplayed() },
             action = { performClick() }
         )
@@ -111,8 +111,8 @@ class ComputerScreenTest {
         composeTestRule.waitUntil {
             val pokemonDescriptions = getPokemonDescriptions()
             pokemonDescriptions.size == 2 &&
-                pokemonDescriptions[0] == getPokemonIcon(9) &&
-                pokemonDescriptions[1] == getPokemonIcon(6)
+                pokemonDescriptions[0] == getPokemonIcon("blastoise") &&
+                pokemonDescriptions[1] == getPokemonIcon("charizard")
         }
     }
 
@@ -157,5 +157,5 @@ class ComputerScreenTest {
         }
     }
 
-    private fun getPokemonIcon(id: Int) = activity.getString(R.string.pokemon_icon, id)
+    private fun getPokemonIcon(name: String) = activity.getString(R.string.pokemon_icon, name)
 }
