@@ -214,7 +214,7 @@ private fun PokedexActionButtons(
                 )
             } else {
                 PokedexActionButton(
-                    text = stringResource(R.string.discover_pokemon),
+                    text = stringResource(R.string.catch_pokemon),
                     onClick = onCatchClick
                 )
             }
