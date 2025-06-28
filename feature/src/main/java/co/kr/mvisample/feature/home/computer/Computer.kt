@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -39,6 +40,7 @@ import co.kr.mvisample.feature.home.computer.model.ComputerAction
 import co.kr.mvisample.feature.home.computer.model.PokemonIconModel
 import co.kr.mvisample.feature.home.computer.presentation.ComputerViewModel
 import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
 
 @Composable
 fun ComputerScreen(
@@ -121,9 +123,15 @@ private fun PokemonIconGrid(
                         this.scaleY = scaleY
                     }
                     .animateItem(),
-                painter = rememberAsyncImagePainter(
-                    model = if (LocalInspectionMode.current) R.drawable.img_charizard_icon else pokemon.iconUrl
-                ),
+                painter = if (LocalInspectionMode.current) {
+                    painterResource(R.drawable.img_charizard_icon)
+                } else {
+                    rememberAsyncImagePainter(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(pokemon.iconUrl)
+                            .build()
+                    )
+                },
                 contentDescription = stringResource(R.string.pokemon_icon, pokemon.id, offset.y)
             )
         }

@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -60,6 +61,7 @@ import co.kr.mvisample.feature.home.pokedex.model.PokedexEvent
 import co.kr.mvisample.feature.home.pokedex.model.PokemonModel
 import co.kr.mvisample.feature.home.pokedex.presentation.PokedexViewModel
 import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
@@ -172,9 +174,15 @@ private fun PokemonImage(
                 .sharedElement(
                     key = "image" + pokemon?.id
                 ),
-            painter = rememberAsyncImagePainter(
-                model = if (LocalInspectionMode.current) R.drawable.img_charizard else pokemon?.imageUrl
-            ),
+            painter = if (LocalInspectionMode.current) {
+                painterResource(R.drawable.img_charizard)
+            } else {
+                rememberAsyncImagePainter(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(pokemon?.imageUrl)
+                        .build()
+                )
+            },
             contentDescription = stringResource(R.string.pokemon_image),
             colorFilter = if (pokemon?.isDiscovered == true) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
         )

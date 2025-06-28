@@ -22,5 +22,6 @@ dependencies {
     implementation(libs.androidx.ui.test.junit4.android)
     
     implementation(libs.coil.compose)
+    implementation(libs.coil.network)
     implementation(libs.coil.test)
 }

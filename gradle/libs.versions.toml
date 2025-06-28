@@ -94,6 +94,7 @@ androidx-paging-compose = { module = "androidx.paging:paging-compose", version.r
 
 # coil
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 coil-test = { module = "io.coil-kt.coil3:coil-test", version.ref = "coil" }
 
 # retrofit and okhttp

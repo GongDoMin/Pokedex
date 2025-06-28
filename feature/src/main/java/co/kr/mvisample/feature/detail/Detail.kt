@@ -23,7 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.SubcomposeLayout
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,6 +47,7 @@ import co.kr.mvisample.feature.detail.model.PokemonDetailModel
 import co.kr.mvisample.feature.detail.model.TypeModel
 import co.kr.mvisample.feature.detail.presentation.DetailViewModel
 import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
 
 @Composable
 fun DetailScreen(
@@ -196,9 +199,15 @@ private fun PokemonImage(
             .sharedElement(
                 key = "image" + pokemonDetail.id
             ),
-        painter = rememberAsyncImagePainter(
-            model = if (LocalInspectionMode.current) R.drawable.img_charizard else pokemonDetail.imageUrl
-        ),
+        painter = if (LocalInspectionMode.current) {
+            painterResource(R.drawable.img_charizard)
+        } else {
+            rememberAsyncImagePainter(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(pokemonDetail.imageUrl)
+                    .build()
+            )
+        },
         contentDescription = stringResource(R.string.pokemon_detail_image),
         colorFilter = if (pokemonDetail.isDiscovered) null else ColorFilter.tint(PokemonTheme.colors.backgroundBlack)
     )
