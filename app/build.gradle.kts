@@ -42,4 +42,6 @@ dependencies {
     // 라이브러리 참고를 위해 삭제하지 않음
     // turbine
     testImplementation(libs.turbine)
+
+    implementation(libs.kotlinx.collections.immutable)
 }
