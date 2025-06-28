@@ -75,7 +75,7 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { filter(hasPrefixContentDescription("isDiscover is false")).onFirst().performScrollTo().assertIsDisplayed() },
+            assert = { filter(hasPrefixContentDescription("isDiscovered is false")).onFirst().performScrollTo().assertIsDisplayed() },
             action = { performClick() }
         )
 
@@ -90,7 +90,7 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { assertAny(hasPrefixContentDescription("isDiscover is true")) },
+            assert = { assertAny(hasPrefixContentDescription("isDiscovered is true")) },
         )
     }
 
@@ -101,7 +101,7 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { filter(hasPrefixContentDescription("isDiscover is false")).onFirst().performScrollTo().assertIsDisplayed() },
+            assert = { filter(hasPrefixContentDescription("isDiscovered is false")).onFirst().performScrollTo().assertIsDisplayed() },
             action = { performClick() }
         )
 
@@ -122,7 +122,7 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { assertAny(hasContentDescription("isDiscover is true and isCaught is true")) },
+            assert = { assertAny(hasContentDescription("isDiscovered is true and isCaught is true")) },
         )
     }
 
@@ -133,7 +133,7 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { filter(hasPrefixContentDescription("isDiscover is false")).onFirst().performScrollTo().assertIsDisplayed() },
+            assert = { filter(hasPrefixContentDescription("isDiscovered is false")).onFirst().performScrollTo().assertIsDisplayed() },
             action = { performClick() }
         )
 

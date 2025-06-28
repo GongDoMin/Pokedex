@@ -4,4 +4,5 @@
     <string name="pokemon_image">pokemonImage</string>
     <string name="pokemon_detail_image">pokemonDetailImage</string>
     <string name="pokemon_icon">pokemonIcon_%s</string>
+    <string name="pokemon_status">isDiscovered is %s and isCaught is %s</string>
 </resources>
