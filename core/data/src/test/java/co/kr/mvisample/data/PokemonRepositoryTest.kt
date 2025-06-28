@@ -153,7 +153,7 @@ class PokemonRepositoryTest : StringSpec() {
                 )
                 blastoise shouldBe PokemonLocalEntity(
                     id = 9,
-                    name = "charizard",
+                    name = "blastoise",
                     iconUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-vii/icons/9.png",
                     isCaught = true,
                     order = 1
