@@ -8,7 +8,7 @@ import co.kr.mvisample.data.repository.PokemonRepository
 import co.kr.mvisample.design.PreviewPokemonTheme
 import co.kr.mvisample.feature.detail.presentation.DetailViewModel
 import co.kr.mvisample.testing.HiltTestActivity
-import co.kr.mvisample.testing.utils.captureMultiDevice
+import co.kr.mvisample.testing.captureMultiDevice
 import co.kr.mvisample.testing.utils.waitUntilAssert
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

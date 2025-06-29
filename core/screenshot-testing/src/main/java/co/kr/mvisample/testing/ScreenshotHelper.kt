@@ -1,4 +1,4 @@
-package co.kr.mvisample.testing.utils
+package co.kr.mvisample.testing
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

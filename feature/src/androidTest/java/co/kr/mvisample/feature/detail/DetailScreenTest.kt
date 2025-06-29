@@ -92,7 +92,7 @@ class DetailScreenTest {
 
         composeTestRule.waitUntilAssert(
             node = { onNodeWithText("fire\nflying") },
-            assert = { performScrollTo().assertIsDisplayed() }
+            assert = { assertIsDisplayed() }
         )
     }
 

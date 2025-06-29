@@ -3,7 +3,6 @@ plugins {
     id("mvisample.android.hilt")
     id("mvisample.android.serialization")
     id("maisample.android.room")
-    id("mvisample.android.library.compose")
 }
 
 android {
@@ -25,10 +24,4 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network)
     implementation(libs.coil.test)
-
-    implementation(libs.roborazzi)
-    implementation(libs.roborazzi.compose)
-    implementation(libs.roborazzi.jUnit)
-
-    implementation(libs.robolectric)
 }

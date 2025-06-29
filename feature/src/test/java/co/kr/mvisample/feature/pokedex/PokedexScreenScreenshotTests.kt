@@ -9,7 +9,7 @@ import co.kr.mvisample.design.PreviewPokemonTheme
 import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.home.pokedex.PokedexScreen
 import co.kr.mvisample.testing.HiltTestActivity
-import co.kr.mvisample.testing.utils.captureMultiDevice
+import co.kr.mvisample.testing.captureMultiDevice
 import co.kr.mvisample.testing.utils.waitUntilAssert
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
