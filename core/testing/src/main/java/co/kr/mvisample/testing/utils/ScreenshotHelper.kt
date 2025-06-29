@@ -18,7 +18,7 @@ val DefaultRoborazziOptions =
 
 enum class DefaultTestDevices(val description: String, val spec: String) {
     PIXEL4A("pixel4a", "spec:shape=Normal,width=393,height=841,unit=dp,dpi=440"),
-    ZFLIP3("z flip3", "spec:shape=Normal,width=406,height=991,unit=dp,dpi=420")
+    ZFLIP3("zFlip3", "spec:shape=Normal,width=406,height=991,unit=dp,dpi=420")
 }
 
 fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.captureMultiDevice(
