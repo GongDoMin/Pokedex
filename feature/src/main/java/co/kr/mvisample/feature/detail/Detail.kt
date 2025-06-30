@@ -75,7 +75,8 @@ fun DetailScreen(
     ) {
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
+                .background(PokemonTheme.colors.backgroundRed)
         ) {
             DetailHeader(
                 pokemonDetail = uiState.content.pokemonDetail,
@@ -99,7 +100,6 @@ fun DetailHeader(
     SubcomposeLayout(
         modifier = modifier
             .fillMaxWidth()
-            .background(PokemonTheme.colors.backgroundRed)
             .padding(16.dp)
     ) { constraints ->
         val textPlaceable = subcompose("text") {
@@ -144,7 +144,7 @@ fun DetailContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(PokemonTheme.colors.backgroundRed)
+            .verticalScroll(rememberScrollState())
             .padding(16.dp)
             .pokemonCard()
             .padding(8.dp),
