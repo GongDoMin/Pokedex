@@ -11,16 +11,12 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
 import co.kr.mvisample.design.PreviewPokemonTheme
 import co.kr.mvisample.feature.R
 import co.kr.mvisample.feature.home.pokedex.PokedexScreen
 import co.kr.mvisample.testing.HiltTestActivity
-import co.kr.mvisample.testing.utils.hasPrefixContentDescription
-import co.kr.mvisample.testing.utils.hasSuffixContentDescription
 import co.kr.mvisample.testing.utils.waitUntilAllNodesAsserted
 import co.kr.mvisample.testing.utils.waitUntilAssert
-import co.kr.mvisample.testing.utils.waitUntilNodeAssertedAndAction
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
@@ -53,12 +49,13 @@ class PokedexScreenTest {
 
     @Test
     fun 포켓몬이름을_클릭한다() = runTest {
-        composeTestRule.waitUntilNodeAssertedAndAction(
+        composeTestRule.waitUntilAssert(
             node = {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
+                    .onFirst()
            },
-            assert = { onFirst().performScrollTo().assertIsDisplayed() },
+            assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
@@ -70,12 +67,19 @@ class PokedexScreenTest {
 
     @Test
     fun 발견하기를_클릭한다() = runTest {
-        composeTestRule.waitUntilNodeAssertedAndAction(
+        composeTestRule.waitUntilAssert(
             node = {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
+                    .filter(
+                        hasContentDescription(
+                            value = "isDiscovered is false",
+                            substring = true
+                        )
+                    )
+                    .onFirst()
             },
-            assert = { filter(hasPrefixContentDescription("isDiscovered is false")).onFirst().performScrollTo().assertIsDisplayed() },
+            assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
@@ -90,18 +94,32 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { assertAny(hasPrefixContentDescription("isDiscovered is true")) },
+            assert = {
+                assertAny(
+                    hasContentDescription(
+                        value = "isDiscovered is true",
+                        substring = true
+                    )
+                )
+            }
         )
     }
 
     @Test
     fun 포획하기를_클릭한다() = runTest {
-        composeTestRule.waitUntilNodeAssertedAndAction(
+        composeTestRule.waitUntilAssert(
             node = {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
+                    .filter(
+                        hasContentDescription(
+                            value = "isDiscovered is false",
+                            substring = true
+                        )
+                    )
+                    .onFirst()
             },
-            assert = { filter(hasPrefixContentDescription("isDiscovered is false")).onFirst().performScrollTo().assertIsDisplayed() },
+            assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
@@ -128,12 +146,19 @@ class PokedexScreenTest {
 
     @Test
     fun 놓아주기를_클릭한다() = runTest {
-        composeTestRule.waitUntilNodeAssertedAndAction(
+        composeTestRule.waitUntilAssert(
             node = {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
+                    .filter(
+                        hasContentDescription(
+                            value = "isDiscovered is false",
+                            substring = true
+                        )
+                    )
+                    .onFirst()
             },
-            assert = { filter(hasPrefixContentDescription("isDiscovered is false")).onFirst().performScrollTo().assertIsDisplayed() },
+            assert = { assertIsDisplayed() },
             action = { performClick() }
         )
 
@@ -160,18 +185,26 @@ class PokedexScreenTest {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
             },
-            assert = { assertAll(hasSuffixContentDescription("isCaught is false")) },
+            assert = {
+                assertAll(
+                    hasContentDescription(
+                        value = "isCaught is false",
+                        substring = true
+                    )
+                )
+            },
         )
     }
 
     @Test
     fun 선택된_포켓몬이_없을때_발견하기를_클릭한다() = runTest {
-        composeTestRule.waitUntilNodeAssertedAndAction(
+        composeTestRule.waitUntilAssert(
             node = {
                 onNodeWithContentDescription(activity.getString(R.string.pokemon_name_list))
                     .onChildren()
+                    .onFirst()
             },
-            assert = { onFirst().performScrollTo().assertIsDisplayed() }
+            assert = { assertIsDisplayed() }
         )
 
         composeTestRule.waitUntilAssert(
