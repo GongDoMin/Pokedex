@@ -12,6 +12,7 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.runtime.Composable
@@ -45,6 +46,7 @@ fun PokemonApp() {
                 NavHost(
                     modifier = Modifier
                         .fillMaxSize()
+                        .background(PokemonTheme.colors.backgroundRed)
                         .safeContentPadding(),
                     navController = navController.navController,
                     startDestination = Home
