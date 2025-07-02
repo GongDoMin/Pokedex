@@ -12,8 +12,11 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
@@ -40,6 +43,9 @@ fun PokemonApp() {
                 LocalSharedTransitionScope provides this
             ) {
                 NavHost(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .safeContentPadding(),
                     navController = navController.navController,
                     startDestination = Home
                 ) {
