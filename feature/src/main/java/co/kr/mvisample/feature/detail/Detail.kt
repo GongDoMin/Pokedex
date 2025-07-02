@@ -73,17 +73,13 @@ fun DetailScreen(
         onDismissDialog = { viewModel.handleBasicDialogAction(DialogAction.BasicDialogAction.OnDismissDialog) },
         onClickPositiveButton = { viewModel.handleBasicDialogAction(DialogAction.BasicDialogAction.OnClickPositiveButton) }
     ) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-        ) {
+        Column {
             DetailHeader(
                 pokemonDetail = uiState.content.pokemonDetail,
                 onBackClick = { viewModel.handleAction(DetailAction.OnBackClick) }
             )
 
             DetailContent(
-                modifier = Modifier,
                 pokemonDetail = uiState.content.pokemonDetail
             )
         }
@@ -99,7 +95,6 @@ fun DetailHeader(
     SubcomposeLayout(
         modifier = modifier
             .fillMaxWidth()
-            .background(PokemonTheme.colors.backgroundRed)
             .padding(16.dp)
     ) { constraints ->
         val textPlaceable = subcompose("text") {
@@ -144,7 +139,7 @@ fun DetailContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(PokemonTheme.colors.backgroundRed)
+            .verticalScroll(rememberScrollState())
             .padding(16.dp)
             .pokemonCard()
             .padding(8.dp),
