@@ -73,11 +73,7 @@ fun DetailScreen(
         onDismissDialog = { viewModel.handleBasicDialogAction(DialogAction.BasicDialogAction.OnDismissDialog) },
         onClickPositiveButton = { viewModel.handleBasicDialogAction(DialogAction.BasicDialogAction.OnClickPositiveButton) }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(PokemonTheme.colors.backgroundRed)
-        ) {
+        Column {
             DetailHeader(
                 pokemonDetail = uiState.content.pokemonDetail,
                 onBackClick = { viewModel.handleAction(DetailAction.OnBackClick) }
