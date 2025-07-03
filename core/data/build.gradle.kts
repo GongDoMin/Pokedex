@@ -1,5 +1,6 @@
 plugins {
     id("mvisample.android.library")
+    id("mvisample.ksp")
     id("mvisample.android.hilt")
     id("mvisample.kotest")
 }

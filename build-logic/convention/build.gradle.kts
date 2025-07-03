@@ -11,6 +11,7 @@ dependencies {
     compileOnly(libs.android.gradle.plugin)
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.ksp.gradle.plugin)
+    implementation(libs.roborazzi.gradle.plugin)
 }
 
 gradlePlugin {
@@ -45,14 +46,29 @@ gradlePlugin {
             implementationClass = "AndroidHiltConventionPlugin"
         }
 
-        register("AndroidKotestPlugin") {
+        register("KotestPlugin") {
             id = "mvisample.kotest"
-            implementationClass = "AndroidKotestConventionPlugin"
+            implementationClass = "KotestConventionPlugin"
         }
 
-        register("AndroidSerializationPlugin") {
-            id = "mvisample.android.serialization"
-            implementationClass = "AndroidSerializationConventionPlugin"
+        register("SerializationPlugin") {
+            id = "mvisample.serialization"
+            implementationClass = "SerializationConventionPlugin"
+        }
+
+        register("KspPlugin") {
+            id = "mvisample.ksp"
+            implementationClass = "KspConventionPlugin"
+        }
+
+        register("CoilPlugin") {
+            id = "mvisample.coil"
+            implementationClass = "CoilConventionPlugin"
+        }
+
+        register("RoborazziPlugin") {
+            id = "mvisample.roborazzi"
+            implementationClass = "RoborazziConventionPlugin"
         }
 
         register("AndroidRoomPlugin") {

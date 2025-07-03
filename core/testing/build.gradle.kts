@@ -1,8 +1,10 @@
 plugins {
     id("mvisample.android.library")
+    id("mvisample.ksp")
     id("mvisample.android.hilt")
-    id("mvisample.android.serialization")
+    id("mvisample.serialization")
     id("maisample.android.room")
+    id("mvisample.coil")
 }
 
 android {
@@ -20,8 +22,6 @@ dependencies {
     
     implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.ui.test.junit4.android)
-    
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network)
+
     implementation(libs.coil.test)
 }

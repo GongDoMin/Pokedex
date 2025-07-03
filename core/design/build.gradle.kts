@@ -1,7 +1,7 @@
 plugins {
     id("mvisample.android.library")
     id("mvisample.android.library.compose")
-    id("mvisample.android.serialization")
+    id("mvisample.serialization")
 }
 
 android {

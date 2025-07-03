@@ -1,8 +1,10 @@
 plugins {
     id("mvisample.android.application")
     id("mvisample.android.application.compose")
-    id("mvisample.android.serialization")
+    id("mvisample.ksp")
+    id("mvisample.serialization")
     id("mvisample.android.hilt")
+    id("mvisample.coil")
 }
 
 android {
@@ -40,9 +42,4 @@ dependencies {
     // 라이브러리 참고를 위해 삭제하지 않음
     // turbine
     testImplementation(libs.turbine)
-
-    implementation(libs.kotlinx.collections.immutable)
-
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network)
 }
