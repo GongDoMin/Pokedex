@@ -1,5 +1,4 @@
 plugins {
-    alias(libs.plugins.jetbrains.kotlin.kapt)
     id("mvisample.android.application")
     id("mvisample.android.application.compose")
     id("mvisample.android.serialization")

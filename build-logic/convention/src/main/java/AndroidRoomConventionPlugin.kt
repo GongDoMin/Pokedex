@@ -12,7 +12,7 @@ class AndroidRoomConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx-room-runtime").get())
                 add("implementation", libs.findLibrary("androidx-room-ktx").get())
                 add("implementation", libs.findLibrary("androidx-room-paging").get())
-                add("kapt", libs.findLibrary("androidx-room-compiler").get())
+                add("ksp", libs.findLibrary("androidx-room-compiler").get())
                 add("androidTestImplementation", libs.findLibrary("androidx-room-testing").get())
             }
         }
