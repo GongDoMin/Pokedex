@@ -15,6 +15,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -47,7 +48,7 @@ fun PokemonApp() {
                     modifier = Modifier
                         .fillMaxSize()
                         .background(PokemonTheme.colors.backgroundRed)
-                        .safeContentPadding(),
+                        .systemBarsPadding(),
                     navController = navController.navController,
                     startDestination = Home
                 ) {
