@@ -1,6 +1,5 @@
 package co.kr.mvisample.local
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import co.kr.mvisample.local.model.PokemonEntity
 import co.kr.mvisample.local.model.PokemonLocalEntity
 import co.kr.mvisample.local.room.dao.PokemonDao
@@ -14,9 +13,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class PokemonLocalDaoTest : PokemonDatabaseTest() {
 
     private lateinit var pokemonDao: PokemonDao

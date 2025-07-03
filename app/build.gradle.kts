@@ -22,24 +22,13 @@ dependencies {
     implementation(projects.feature)
     implementation(projects.core.design)
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity)
     implementation(libs.androidx.runner)
-
-    // JUnit
-    testImplementation(libs.junit)
-
-    // android test
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-
-    // navigation
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
 
-    // 라이브러리 참고를 위해 삭제하지 않음
-    // turbine
     testImplementation(libs.turbine)
+    testImplementation(libs.junit)
+
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
 }

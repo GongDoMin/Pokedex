@@ -19,9 +19,7 @@ dependencies {
     implementation(projects.core.data)
 
     implementation(libs.androidx.runner)
-    
     implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.ui.test.junit4.android)
-
     implementation(libs.coil.test)
 }

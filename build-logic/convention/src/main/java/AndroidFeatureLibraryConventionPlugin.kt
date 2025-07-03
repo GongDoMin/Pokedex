@@ -46,6 +46,7 @@ class AndroidFeatureLibraryConventionPlugin : Plugin<Project> {
                 add("implementation", project(":core:common"))
                 add("testImplementation", project(":core:testing"))
                 add("testImplementation", project(":core:screenshot-testing"))
+                add("testImplementation", project(":turbine"))
                 add("androidTestImplementation", project(":core:design"))
                 add("androidTestImplementation", project(":core:common"))
                 add("androidTestImplementation", project(":core:testing"))

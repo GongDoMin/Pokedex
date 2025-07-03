@@ -14,21 +14,15 @@ android {
 dependencies {
 
     implementation(libs.androidx.ui.test.junit4.android)
-    testImplementation(projects.turbine)
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    androidTestImplementation(projects.core.testing)
-
-    testImplementation(libs.junit)
-
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.paging.compose)
+
+    testImplementation(libs.junit)
     testImplementation(libs.androidx.navigation.testing)
 
-    implementation(libs.androidx.paging.compose)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+
+
 }

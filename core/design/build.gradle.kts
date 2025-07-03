@@ -13,6 +13,4 @@ dependencies {
     implementation(libs.androidx.runner)
 
     implementation(libs.androidx.navigation.compose)
-
-    implementation(libs.kotlinx.collections.immutable)
 }
