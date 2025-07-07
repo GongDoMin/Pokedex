@@ -33,7 +33,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run local unit tests
-        run: ./gradlew testDebugUnitTest
+        run: ./gradlew testDebugUnitTest --profile
 
       - name: Check lint
         run: ./gradlew lintDebug
@@ -51,6 +51,13 @@ jobs:
         with:
           name: lint-reports-html
           path: '**/build/reports/lint-results-debug.html'
+
+      - name: Upload Profile report (HTML)
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: profile-report-html
+          path: 'build/reports/profile/profile-*.html'
 
   androidTest:
     name: "Instrumentation Tests"
@@ -82,7 +89,7 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel
-          script: ./gradlew connectedDebugAndroidTest
+          script: ./gradlew connectedDebugAndroidTest --profile
 
       - name: Upload test reports
         if: ${{ !cancelled() }}
@@ -90,6 +97,13 @@ jobs:
         with:
           name: Android Test Results
           path: "**/outputs/androidTest-results/connected/**/*.xml"
+      
+      - name: Upload Profile report (HTML)
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: profile-report-html
+          path: 'build/reports/profile/profile-*.html'
 
   verify_screenshots:
       name: "verify screen"
