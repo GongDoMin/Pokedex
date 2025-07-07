@@ -1,7 +1,8 @@
 plugins {
     id("mvisample.android.library")
+    id("mvisample.ksp")
     id("mvisample.android.hilt")
-    id("mvisample.android.serialization")
+    id("mvisample.serialization")
     id("mvisample.kotest")
 }
 
@@ -29,11 +30,10 @@ dependencies {
     testImplementation(projects.core.testing)
 
     implementation(libs.androidx.runner)
-
-    testImplementation(libs.junit)
-    
     implementation(libs.okhttp)
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
     implementation(libs.retrofit.serialization.converter)
+
+    testImplementation(libs.junit)
 }

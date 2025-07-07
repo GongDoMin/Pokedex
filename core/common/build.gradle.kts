@@ -12,8 +12,6 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.core.design)
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.runner)
 
     testImplementation(libs.junit)

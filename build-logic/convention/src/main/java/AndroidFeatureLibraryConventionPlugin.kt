@@ -1,9 +1,11 @@
 @file:Suppress("unused")
 
 import co.kr.build.convention.configureKotlinAndroid
+import co.kr.build.convention.libs
 import com.android.build.gradle.LibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.all
 import org.gradle.kotlin.dsl.configure
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
@@ -14,12 +16,23 @@ class AndroidFeatureLibraryConventionPlugin : Plugin<Project> {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
                 apply("mvisample.android.library.compose")
+                apply("mvisample.roborazzi")
             }
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig {
                     testInstrumentationRunner = "co.kr.mvisample.testing.CustomTestRunner"
+                }
+
+                testOptions {
+                    unitTests {
+                        isIncludeAndroidResources = true
+
+                        all {
+                            it.systemProperties["robolectric.pixelCopyRenderMode"] = "hardware"
+                        }
+                    }
                 }
             }
 
@@ -33,9 +46,13 @@ class AndroidFeatureLibraryConventionPlugin : Plugin<Project> {
                 add("implementation", project(":core:common"))
                 add("testImplementation", project(":core:testing"))
                 add("testImplementation", project(":core:screenshot-testing"))
+                add("testImplementation", project(":turbine"))
                 add("androidTestImplementation", project(":core:design"))
                 add("androidTestImplementation", project(":core:common"))
                 add("androidTestImplementation", project(":core:testing"))
+
+                add("testImplementation", libs.findLibrary("robolectric").get())
+                add("testRuntimeOnly", libs.findLibrary("junit-vintage.engine").get())
             }
         }
     }

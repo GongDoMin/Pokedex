@@ -20,6 +20,7 @@ internal fun Project.configureAndroidCompose(
             add("implementation", libs.findBundle("compose").get())
             add("androidTestImplementation", libs.findBundle("android-test-compose").get())
             add("debugImplementation", libs.findBundle("debug-compose").get())
+            add("implementation", libs.findLibrary("kotlinx-collections-immutable").get())
         }
     }
 }

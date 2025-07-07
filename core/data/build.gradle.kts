@@ -1,5 +1,6 @@
 plugins {
     id("mvisample.android.library")
+    id("mvisample.ksp")
     id("mvisample.android.hilt")
     id("mvisample.kotest")
 }
@@ -12,12 +13,12 @@ dependencies {
 
     implementation(projects.core.remote)
     implementation(projects.core.local)
+
+    implementation(libs.androidx.runner)
+    implementation(libs.androidx.paging.compose)
+
     testImplementation(projects.core.testing)
     testImplementation(projects.turbine)
 
-    implementation(libs.androidx.runner)
-
     testImplementation(libs.junit)
-
-    implementation(libs.androidx.paging.compose)
 }
